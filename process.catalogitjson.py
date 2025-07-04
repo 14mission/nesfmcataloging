@@ -2,9 +2,14 @@
 import json, glob, re
 
 # to run this script:
-# export all pages of google drive spreadsheets as TSV, name them "NESFM Silen Film Archive....tsv"
 # export all films from CatalogIt, include all fields, name file "catalogit.allfilms.allfields.json"
+# then just run this script, it looks for that file and reads it
 
+# what it does:
+# - checks that each record has a valid ObjectId; they can be recorded in various fields
+# - checks for collisions, multiple entries with the same ObjectId
+
+# this function irons out superficial differences between ID's that don't really matter
 def idnorm(idstr):
   idstr = idstr.lower()
   idstr = re.sub(r'[^\w\s]+','.',idstr)
@@ -15,6 +20,7 @@ def idnorm(idstr):
   idstr = re.sub(r'__SPACE__',' ',idstr)
   return idstr
 
+# print some sample ID normalization
 for rawidstr in [ "2025-15-99b", "FOO Bar", "XYZZY 99","PCM.99" ]:
   print(rawidstr + " -> " + idnorm(rawidstr))
 
@@ -24,16 +30,20 @@ if len(jsonfnlist) != 1: raise Exception("want 1 jsonfn but found "+str(len(json
 print(f"load {jsonfnlist[0]}")
 jsondata = json.load(open(jsonfnlist[0]))
 
+# keep track of mappings of normalized ID's to records we have seen
+# this is so we can report on collisions
 normentobjid2entry = {}
 
-# check for required fields
+# for all entries
 for entry in jsondata:
+  # CatalogIt's own ID, which is guaranteed to be unique
   citid = str(entry["CIT ID"])
+  # entry should have a title
   if 'Name/Title' in entry:
     citnametitle = str(entry['Name/Title'])
   else:
     citnametitle = "NoCitNameTitle"
-  # entry object ID where it's supposed to be?
+  # ObjectId: first look where it's suposed to be, in the "Entry/Object ID" field
   if 'Entry/Object ID' in entry:
     citentobjid = entry['Entry/Object ID']
     citentobjidsrc = 'EntObjID'
@@ -48,6 +58,7 @@ for entry in jsondata:
     citentobjid = "NoCitEntObjID"
     citentobjidsrc = "NONE"
     print("NOID: "+str(entry))
+  # shelving/can code from CatalogIt -- not doing that yet
   citshlvcan = str("NotYet")
   # normed entry/objid->entry
   if citentobjidsrc != "NONE":
