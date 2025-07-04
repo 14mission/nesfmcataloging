@@ -9,6 +9,10 @@ import json, glob, re
 # - checks that each record has a valid ObjectId; they can be recorded in various fields
 # - checks for collisions, multiple entries with the same ObjectId
 
+# things to look for in output
+# - "NOOBJID" : records where we couldn't find any ObjId
+# - "DUPOBJID" : duplicate normalized ObjId found in multiple records
+
 # this function irons out superficial differences between ID's that don't really matter
 def idnorm(idstr):
   idstr = idstr.lower()
@@ -57,7 +61,7 @@ for entry in jsondata:
   else:
     citentobjid = "NoCitEntObjID"
     citentobjidsrc = "NONE"
-    print("NOID: "+str(entry))
+    print("NOOBJID: "+str(entry))
   # shelving/can code from CatalogIt -- not doing that yet
   citshlvcan = str("NotYet")
   # normed entry/objid->entry
