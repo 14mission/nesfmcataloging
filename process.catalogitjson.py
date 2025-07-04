@@ -54,7 +54,7 @@ for entry in jsondata:
   # try: Other Names and Numbers -> Other Numbers -> Other Number (may be more than one)
   # look for YYYY.DONOR.ITEM code or an MG code
   # may be preceded by some verbiage
-  elif (matchobj := re.search(r'["\']Other Number["\']\s*:\s*["\'](?:Object\s*ID:)?\s*(\d{4}\.\d+\.\d+(?:-?[a-z])?|MG[\.\s]*\d+(?:-?[a-z])?)["\';\s]', str(entry))) != None:
+  elif (matchobj := re.search(r'["\']Other Number["\']\s*:\s*["\'](?:Object\s*ID:)?\s*(\d{4}\.\d+\.\d+(?:-?[a-z])?|MG[\.\s]*\d+(?:-?[a-z])?|L\d+)["\';\s]', str(entry))) != None:
     citentobjid = matchobj.group(1)
     citentobjidsrc = "OtherNumber"
   # no entry object id found
