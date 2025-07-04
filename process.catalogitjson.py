@@ -25,8 +25,8 @@ def idnorm(idstr):
   return idstr
 
 # print some sample ID normalization
-for rawidstr in [ "2025-15-99b", "FOO Bar", "XYZZY 99","PCM.99" ]:
-  print(rawidstr + " -> " + idnorm(rawidstr))
+#for rawidstr in [ "2025-15-99b", "FOO Bar", "XYZZY 99","PCM.99" ]:
+#  print(rawidstr + " -> " + idnorm(rawidstr))
 
 # find one json file, read it
 jsonfnlist = glob.glob("catalogit*json")
@@ -38,6 +38,15 @@ jsondata = json.load(open(jsonfnlist[0]))
 # this is so we can report on collisions
 normentobjid2entry = {}
 
+# header for output
+print("\t".join([
+  "CitID",
+  "CitEntObjId",
+  "CitEntObjIdSrc",
+  "CitShelfCanCode",
+  "CitNameTitle",
+]))
+
 # for all entries
 for entry in jsondata:
   # CatalogIt's own ID, which is guaranteed to be unique
@@ -47,8 +56,12 @@ for entry in jsondata:
     citnametitle = str(entry['Name/Title'])
   else:
     citnametitle = "NoCitNameTitle"
+  # let's ignore video entries
+  if re.search(r'(?i)\b(vhs|dvd|blu-?ray)\b',str(entry)) != None:
+    print("SKIPVIDEO: "+str(entry))
+    continue
   # ObjectId: first look where it's suposed to be, in the "Entry/Object ID" field
-  if 'Entry/Object ID' in entry:
+  elif 'Entry/Object ID' in entry:
     citentobjid = entry['Entry/Object ID']
     citentobjidsrc = 'EntObjID'
   # try: Other Names and Numbers -> Other Numbers -> Other Number (may be more than one)
@@ -65,18 +78,20 @@ for entry in jsondata:
   # shelving/can code from CatalogIt -- not doing that yet
   citshlvcan = str("NotYet")
   # normed entry/objid->entry
+  dupobjid = False
   if citentobjidsrc != "NONE":
     normentobjid = idnorm(citentobjid)
     citentrysynopsis = citid+":"+citnametitle
     if citentobjid in normentobjid2entry:
-      print("DUPOBJID\t"+normentobjid+"\t"+normentobjid2entry[normentobjid]+"\t"+citentrysynopsis)
+      print("DUPOBJID\t"+normentobjid+"\t"+normentobjid2entry[normentobjid]+"\tVS\t"+citentrysynopsis)
+      dupobjid = True
     else:
       normentobjid2entry[normentobjid] = citentrysynopsis
   # log what's found
   print("\t".join([
     citid,
     str(citentobjid),
-    citentobjidsrc,
+    citentobjidsrc + ("DUP" if dupobjid else ""),
     citshlvcan,
     citnametitle
   ]))
