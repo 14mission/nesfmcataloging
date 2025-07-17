@@ -15,23 +15,30 @@ import json, glob, re, sys
 
 # this function irons out superficial differences between ID's that don't really matter
 def idnorm(idstr):
+  # lowercase
   idstr = idstr.lower()
+  # turn all puncs into dot
   idstr = re.sub(r'[^\w\s]+','.',idstr)
-  idstr = re.sub(r'(\d)\s*\.\s*(\d)',r'\1__DOT__\2',idstr)
-  idstr = re.sub(r'([a-z])\s+([a-z])',r'\1__SPACE__\2',idstr)
+  # preserve dot between digs. might be space, too
+  idstr = re.sub(r'(?<=\d)\s*\.\s*(?=\d)',r'__DOT__',idstr)
+  # preserve space between letters
+  idstr = re.sub(r'(?<=[a-z])\s+(?=[a-z])',r'__SPACE__',idstr)
+  # clobber any remaining nonalphadig
   idstr = re.sub(r'\W+','',idstr)
+  # restore preserved dot and space
   idstr = re.sub(r'__DOT__','.',idstr)
   idstr = re.sub(r'__SPACE__',' ',idstr)
   return idstr
 
 # print some sample ID normalization
-#for rawidstr in [ "2025-15-99b", "FOO Bar", "XYZZY 99","PCM.99" ]:
-#  print(rawidstr + " -> " + idnorm(rawidstr))
+for rawidstr in [ "2025-15-99b", "FOO Bar", "XYZZY 99","PCM.99", "2012.3.232.b", "2012-3.232-B" ]:
+  print(rawidstr + " -> " + idnorm(rawidstr))
 
 # read spreadsheet tsv's
 # find object id's (col labeled Accession Number)
 # map to titles
 tsvnormentobjid2title = {}
+numunkobjid = 0
 for tsvfn in glob.glob("NESFM*tsv"):
   print("spreadsheet tsv: "+tsvfn)
   if "videos" in tsvfn:
@@ -56,7 +63,12 @@ for tsvfn in glob.glob("NESFM*tsv"):
         sys.exit(1)
     else:
       normobjid = idnorm(cols[objidcolnum])
-      tsvnormentobjid2title[normobjid] = cols[titlecolnum]
+      if "unknown" in normobjid.lower():
+        numunkobjid += 1
+      else:
+        tsvnormentobjid2title[normobjid] = cols[titlecolnum]
+print("mapped "+str(len(tsvnormentobjid2title))+" objids")
+print("unknown: "+str(numunkobjid))
 
 # find one json file, read it
 jsonfnlist = glob.glob("catalogit*json")
