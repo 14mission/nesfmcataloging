@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import json, glob, re
 
 # to run this script:
@@ -38,6 +38,10 @@ jsondata = json.load(open(jsonfnlist[0]))
 # this is so we can report on collisions
 normentobjid2entry = {}
 
+# write outputs
+outtsv = open("process.catalogitjson.out.tsv","w")
+outlog = open("process.catalogitjson.out.log","w")
+
 # header for output
 print("\t".join([
   "CitID",
@@ -45,7 +49,7 @@ print("\t".join([
   "CitEntObjIdSrc",
   "CitShelfCanCode",
   "CitNameTitle",
-]))
+]), file=outtsv)
 
 # for all entries
 for entry in jsondata:
@@ -58,7 +62,7 @@ for entry in jsondata:
     citnametitle = "NoCitNameTitle"
   # let's ignore video entries
   if re.search(r'(?i)\b(vhs|dvd|blu-?ray)\b',str(entry)) != None:
-    print("SKIPVIDEO: "+str(entry))
+    print("SKIPVIDEO: "+str(entry), file=outlog)
     continue
   # ObjectId: first look where it's suposed to be, in the "Entry/Object ID" field
   elif 'Entry/Object ID' in entry:
@@ -74,7 +78,7 @@ for entry in jsondata:
   else:
     citentobjid = "NoCitEntObjID"
     citentobjidsrc = "NONE"
-    print("NOOBJID: "+str(entry))
+    print("NOOBJID: "+str(entry), file=outlog)
   # shelving/can code from CatalogIt -- not doing that yet
   citshlvcan = str("NotYet")
   # normed entry/objid->entry
@@ -83,7 +87,7 @@ for entry in jsondata:
     normentobjid = idnorm(citentobjid)
     citentrysynopsis = citid+":"+citnametitle
     if citentobjid in normentobjid2entry:
-      print("DUPOBJID\t"+normentobjid+"\t"+normentobjid2entry[normentobjid]+"\tVS\t"+citentrysynopsis)
+      print("DUPOBJID\t"+normentobjid+"\t"+normentobjid2entry[normentobjid]+"\tVS\t"+citentrysynopsis,file=outlog)
       dupobjid = True
     else:
       normentobjid2entry[normentobjid] = citentrysynopsis
@@ -94,4 +98,4 @@ for entry in jsondata:
     citentobjidsrc + ("DUP" if dupobjid else ""),
     citshlvcan,
     citnametitle
-  ]))
+  ]), file=outtsv)
