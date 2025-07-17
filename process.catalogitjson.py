@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import json, glob, re
+import json, glob, re, sys
 
 # to run this script:
 # export all films from CatalogIt, include all fields, name file "catalogit.allfilms.allfields.json"
@@ -28,6 +28,36 @@ def idnorm(idstr):
 #for rawidstr in [ "2025-15-99b", "FOO Bar", "XYZZY 99","PCM.99" ]:
 #  print(rawidstr + " -> " + idnorm(rawidstr))
 
+# read spreadsheet tsv's
+# find object id's (col labeled Accession Number)
+# map to titles
+tsvnormentobjid2title = {}
+for tsvfn in glob.glob("NESFM*tsv"):
+  print("spreadsheet tsv: "+tsvfn)
+  if "videos" in tsvfn:
+    print("skip")
+    continue
+  tsvin = open(tsvfn)
+  objidcolnum, titlecolnum = None, None
+  for ln in tsvin:
+    cols = ln.split("\t")
+    if objidcolnum == None:
+      for colnum in range(len(cols)):
+        if "Accession Number" in cols[colnum]:
+          objidcolnum = colnum
+        elif "Title" in cols[colnum]:
+          titlecolnum = colnum
+      print("objidcolnum = "+str(objidcolnum)+"; titlecolnum="+str(titlecolnum))
+      if objidcolnum == None:
+        print("no accession num: "+",".join(cols))
+        sys.exit(1)
+      elif titlecolnum == None: 
+        print("no title: "+",".join(cols))
+        sys.exit(1)
+    else:
+      normobjid = idnorm(cols[objidcolnum])
+      tsvnormentobjid2title[normobjid] = cols[titlecolnum]
+
 # find one json file, read it
 jsonfnlist = glob.glob("catalogit*json")
 if len(jsonfnlist) != 1: raise Exception("want 1 jsonfn but found "+str(len(jsonfnlist)))
@@ -36,7 +66,7 @@ jsondata = json.load(open(jsonfnlist[0]))
 
 # keep track of mappings of normalized ID's to records we have seen
 # this is so we can report on collisions
-normentobjid2entry = {}
+citnormentobjid2entry = {}
 
 # write outputs
 outtsv = open("process.catalogitjson.out.tsv","w")
@@ -49,6 +79,7 @@ print("\t".join([
   "CitEntObjIdSrc",
   "CitShelfCanCode",
   "CitNameTitle",
+  "TsvNameTitle",
 ]), file=outtsv)
 
 # for all entries
@@ -83,19 +114,21 @@ for entry in jsondata:
   citshlvcan = str("NotYet")
   # normed entry/objid->entry
   dupobjid = False
+  normentobjid = None
   if citentobjidsrc != "NONE":
     normentobjid = idnorm(citentobjid)
     citentrysynopsis = citid+":"+citnametitle
-    if citentobjid in normentobjid2entry:
-      print("DUPOBJID\t"+normentobjid+"\t"+normentobjid2entry[normentobjid]+"\tVS\t"+citentrysynopsis,file=outlog)
+    if citentobjid in citnormentobjid2entry:
+      print("DUPOBJID\t"+normentobjid+"\t"+citnormentobjid2entry[normentobjid]+"\tVS\t"+citentrysynopsis,file=outlog)
       dupobjid = True
     else:
-      normentobjid2entry[normentobjid] = citentrysynopsis
+      citnormentobjid2entry[normentobjid] = citentrysynopsis
   # log what's found
   print("\t".join([
     citid,
     str(citentobjid),
     citentobjidsrc + ("DUP" if dupobjid else ""),
     citshlvcan,
-    citnametitle
+    citnametitle,
+    tsvnormentobjid2title[normentobjid] if normentobjid in tsvnormentobjid2title else "NoMatch"
   ]), file=outtsv)
