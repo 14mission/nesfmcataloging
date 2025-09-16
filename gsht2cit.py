@@ -23,6 +23,20 @@ for intsv in intsvlist:
   print(f"read {intsv}")
   inh = open(intsv)
   lnum = 0
+
+  colmap = { "objid":None, "title":None }
+
+
   for ln in inh:
+    lncols = ln.split("\t")
+    lncols[-1] = lncols[-1].strip()
+    if colmap["objid"] == None:
+      for colnum, colstr in enumerate(lncols):
+        if re.match(r'Acc?ession Num',colstr): colmap["objid"] = colnum
+        elif re.match(r'Title',colstr): colmap["title"] = colnum
+      for field in sorted(colmap.keys()):
+        if colmap[field] == None:
+          raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
+        print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
 
     lnum += 1
