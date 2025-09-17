@@ -20,12 +20,15 @@ else:
   outh = open(outtsvfn,"w")
 
 for intsv in intsvlist:
+  if re.match(r'(?i).*de\W*a[cs]*se[cs]+ion',intsv):
+    print(f"SKIP {intsv}")
+    continue
+
   print(f"read {intsv}")
   inh = open(intsv)
   lnum = 0
 
-  colmap = { "objid":None, "title":None }
-
+  colmap = { "objid":None, "title":None, "shelvingcode":None, "location":None }
 
   for ln in inh:
     lncols = ln.split("\t")
@@ -34,6 +37,8 @@ for intsv in intsvlist:
       for colnum, colstr in enumerate(lncols):
         if re.match(r'Acc?ession Num',colstr): colmap["objid"] = colnum
         elif re.match(r'Title',colstr): colmap["title"] = colnum
+        elif re.match(r'(Shelving|Bartel *-* *Thomsen Film Code)',colstr): colmap["shelvingcode"] = colnum
+        elif re.match(r'Film Rack',colstr): colmap["location"] = colnum
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
           raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
