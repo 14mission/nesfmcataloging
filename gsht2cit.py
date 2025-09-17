@@ -43,6 +43,8 @@ for intsv in intsvlist:
   for ln in inh:
     lncols = ln.split("\t")
     lncols[-1] = lncols[-1].strip()
+
+    # header line?
     if colmap["objid"] == None:
       for colnum, colstr in enumerate(lncols):
         if re.match(r'Acc?ession Num',colstr): colmap["objid"] = colnum
@@ -55,6 +57,11 @@ for intsv in intsvlist:
         print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
       continue
 
+    # regular line.  make sure all fields filled
+    for colname in outcols:
+      if lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
+        raise Exception("empty "+colname+" in "+intsv+":"+str(lnum)+": "+ln)
+    # then print
     print("\t".join(lncols[colmap[colname]] for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
 
     lnum += 1
