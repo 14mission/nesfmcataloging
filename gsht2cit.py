@@ -41,6 +41,7 @@ for intsv in intsvlist:
     colmap[field] = None
 
   for ln in inh:
+    lnum += 1
     lncols = ln.split("\t")
     lncols[-1] = lncols[-1].strip()
 
@@ -57,11 +58,14 @@ for intsv in intsvlist:
         print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
       continue
 
+    # section divider line?
+    if len([col for col in lncols if col != None and len(col.strip())>0]) <= 2:
+      print("skip section header line: "+str(lnum)+": "+ln.strip())
+      continue
+
     # regular line.  make sure all fields filled
     for colname in outcols:
       if lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
-        raise Exception("empty "+colname+" in "+intsv+":"+str(lnum)+": "+ln)
+        raise Exception("empty "+colname+" in "+intsv+":"+str(lnum)+": "+ln.strip())
     # then print
     print("\t".join(lncols[colmap[colname]] for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
-
-    lnum += 1
