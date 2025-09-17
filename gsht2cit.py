@@ -2,7 +2,7 @@
 import sys,os,re
 
 intsvlist = []
-outtsvfn = None
+outtsvfn = "gsht2cit.out.tsv"
 av = sys.argv[1:]
 ac = 0
 while ac < len(av):
@@ -19,16 +19,26 @@ else:
   print(f"write to {outtsvfn}")
   outh = open(outtsvfn,"w")
 
+outcols = ["objid","title","shelvingcode","location"]
+print("\t".join(outcols)+"\tsource\tline",file=outh)
+
 for intsv in intsvlist:
   if re.match(r'(?i).*de\W*a[cs]*se[cs]+ion',intsv):
     print(f"SKIP {intsv}")
     continue
 
+  # short name of file to put in output
+  source = intsv
+  source = re.sub(r'^.*- *','',source)
+  source = re.sub(r'\.tsv$','',source)
+
   print(f"read {intsv}")
   inh = open(intsv)
   lnum = 0
 
-  colmap = { "objid":None, "title":None, "shelvingcode":None, "location":None }
+  colmap = {}
+  for field in outcols:
+    colmap[field] = None
 
   for ln in inh:
     lncols = ln.split("\t")
@@ -43,5 +53,8 @@ for intsv in intsvlist:
         if colmap[field] == None:
           raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
         print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
+      continue
+
+    print("\t".join(lncols[colmap[colname]] for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
 
     lnum += 1
