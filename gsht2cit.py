@@ -2,30 +2,28 @@
 import sys,os,re
 
 intsvlist = []
-outtsvfn = "gsht2cit.out.tsv"
 av = sys.argv[1:]
 ac = 0
 while ac < len(av):
   if av[ac] == "-h": print("usage: "+sys.argv[0]+" -h(elp) inputfiles*tsv -o outputfile.tsv")
-  elif av[ac] == "-o" and ac+1 < len(av) and av[ac+1][0] != "-": ac+1; outtsvfn = av[ac]
   elif av[ac][0] == "-": raise Exeption("unkflag: "+av[ac])
   else: intsvlist.append(av[ac])
   ac += 1
 
-if outtsvfn == None:
-  print("write to stdout")
-  outh = sys.stdout
-else:
-  print(f"write to {outtsvfn}")
-  outh = open(outtsvfn,"w")
-
 outcols = ["objid","title","shelvingcode","location"]
-print("\t".join(outcols)+"\tsource\tline",file=outh)
 
 for intsv in intsvlist:
-  if re.match(r'(?i).*de\W*a[cs]*se[cs]+ion',intsv):
+  if re.match(r'(?i).*(de\W*a[cs]*se[cs]+ion|4cit)',intsv):
     print(f"SKIP {intsv}")
     continue
+
+  # output file
+  outfn = intsv
+  outfn = re.sub(r'\.\w+$','',outfn)
+  outfn += ".4cit.tsv"
+  print(f"write to {outfn}")
+  outh = open(outfn,"w")
+  print("\t".join(outcols)+"\tsource\tline",file=outh)
 
   # short name of file to put in output
   source = intsv
@@ -52,6 +50,7 @@ for intsv in intsvlist:
         elif re.match(r'Title',colstr): colmap["title"] = colnum
         elif re.match(r'(Shelving|Bartel *-* *Thomsen Film Code)',colstr): colmap["shelvingcode"] = colnum
         elif re.match(r'Film Rack',colstr): colmap["location"] = colnum
+        elif re.match(r'Series',colstr): colmap["series"] = colnum; print("series col")
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
           raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
@@ -67,5 +66,9 @@ for intsv in intsvlist:
     for colname in outcols:
       if lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
         raise Exception("empty "+colname+" in "+intsv+":"+str(lnum)+": "+ln.strip())
+    # if series col, and filled, prefix to title
+    if "series" in colmap and len(lncols[colmap["series"]].strip()):
+      lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
+
     # then print
     print("\t".join(lncols[colmap[colname]] for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
