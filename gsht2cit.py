@@ -10,40 +10,56 @@ while ac < len(av):
   else: intsvlist.append(av[ac])
   ac += 1
 
+# columns that should be in output
 outcols = ["objid","title","shelvingcode","location"]
+# if these are not found in input, put UNKNOWN in output.
+# for any other column to be empty is an error
+okunkcols = ["objid","shelvingcode","location"]
 
+# process all input files specified on the command line
 for intsv in intsvlist:
+
+  # ignore certain files: "deaccessioned", and files written by this program
   if re.match(r'(?i).*(de\W*a[cs]*se[cs]+ion|4cit)',intsv):
     print(f"SKIP {intsv}")
     continue
 
+  # start reading this fiel
+  print(f"read {intsv}")
+  inh = open(intsv)
+  lnum = 0
+
   # output file
-  outfn = intsv
-  outfn = re.sub(r'\.\w+$','',outfn)
+  outfn = re.sub(r'\.\w+$','',intsv)
   outfn += ".4cit.tsv"
-  print(f"write to {outfn}")
+  print(f"write output to {outfn}")
   outh = open(outfn,"w")
   print("\t".join(outcols)+"\tsource\tline",file=outh)
+
+  # log file
+  logfn = re.sub(r'\.\w+$','',intsv)
+  logfn += ".4cit.log"
+  print(f"write logs to {logfn}")
+  logh = open(logfn,"w")
 
   # short name of file to put in output
   source = intsv
   source = re.sub(r'^.*- *','',source)
   source = re.sub(r'\.tsv$','',source)
 
-  print(f"read {intsv}")
-  inh = open(intsv)
-  lnum = 0
-
+  # we will look at header row and figure out what input col maps to what output col
   colmap = {}
   for field in outcols:
     colmap[field] = None
 
+  # read all lines
   for ln in inh:
     lnum += 1
     lncols = ln.split("\t")
     lncols[-1] = lncols[-1].strip()
 
     # header line?
+    # map input cls to output cols
     if colmap["objid"] == None:
       for colnum, colstr in enumerate(lncols):
         if re.match(r'Acc?ession Num',colstr): colmap["objid"] = colnum
@@ -54,21 +70,32 @@ for intsv in intsvlist:
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
           raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
-        print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
+        print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]], file=logh)
       continue
 
-    # section divider line?
-    if len([col for col in lncols if col != None and len(col.strip())>0]) <= 2:
-      print("skip section header line: "+str(lnum)+": "+ln.strip())
+    # section divider line? print it but then ignore
+    # other ignorable types too
+    if len([col for col in lncols if col != None and len(col.strip())>0]) <= 2 or re.search(r'(?i)(HATS OFF IS A LOST FILM|no prints in archive|NO film prints.+DVD)',ln):
+      print(f"skip line: {lnum}: "+ln.strip(), file=logh)
       continue
 
-    # regular line.  make sure all fields filled
+    # regular line.  make sure all required fields filled
+    # some fields can be empty, then we put UNKNOWN
     for colname in outcols:
       if lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
-        raise Exception("empty "+colname+" in "+intsv+":"+str(lnum)+": "+ln.strip())
-    # if series col, and filled, prefix to title
-    if "series" in colmap and len(lncols[colmap["series"]].strip()):
-      lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
+        # for some cols, we just specify UNKNOWN
+        if colname in okunkcols:
+          print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip(), file=logh)
+          lncols[colmap[colname]] = "UNKNOWN"
+        # for others, an empty value is a fatal error
+        else:
+          print(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(), file=logh)
+          raise Exception(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip())
 
-    # then print
+    # TBD: handle serieses
+    # if series col, and filled, prefix to title
+    # if "series" in colmap and len(lncols[colmap["series"]].strip()):
+    #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
+
+    # write line to output file
     print("\t".join(lncols[colmap[colname]] for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
