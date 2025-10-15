@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 import sys,os,re
 
+# for importing spreadsheets into catalogit
+# see notes in doc "Mapping NESFM Silent Film Archive spreadsheet to catalog it"
+
 intsvlist = []
 av = sys.argv[1:]
 ac = 0
