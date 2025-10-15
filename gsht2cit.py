@@ -14,10 +14,12 @@ while ac < len(av):
   ac += 1
 
 # columns that should be in output
-outcols = ["objid","title","shelvingcode","location"]
+outcols = ["objid","name/title","shelvingcode","location","collection"]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
 okunkcols = ["objid","shelvingcode","location"]
+# these are cols that can be empty
+okemptycols = ["collection"]
 
 # process all input files specified on the command line
 for intsv in intsvlist:
@@ -66,10 +68,10 @@ for intsv in intsvlist:
     if colmap["objid"] == None:
       for colnum, colstr in enumerate(lncols):
         if re.match(r'Acc?ession Num',colstr): colmap["objid"] = colnum
-        elif re.match(r'Title',colstr): colmap["title"] = colnum
+        elif re.match(r'Title',colstr): colmap["name/title"] = colnum
         elif re.match(r'(Shelving|Bartel *-* *Thomsen Film Code)',colstr): colmap["shelvingcode"] = colnum
         elif re.match(r'Film Rack',colstr): colmap["location"] = colnum
-        elif re.match(r'Series',colstr): colmap["series"] = colnum; print("series col")
+        elif re.match(r'(?i)(comedy\s+)?Series',colstr): colmap["collection"] = colnum;
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
           raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
@@ -86,8 +88,11 @@ for intsv in intsvlist:
     # some fields can be empty, then we put UNKNOWN
     for colname in outcols:
       if lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
+        # some cols allowed to be empty
+        if colname in okemptycols:
+          lncols[colmap[colname]] = None
         # for some cols, we just specify UNKNOWN
-        if colname in okunkcols:
+        elif colname in okunkcols:
           print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip(), file=logh)
           lncols[colmap[colname]] = "UNKNOWN"
         # for others, an empty value is a fatal error
