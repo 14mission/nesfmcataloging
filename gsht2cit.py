@@ -19,7 +19,14 @@ while ac < len(av):
 # note: / can mean either hierarchy field arrangement, or just "aka" in a field name
 # also: a colon in and outcol name means CIt field is an array, with label/vals, and the bit after colon is a label
 # fields prefixed with * should be manually edited
-outcols = ["objid","name/title","shelvingcode","location","collection","condition/notes:pq#","motion picture details/production date/date","made/created/notes:Re-Issue Year","*motion picture details/cast","*motion picture details/cast","*motion picture details/director"]
+outcols = [
+  "objid","name/title","shelvingcode","location","collection","condition/notes:pq#",
+  "motion picture details/production date/date",
+  "made/created/notes:Re-Issue Year",
+  "*motion picture details/cast",
+  "*motion picture details/cast",
+  "*motion picture details/director"
+]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
 okunkcols = ["objid","shelvingcode","location"]
