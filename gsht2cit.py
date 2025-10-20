@@ -16,6 +16,8 @@ while ac < len(av):
   ac += 1
 
 # columns that should be in output
+# note: / can mean either hierarchy field arrangement, or just "aka" in a field name
+# also: a colon in and outcol name means CIt field is an array, with label/vals, and the bit after colon is a label
 outcols = ["objid","name/title","shelvingcode","location","collection","condition/notes:pq#"]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
