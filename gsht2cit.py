@@ -18,7 +18,8 @@ while ac < len(av):
 # columns that should be in output
 # note: / can mean either hierarchy field arrangement, or just "aka" in a field name
 # also: a colon in and outcol name means CIt field is an array, with label/vals, and the bit after colon is a label
-outcols = ["objid","name/title","shelvingcode","location","collection","condition/notes:pq#","motion picture details/production date/date"]
+# fields prefixed with * should be manually edited
+outcols = ["objid","name/title","shelvingcode","location","collection","condition/notes:pq#","motion picture details/production date/date","made/created/notes:Re-Issue Year","*motion picture details/cast","*motion picture details/cast","*motion picture details/director"]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
 okunkcols = ["objid","shelvingcode","location"]
@@ -80,6 +81,9 @@ for intsv in intsvlist:
         elif re.match(r'(?i)(comedy\s+)?Series',colstr): colmap["collection"] = colnum
         elif re.match(r'(?i)p\s*q\s*#',colstr): colmap["condition/notes:pq#"] = colnum
         elif re.match(r'(?i)prod.*year',colstr): colmap["motion picture details/production date/date"] = colnum
+        elif re.match(r'(?i)re\W*issue.*year',colstr): colmap["made/created/notes:Re-Issue Year"] = colnum
+        elif re.match(r'(?i)star\W*s\W*',colstr): colmap["*motion picture details/cast"] = colnum
+        elif re.match(r'(?i)director',colstr): colmap["*motion picture details/director"] = colnum
       # check that all required output cols were matched
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
