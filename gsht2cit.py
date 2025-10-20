@@ -71,6 +71,7 @@ for intsv in intsvlist:
     # header line?
     # map input cls to output cols
     if colmap["objid"] == None:
+      # map input cols to output cols
       for colnum, colstr in enumerate(lncols):
         if re.match(r'Acc?ession Num',colstr): colmap["objid"] = colnum
         elif re.match(r'Title',colstr): colmap["name/title"] = colnum
@@ -78,10 +79,17 @@ for intsv in intsvlist:
         elif re.match(r'Film Rack',colstr): colmap["location"] = colnum
         elif re.match(r'(?i)(comedy\s+)?Series',colstr): colmap["collection"] = colnum
         elif re.match(r'(?i)p\s*q\s*#',colstr): colmap["condition/notes:pq#"] = colnum
+      # check that all required output cols were matched
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
           raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
         print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]], file=logh)
+      # check that all input cols were mapped, except ones explicitly known to be unneeded
+      unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'created \d+\/|^\s*$',lncols[colnum]) == None]
+      if len(unmappedinputcols) > 0:
+        raise Exception("unmapped input cols: "+", ".join(lncols[colnum] for colnum in unmappedinputcols))
+
+      # rest of loop is for regular data lines
       continue
 
     # section divider line? print it but then ignore
