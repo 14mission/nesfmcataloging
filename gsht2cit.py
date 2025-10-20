@@ -4,6 +4,8 @@ import sys,os,re
 # for importing spreadsheets into catalogit
 # see notes in doc "Mapping NESFM Silent Film Archive spreadsheet to catalog it"
 
+# rename exported spreadsheets like this: ls NESFM\ Silent\ Film\ Achive\ -\ *tsv | perl -ne 's/\s+$//gs; my $origfn = $_; my $newfn = $origfn; $newfn =~ s/.* - /nesfm.archive./; $newfn =~ s/ /_/g; $newfn =~ s/&/and/g; $newfn = lc $newfn; print "mv \"$origfn\" $newfn\n"' | sh
+
 intsvlist = []
 av = sys.argv[1:]
 ac = 0
@@ -14,12 +16,13 @@ while ac < len(av):
   ac += 1
 
 # columns that should be in output
-outcols = ["objid","name/title","shelvingcode","location","collection"]
+outcols = ["objid","name/title","shelvingcode","location","collection","condition/notes"]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
 okunkcols = ["objid","shelvingcode","location"]
 # these are cols that can be empty
-okemptycols = ["collection"]
+okemptycols = ["collection","condition/notes"]
+# these cols can have multiple values
 
 # process all input files specified on the command line
 for intsv in intsvlist:
