@@ -18,7 +18,7 @@ while ac < len(av):
 # columns that should be in output
 # note: / can mean either hierarchy field arrangement, or just "aka" in a field name
 # also: a colon in and outcol name means CIt field is an array, with label/vals, and the bit after colon is a label
-outcols = ["objid","name/title","shelvingcode","location","collection","condition/notes:pq#"]
+outcols = ["objid","name/title","shelvingcode","location","collection","condition/notes:pq#","motion picture details/production date/date"]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
 okunkcols = ["objid","shelvingcode","location"]
@@ -79,11 +79,16 @@ for intsv in intsvlist:
         elif re.match(r'Film Rack',colstr): colmap["location"] = colnum
         elif re.match(r'(?i)(comedy\s+)?Series',colstr): colmap["collection"] = colnum
         elif re.match(r'(?i)p\s*q\s*#',colstr): colmap["condition/notes:pq#"] = colnum
+        elif re.match(r'(?i)prod.*year',colstr): colmap["motion picture details/production date/date"] = colnum
       # check that all required output cols were matched
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
           raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
         print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]], file=logh)
+      # check that nothing was mapped unexpectedly
+      unexpectedoutputcols = [colname for colname in colmap.keys() if colname not in outcols]
+      if len(unexpectedoutputcols) > 0:
+        raise Exception("unexpected output column mapping to: "+", ".join(unexpectedoutputcols))
       # check that all input cols were mapped, except ones explicitly known to be unneeded
       unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'created \d+\/|^\s*$',lncols[colnum]) == None]
       if len(unmappedinputcols) > 0:
