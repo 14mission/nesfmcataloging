@@ -29,6 +29,10 @@ outcols = [
   "*motion picture details/producer/publisher",
   "relationships/related person or organization/notes:Original Distributor",
   "relationships/related person or organization/notes:Re-Issue Distributor",
+  "relationships/related places/notes:Print Exhibition Country",
+  "made/created/place",
+  "motion picture details/film stock",
+  "motion picture details/length",
 ]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
@@ -97,6 +101,10 @@ for intsv in intsvlist:
         elif re.match(r'(?i)produc(er|tion co)',colstr): colmap["*motion picture details/producer/publisher"] = colnum
         elif re.match(r'(?i)distrib.*orig',colstr): colmap["relationships/related person or organization/notes:Original Distributor"] = colnum
         elif re.match(r'(?i)distrib.*re\W*issue',colstr): colmap["relationships/related person or organization/notes:Re-Issue Distributor"] = colnum
+        elif re.match(r'(?i)country',colstr): colmap["made/created/place"] = colnum
+        elif re.match(r'(?i)film stock',colstr): colmap["motion picture details/film stock"] = colnum
+        elif re.match(r'(?i)film length',colstr): colmap["motion picture details/length"] = colnum
+        elif re.match(r'(?i)print exhibition country',colstr): colmap["relationships/related places/notes:Print Exhibition Country"] = colnum
       # check that all required output cols were matched
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
