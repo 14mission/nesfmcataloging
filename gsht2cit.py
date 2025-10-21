@@ -33,10 +33,45 @@ outcols = [
   "made/created/place",
   "motion picture details/film stock",
   "motion picture details/length",
+  "motion picture details/sound/sound notes:Language", # actually probably NOT sound
+  "*motion picture details/sound/film sound", 
+  "aspect ratio", # notes (1) maybe should be under motion picture details? (2) conflated with format in gsheets
+  "motion picture details/film gauge/format", # see (2) above.  also, maybe one more level than needed?
+  "*motion picture details/color characteristics",
+  "parts/parts", # (reels)
+  "general notes/note:Blackhawk Assets",
+  "general notes/note:Best Quality DVD Release",
+  "general notes/note:Best Quality Blu-ray Release", # lowercase "ray" per wikipedia
+  "general notes/note:Stereotypes",
+  "*general notes/note", # label needed?
 ]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
-okunkcols = ["objid","shelvingcode","location"]
+okunkcols = [
+  # really should *not* be missing!!!
+  "objid","shelvingcode", "location",
+  # probably should not be missing either
+  "motion picture details/film stock",
+  "motion picture details/length",
+  "*motion picture details/director",
+  "*motion picture details/producer/publisher",
+  "motion picture details/production date/date",
+  "*motion picture details/color characteristics",
+  # really not sure
+  "motion picture details/sound/sound notes:Language", # just assume empty=english?
+  # probably ok to be omitted
+  "made/created/notes:Re-Issue Year",
+  "relationships/related person or organization/notes:Original Distributor",
+  "relationships/related person or organization/notes:Re-Issue Distributor",
+  "general notes/note:Best Quality DVD Release",
+  "general notes/note:Best Quality Blu-ray Release",
+  "*general notes/note",
+  "general notes/note:Stereotypes",
+  "general notes/note:Blackhawk Assets",
+  "relationships/related places/notes:Print Exhibition Country",
+]
+# ok to not be cols at all
+okmissingcols = [ "motion picture details/film gauge/format" ] # will actually be retrieved from "aspect ratio" col
 # these are cols that can be empty
 okemptycols = ["collection","condition/notes:pq#"]
 # these cols can have multiple values
@@ -105,11 +140,25 @@ for intsv in intsvlist:
         elif re.match(r'(?i)film stock',colstr): colmap["motion picture details/film stock"] = colnum
         elif re.match(r'(?i)film length',colstr): colmap["motion picture details/length"] = colnum
         elif re.match(r'(?i)print exhibition country',colstr): colmap["relationships/related places/notes:Print Exhibition Country"] = colnum
+        elif re.match(r'(?i)language',colstr): colmap["motion picture details/sound/sound notes:Language"] = colnum
+        elif re.match(r'(?i)sound track',colstr): colmap["*motion picture details/sound/film sound"] = colnum
+        elif re.match(r'(?i)aspect ratio.*film format',colstr): colmap["aspect ratio"] = colnum # to be broken up below
+        elif re.match(r'(?i)film color',colstr): colmap["*motion picture details/color characteristics"] = colnum
+        elif re.match(r'(?i)film reels',colstr): colmap["parts/parts"] = colnum
+        elif re.match(r'(?i)blackhawk assets',colstr): colmap["general notes/note:Blackhawk Assets"] = colnum
+        elif re.match(r'(?i)blu\W*ray release',colstr): colmap["general notes/note:Best Quality Blu-ray Release"] = colnum
+        elif re.match(r'(?i)dvd release',colstr): colmap["general notes/note:Best Quality DVD Release"] = colnum
+        elif re.match(r'(?i)stereotypes',colstr): colmap["general notes/note:Stereotypes"] = colnum
+        elif re.match(r'(?i)notes',colstr): colmap["*general notes/note"] = colnum
       # check that all required output cols were matched
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
-          raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
-        print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]], file=logh)
+          if field in okmissingcols:
+            print(field + "=None")
+          else:
+            raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
+        else:
+          print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]], file=logh)
       # check that nothing was mapped unexpectedly
       unexpectedoutputcols = [colname for colname in colmap.keys() if colname not in outcols]
       if len(unexpectedoutputcols) > 0:
@@ -131,7 +180,9 @@ for intsv in intsvlist:
     # regular line.  make sure all required fields filled
     # some fields can be empty, then we put UNKNOWN
     for colname in outcols:
-      if lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
+      if colname not in colmap or colmap[colname] == None:
+        continue
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
         # some cols allowed to be empty
         if colname in okemptycols:
           lncols[colmap[colname]] = None
@@ -150,4 +201,4 @@ for intsv in intsvlist:
     #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
-    print("\t".join(lncols[colmap[colname]] if lncols[colmap[colname]] != None else "None" for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
+    print("\t".join(lncols[colmap[colname]] if colmap[colname] != None and lncols[colmap[colname]] != None else "None" for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
