@@ -25,7 +25,10 @@ outcols = [
   "made/created/notes:Re-Issue Year",
   "*motion picture details/cast",
   "*motion picture details/cast",
-  "*motion picture details/director"
+  "*motion picture details/director",
+  "*motion picture details/producer/publisher",
+  "relationships/related person or organization/notes:Original Distributor",
+  "relationships/related person or organization/notes:Re-Issue Distributor",
 ]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
@@ -91,6 +94,9 @@ for intsv in intsvlist:
         elif re.match(r'(?i)re\W*issue.*year',colstr): colmap["made/created/notes:Re-Issue Year"] = colnum
         elif re.match(r'(?i)star\W*s\W*',colstr): colmap["*motion picture details/cast"] = colnum
         elif re.match(r'(?i)director',colstr): colmap["*motion picture details/director"] = colnum
+        elif re.match(r'(?i)produc(er|tion co)',colstr): colmap["*motion picture details/producer/publisher"] = colnum
+        elif re.match(r'(?i)distrib.*orig',colstr): colmap["relationships/related person or organization/notes:Original Distributor"] = colnum
+        elif re.match(r'(?i)distrib.*re\W*issue',colstr): colmap["relationships/related person or organization/notes:Re-Issue Distributor"] = colnum
       # check that all required output cols were matched
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
