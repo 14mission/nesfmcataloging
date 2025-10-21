@@ -74,7 +74,6 @@ okunkcols = [
 okmissingcols = [ "motion picture details/film gauge/format" ] # will actually be retrieved from "aspect ratio" col
 # these are cols that can be empty
 okemptycols = ["collection","condition/notes:pq#"]
-# these cols can have multiple values
 
 # process all input files specified on the command line
 for intsv in intsvlist:
@@ -201,11 +200,11 @@ for intsv in intsvlist:
     # special rules:
     
     # extract film gauge from aspect ratio
-    #if lncols[colmap["aspect ratio"]] != None:
-    #  apect_ratio_and_film_gauge_match = re.match(r'^(.+?)\s+(\d+(?\.\d+)\s*mm)\s*$', lncols[colmap["aspect ratio"]])
-    #  if apect_ratio_and_film_gauge_match != None:
-    #    lncols[colmap["aspect ratio"]] = apect_ratio_and_film_gauge_match.group(1)
-
+    if lncols[colmap["aspect ratio"]] != None:
+      apect_ratio_and_film_gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?\s*mm)\s*$', outcolvals["aspect ratio"])
+      if apect_ratio_and_film_gauge_match != None:
+        outcolvals["aspect ratio"] = apect_ratio_and_film_gauge_match.group(1)
+        outcolvals["motion picture details/film gauge/format"] = apect_ratio_and_film_gauge_match.group(2)
 
     # TBD: handle serieses
     # if series col, and filled, prefix to title
