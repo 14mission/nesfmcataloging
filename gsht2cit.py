@@ -179,21 +179,33 @@ for intsv in intsvlist:
 
     # regular line.  make sure all required fields filled
     # some fields can be empty, then we put UNKNOWN
+    outcolvals = {}
     for colname in outcols:
       if colname not in colmap or colmap[colname] == None:
         continue
       elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
         # some cols allowed to be empty
         if colname in okemptycols:
-          lncols[colmap[colname]] = None
+          outcolvals[colname] = None
         # for some cols, we just specify UNKNOWN
         elif colname in okunkcols:
           print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip(), file=logh)
-          lncols[colmap[colname]] = "UNKNOWN"
+          outcolvals[colname] = "UNKNOWN"
         # for others, an empty value is a fatal error
         else:
           print(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(), file=logh)
           raise Exception(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip())
+      else:
+        outcolvals[colname] = lncols[colmap[colname]].strip()
+
+    # special rules:
+    
+    # extract film gauge from aspect ratio
+    #if lncols[colmap["aspect ratio"]] != None:
+    #  apect_ratio_and_film_gauge_match = re.match(r'^(.+?)\s+(\d+(?\.\d+)\s*mm)\s*$', lncols[colmap["aspect ratio"]])
+    #  if apect_ratio_and_film_gauge_match != None:
+    #    lncols[colmap["aspect ratio"]] = apect_ratio_and_film_gauge_match.group(1)
+
 
     # TBD: handle serieses
     # if series col, and filled, prefix to title
@@ -201,4 +213,4 @@ for intsv in intsvlist:
     #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
-    print("\t".join(lncols[colmap[colname]] if colmap[colname] != None and lncols[colmap[colname]] != None else "None" for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
+    print("\t".join(outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else "None" for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
