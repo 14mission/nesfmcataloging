@@ -1,13 +1,29 @@
 #!/usr/bin/env python3
 import re, sys
 
+# patterns to look for
+# arrange in order to check them
 objidpats = [
+ r'\d\d\d\d\.\d+\.\d+',
+ r'\d\d\d\d\.\d+\.\d+[\s-]?[A-Za-z]',
+ r'MG\d+',
+ r'MG\d+-\d+',
+ r'MG\d+(-\d+)?-?[A-Za-z]+(-\d+|-[A-Za-z]+)*',
+ r'A-\d+',
+ r'(?i:)\W*unknown\W*',
+ r'#\d+\.\d+',
+ r'20xx.xx.xx',
  r'.+',
  r'',
 ]
 
+# count number of times each pattern matched
+# keep first 10 examples
 objidpatcounts = {}
-for pat in objidpats: objidpatcounts[pat] = 0
+objidpatexamples = {}
+for pat in objidpats:
+  objidpatcounts[pat] = 0
+  objidpatexamples[pat] = []
 
 for fn in sys.argv[1:]:
 
@@ -42,8 +58,13 @@ for fn in sys.argv[1:]:
       for pat in objidpats:
         if re.match(r'^'+pat+'$',objid):
           objidpatcounts[pat] += 1
-          continue
+          objidpatexamples[pat].append(objid)
+          break
 
 # counts of
-for patandcount in sorted(objidpatcounts.items(), key=lambda item: item[1]):
-  print(str(patandcount[1])+"\t^"+patandcount[0]+"$")
+print("cnt\tpat\texamples")
+for pat, count in sorted(objidpatcounts.items(), reverse=True, key=lambda item: item[1]):
+  print(str(count)+"\t^"+pat+"$"+"\t" + ", ".join(example if len(example) else "EMPTY" for example in objidpatexamples[pat][:10]))
+print("misc")
+for oddball in objidpatexamples[r'.+']:
+  print(oddball)
