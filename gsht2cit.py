@@ -27,6 +27,7 @@ outcols = [
   "*motion picture details/cast",
   "*motion picture details/director",
   "*motion picture details/producer/publisher",
+  "*motion picture details/writer",
   "relationships/related person or organization/notes:Original Distributor",
   "relationships/related person or organization/notes:Re-Issue Distributor",
   "relationships/related places/notes:Print Exhibition Country",
@@ -35,15 +36,17 @@ outcols = [
   "motion picture details/length",
   "motion picture details/sound/sound notes:Language", # actually probably NOT sound
   "*motion picture details/sound/film sound", 
+  "motion picture details/frame rate",
   "aspect ratio", # notes (1) maybe should be under motion picture details? (2) conflated with format in gsheets
   "motion picture details/film gauge/format", # see (2) above.  also, maybe one more level than needed?
   "*motion picture details/color characteristics",
   "parts/parts", # (reels)
-  "general notes/note:Blackhawk Assets",
+  #"general notes/note:Blackhawk Assets",
   "general notes/note:Best Quality DVD Release",
   "general notes/note:Best Quality Blu-ray Release", # lowercase "ray" per wikipedia
   "general notes/note:Stereotypes",
   "*general notes/note", # label needed?
+  "acquisition/source",
 ]
 # if these are not found in input, put UNKNOWN in output.
 # for any other column to be empty is an error
@@ -57,6 +60,9 @@ okunkcols = [
   "*motion picture details/producer/publisher",
   "motion picture details/production date/date",
   "*motion picture details/color characteristics",
+  "*motion picture details/writer",
+  "*motion picture details/sound/film sound",
+  "*motion picture details/cast",
   # really not sure
   "motion picture details/sound/sound notes:Language", # just assume empty=english?
   # probably ok to be omitted
@@ -67,13 +73,31 @@ okunkcols = [
   "general notes/note:Best Quality Blu-ray Release",
   "*general notes/note",
   "general notes/note:Stereotypes",
-  "general notes/note:Blackhawk Assets",
+  #"general notes/note:Blackhawk Assets",
   "relationships/related places/notes:Print Exhibition Country",
+  "collection",
+  "acquisition/source",
+  # we *do* actually require film gauge, which we extract from here, but it's handled specially
+  "aspect ratio",
 ]
 # ok to not be cols at all
-okmissingcols = [ "motion picture details/film gauge/format" ] # will actually be retrieved from "aspect ratio" col
+okmissingcols = [ "motion picture details/film gauge/format", # will actually be retrieved from "aspect ratio" col
+  "collection", # present in some genres, not in others
+  "general notes/note:Best Quality Blu-ray Release",
+  "general notes/note:Best Quality DVD Release",
+  #"general notes/note:Blackhawk Assets",
+  "general notes/note:Stereotypes",
+  "*motion picture details/writer",
+  "motion picture details/frame rate",
+]
 # these are cols that can be empty
-okemptycols = ["collection","condition/notes:pq#"]
+okemptycols = [
+  "collection",
+  "condition/notes:pq#",
+  "*motion picture details/writer",
+  "motion picture details/frame rate",
+  "made/created/place",
+]
 
 # process all input files specified on the command line
 for intsv in intsvlist:
@@ -133,6 +157,7 @@ for intsv in intsvlist:
         elif re.match(r'(?i)star\W*s\W*',colstr): colmap["*motion picture details/cast"] = colnum
         elif re.match(r'(?i)director',colstr): colmap["*motion picture details/director"] = colnum
         elif re.match(r'(?i)produc(er|tion co)',colstr): colmap["*motion picture details/producer/publisher"] = colnum
+        elif re.match(r'(?i)writer',colstr): colmap["*motion picture details/writer"] = colnum
         elif re.match(r'(?i)distrib.*orig',colstr): colmap["relationships/related person or organization/notes:Original Distributor"] = colnum
         elif re.match(r'(?i)distrib.*re\W*issue',colstr): colmap["relationships/related person or organization/notes:Re-Issue Distributor"] = colnum
         elif re.match(r'(?i)country',colstr): colmap["made/created/place"] = colnum
@@ -144,18 +169,19 @@ for intsv in intsvlist:
         elif re.match(r'(?i)aspect ratio.*film format',colstr): colmap["aspect ratio"] = colnum # to be broken up below
         elif re.match(r'(?i)film color',colstr): colmap["*motion picture details/color characteristics"] = colnum
         elif re.match(r'(?i)film reels',colstr): colmap["parts/parts"] = colnum
-        elif re.match(r'(?i)blackhawk assets',colstr): colmap["general notes/note:Blackhawk Assets"] = colnum
+        #elif re.match(r'(?i)blackhawk assets',colstr): colmap["general notes/note:Blackhawk Assets"] = colnum
         elif re.match(r'(?i)blu\W*ray release',colstr): colmap["general notes/note:Best Quality Blu-ray Release"] = colnum
         elif re.match(r'(?i)dvd release',colstr): colmap["general notes/note:Best Quality DVD Release"] = colnum
         elif re.match(r'(?i)stereotypes',colstr): colmap["general notes/note:Stereotypes"] = colnum
         elif re.match(r'(?i)notes',colstr): colmap["*general notes/note"] = colnum
+        elif re.match(r'(?i)(don(at)?or|blackhawk assets)',colstr): colmap["acquisition/source"] = colnum
       # check that all required output cols were matched
       for field in sorted(colmap.keys()):
         if colmap[field] == None:
           if field in okmissingcols:
             print(field + "=None")
           else:
-            raise Exception("no "+field+" col found in "+intsv+": hdrcols="+",".join(lncols))
+            raise Exception("no \""+field+"\" col found in \""+intsv+"\": HDRCOLS="+",".join(lncols))
         else:
           print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]], file=logh)
       # check that nothing was mapped unexpectedly
@@ -163,11 +189,15 @@ for intsv in intsvlist:
       if len(unexpectedoutputcols) > 0:
         raise Exception("unexpected output column mapping to: "+", ".join(unexpectedoutputcols))
       # check that all input cols were mapped, except ones explicitly known to be unneeded
-      unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'created \d+\/|^\s*$',lncols[colnum]) == None]
+      unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'(?i)(created \d+\/|catalog\W*it|filed by director or star|^\s*$)',lncols[colnum]) == None]
       if len(unmappedinputcols) > 0:
         raise Exception("unmapped input cols: "+", ".join(lncols[colnum] for colnum in unmappedinputcols))
 
       # rest of loop is for regular data lines
+      continue
+
+    # film not actually in archive?
+    if re.search(r'(?i)NO prints in Archive',ln) != None:
       continue
 
     # section divider line? print it but then ignore
@@ -198,13 +228,36 @@ for intsv in intsvlist:
         outcolvals[colname] = lncols[colmap[colname]].strip()
 
     # special rules:
-    
+
+    # extract film gauge from title: can be like **35mm** or (35mm)
+    aspect_ratio_title_match = re.match(r'(.+?)\s(?:\*\*|\()(\d+)(mm)(?:\*\*|\))\s*$', outcolvals["name/title"])
+    if aspect_ratio_title_match != None:
+      coretitle = aspect_ratio_title_match.group(1)
+      titlefilmgauge = aspect_ratio_title_match.group(2) + aspect_ratio_title_match.group(3)
+      if outcolvals["aspect ratio"] != None and re.search(r'\d+\s*mm', outcolvals["aspect ratio"]) != None and re.search(titlefilmgauge,outcolvals["aspect ratio"]) == None:
+        raise Exception("inconsistent film gauge: title=\""+outcolvals["title"]+"\" vs aspect ratio=\""+outcolvals["aspect ratio"]+"\"")
+      outcolvals["motion picture details/film gauge/format"] = titlefilmgauge
+      outcolvals["name/title"] = coretitle
+      if outcolvals["aspect ratio"] == None:
+        outcolvals["aspect ratio"] = "UNKNOWN"
+
+    # extract frame rate from aspect ratio, if present
+    if outcolvals["aspect ratio"] != None:
+      apect_ratio_and_frame_rate_match = re.match(r'(?i)^(.+?)\s+(\d+\s*fps)\s*$', outcolvals["aspect ratio"])
+      if apect_ratio_and_frame_rate_match != None:
+        outcolvals["aspect ratio"] = apect_ratio_and_frame_rate_match.group(1)
+        outcolvals["motion picture details/frame rate"] = apect_ratio_and_frame_rate_match.group(2).upper()
+
     # extract film gauge from aspect ratio
-    if lncols[colmap["aspect ratio"]] != None:
-      apect_ratio_and_film_gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?\s*mm)\s*$', outcolvals["aspect ratio"])
+    if outcolvals["aspect ratio"] != None:
+      apect_ratio_and_film_gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?\s*mm)(\s*.*?)$', outcolvals["aspect ratio"])
       if apect_ratio_and_film_gauge_match != None:
-        outcolvals["aspect ratio"] = apect_ratio_and_film_gauge_match.group(1)
+        outcolvals["aspect ratio"] = apect_ratio_and_film_gauge_match.group(1) + apect_ratio_and_film_gauge_match.group(3).strip()
         outcolvals["motion picture details/film gauge/format"] = apect_ratio_and_film_gauge_match.group(2)
+
+    # if film gauge still not filled, that's a problem
+    if "motion picture details/film gauge/format" not in outcolvals or outcolvals["motion picture details/film gauge/format"] == None:
+      raise Exception(f"no film gauge found in line {lnum}: "+ln.strip())
 
     # TBD: handle serieses
     # if series col, and filled, prefix to title
