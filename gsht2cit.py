@@ -15,10 +15,24 @@ while ac < len(av):
   else: intsvlist.append(av[ac])
   ac += 1
 
+# columns we should create
 # columns that should be in output
-# note: / can mean either hierarchy field arrangement, or just "aka" in a field name
-# also: a colon in and outcol name means CIt field is an array, with label/vals, and the bit after colon is a label
-# fields prefixed with * should be manually edited
+# format of rows below is output-column-name, flags, input-column-name-pattern
+#  note: / can mean either hierarchy field arrangement, or just "aka" in a field name
+#  also: a colon in and outcol name means CIt field is an array, with label/vals, and the bit after colon is a label
+# note on flags:
+#  - means none
+#  * mark with a * in output, meaning should be manually edited
+#  e ok for the field to be empty
+#  m ok for the field to be missing entirely (not in the input spreadsheet at all)
+#  u if field is empty, fill with explicit UNKNOWN
+#  r field will be filled by a rule
+# note on patterns:
+#  these are matched agains the column headers of the input files, from google spreadsheets
+#  these are regular expressions
+#  they are matched case-insensitively
+#  they are matched at the beginning
+#  they don't have to match all the way to the end
 outcols = []
 hdrpats = {}
 starcols = {}
