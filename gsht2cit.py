@@ -60,7 +60,7 @@ for row in [
   r'motion_picture_details/writer *em writer',
   r'relationships/related_person_or_organization/notes:Original_Distributor u distrib.*orig',
   r'relationships/related_person_or_organization/notes:Re-Issue_Distributor u distrib.*re\W*issue',
-  r'relationships/related_places/notes:Print_Exhibition_Country u print\sexhibition\scountry',
+  r'relationships/related_places/notes:Print_Exhibition_Country e print\sexhibition\scountry',
   r'made/created/place e country',
   r'motion_picture_details/film_stock u film\sstock',
   r'motion_picture_details/length u film\slength',
@@ -236,6 +236,15 @@ for intsv in intsvlist:
     if "motion_picture_details/film_gauge/format" not in outcolvals or outcolvals["motion_picture_details/film_gauge/format"] == None:
       badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
       continue
+
+    # country normalization
+    for countryfield in [ "relationships/related_places/notes:Print_Exhibition_Country", "made/created/place" ]:
+      if countryfield in outcolvals and outcolvals[countryfield] != None:
+        outcolvals[countryfield] = re.sub(r'^U\W*S\W*A\W*','United States',outcolvals[countryfield])
+        outcolvals[countryfield] = re.sub(r'^U\W*K\W*','United Kingdom',outcolvals[countryfield])
+        outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
+        outcolvals[countryfield] = " ".join(outcolvals[countryfield].split())
+        outcolvals[countryfield] = outcolvals[countryfield].title()
 
     # TBD: handle serieses
     # if series col, and filled, prefix to title
