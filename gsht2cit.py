@@ -53,7 +53,7 @@ for row in [
   r'collection em (comedy\s+)?Series',
   r'condition/notes:pq e p\s*q\b',
   r'motion_picture_details/production_date/date u prod.*year',
-  r'made/created/notes:Re-Issue_Year u re\W*issue.*year',
+  r'made/created/notes:Re-Issue_Year e re\W*issue.*year',
   r'motion_picture_details/cast *u star\W*s\W*',
   r'motion_picture_details/director *u director',
   r'motion_picture_details/producer/publisher *u produc(er|tion\sco)',
@@ -243,4 +243,6 @@ for intsv in intsvlist:
     #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
-    print("\t".join(outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else "None" for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
+    #novalstr = "None"
+    novalstr = ""
+    print("\t".join(outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
