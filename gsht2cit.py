@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 import sys,os,re
 
+# later we will make this a fatal error
+def badrow(msg,logf):
+  print("BAD ROW: "+msg,file=logf)
+  print("BAD ROW: "+msg)
+
 # for importing spreadsheets into catalogit
 # see notes in doc "Mapping NESFM Silent Film Archive spreadsheet to catalog it"
 
@@ -68,9 +73,10 @@ for row in [
   r'parts/parts - film\sreels', # reels, revisit?
   r'general_notes/note:Best_Quality_DVD_Release um dvd\s+release',
   r'general_notes/note:Best_Quality_Blu-ray_Release um blu\W*ray\s+release',
+  r'general_notes/note:Best_Quality_Blu-ray_or_DVD_Release um best\squality.*dvd.*blu.*ray.*release',
   r'general_notes/note:Stereotypes u stereotypes',
   r'general_notes/note *u notes', # label needed
-  r'acquisition/source u don(at)?or|blackhawk\sassets', 
+  r'acquisition/source u don(at)?or|blackhawk\sassets|assett?s$', 
   ]:
   cols = row.split()
   if len(cols) != 3: raise Exception("misformatted label spec: "+row)
@@ -154,7 +160,7 @@ for intsv in intsvlist:
       if len(unexpectedoutputcols) > 0:
         raise Exception("unexpected output column mapping to: "+", ".join(unexpectedoutputcols))
       # check that all input cols were mapped, except ones explicitly known to be unneeded
-      unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'(?i)(created \d+\/|catalog\W*it|filed by director or star|^\s*$)',lncols[colnum]) == None]
+      unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'(?i)(created \d+\/|updated \d+\/|catalog\W*it|filed by director or star|sorted by director or catagory|^\s*$)',lncols[colnum]) == None]
       if len(unmappedinputcols) > 0:
         raise Exception("unmapped input cols: "+", ".join(lncols[colnum] for colnum in unmappedinputcols))
 
@@ -174,6 +180,7 @@ for intsv in intsvlist:
     # regular line.  make sure all required fields filled
     # some fields can be empty, then we put UNKNOWN
     outcolvals = {}
+    isbadrow = False
     for colname in outcols:
       if colname not in colmap or colmap[colname] == None:
         continue
@@ -188,9 +195,13 @@ for intsv in intsvlist:
         # for others, an empty value is a fatal error
         else:
           print(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(), file=logh)
-          raise Exception(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip())
+          badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(),logh)
+          isbadrow = True
       else:
         outcolvals[colname] = lncols[colmap[colname]].strip()
+    # in case badrow() just warns
+    if isbadrow:
+      continue
 
     # special rules:
 
@@ -200,7 +211,8 @@ for intsv in intsvlist:
       coretitle = aspect_ratio_title_match.group(1)
       titlefilmgauge = aspect_ratio_title_match.group(2) + aspect_ratio_title_match.group(3)
       if outcolvals["aspect_ratio"] != None and re.search(r'\d+\s*mm', outcolvals["aspect_ratio"]) != None and re.search(titlefilmgauge,outcolvals["aspect_ratio"]) == None:
-        raise Exception("inconsistent film gauge: title=\""+outcolvals["title"]+"\" vs aspect ratio=\""+outcolvals["aspect_ratio"]+"\"")
+        badrow("inconsistent film gauge: title=\""+outcolvals["title"]+"\" vs aspect ratio=\""+outcolvals["aspect_ratio"]+"\"",logh)
+        continue
       outcolvals["motion_picture_details/film_gauge/format"] = titlefilmgauge
       outcolvals["name/title"] = coretitle
       if outcolvals["aspect_ratio"] == None:
@@ -222,7 +234,8 @@ for intsv in intsvlist:
 
     # if film gauge still not filled, that's a problem
     if "motion_picture_details/film_gauge/format" not in outcolvals or outcolvals["motion_picture_details/film_gauge/format"] == None:
-      raise Exception(f"no film gauge found in line {lnum}: "+ln.strip())
+      badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
+      continue
 
     # TBD: handle serieses
     # if series col, and filled, prefix to title
