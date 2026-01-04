@@ -66,6 +66,7 @@ for row in [
   r'motion_picture_details/length u film\slength',
   r'motion_picture_details/sound/sound_notes:Language u language', # actually probably NOT sound; =titles
   r'motion_picture_details/sound/film_sound *u sound\strack',
+  r'motion_picture_details/sound/sound_notes:Type r NOSOURCECOLUMN', # populated from "sound track"
   r'motion_picture_details/frame_rate me NOSOURCECOLUMN',
   r'aspect_ratio - aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
   r'motion_picture_details/film_gauge/format r NOSOURCECOLUMN',
@@ -245,6 +246,17 @@ for intsv in intsvlist:
         outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
         outcolvals[countryfield] = " ".join(outcolvals[countryfield].split())
         outcolvals[countryfield] = outcolvals[countryfield].title()
+
+    # sound normalization
+    if "motion_picture_details/sound/film_sound" in outcolvals and outcolvals["motion_picture_details/sound/film_sound"] != None:
+      soundval = outcolvals["motion_picture_details/sound/film_sound"]
+      if re.match(r'(?i)^silent$',soundval):
+        soundval = "si."
+      else:
+        outcolvals["motion_picture_details/sound/sound_notes:Type"] = soundval
+        soundval = "sd."
+      #print(outcolvals["motion_picture_details/sound/film_sound"]+" -> "+soundval+" + "+(outcolvals["motion_picture_details/sound/sound_notes:Type"] if "motion_picture_details/sound/sound_notes:Type" in outcolvals else ""))
+      outcolvals["motion_picture_details/sound/film_sound"] = soundval
 
     # TBD: handle serieses
     # if series col, and filled, prefix to title
