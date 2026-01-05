@@ -75,7 +75,7 @@ for row in [
   r'general_notes/note:Best_Quality_DVD_Release um dvd\s+release',
   r'general_notes/note:Best_Quality_Blu-ray_Release um blu\W*ray\s+release',
   r'general_notes/note:Best_Quality_Blu-ray_or_DVD_Release um best\squality.*dvd.*blu.*ray.*release',
-  r'general_notes/note:Stereotypes u stereotypes',
+  r'general_notes/note:Stereotypes_or_Content_Issues e stereotypes',
   r'general_notes/note *u notes', # label needed
   r'acquisition/source u don(at)?or|blackhawk\sassets|assett?s$', 
   ]:
