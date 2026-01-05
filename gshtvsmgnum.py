@@ -70,4 +70,16 @@ for gshtfn in glob.glob("nesfm.archive.*tsv"):
         gshtinfo[normedid] += " _AND_ "+text
       else:
         gshtinfo[normedid] = text
-  print("found "+str(len(gshtinfo))+" entries")
+  print("found "+str(len(gshtinfo))+" total entries")
+print("")
+
+print("CORRELATE")
+allids = {}
+for idstr in mgninfo: allids[idstr] = True
+for idstr in gshtinfo: allids[idstr] = True
+for idstr in sorted(allids):
+  print("\t".join([
+    idstr,
+    mgninfo[idstr] if idstr in mgninfo else "NotInMGNumerical",
+    gshtinfo[idstr] if idstr in gshtinfo else "NotInGSheets"
+  ]))
