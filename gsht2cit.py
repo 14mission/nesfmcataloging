@@ -58,19 +58,19 @@ for row in [
   r'motion_picture_details/director *u director',
   r'motion_picture_details/producer/publisher *u produc(er|tion\sco)',
   r'motion_picture_details/writer *em writer',
-  r'relationships/related_person_or_organization/notes:Original_Distributor u distrib.*orig',
-  r'relationships/related_person_or_organization/notes:Re-Issue_Distributor u distrib.*re\W*issue',
+  r'relationships/related_person_or_organization/notes:Original_Distributor e distrib.*orig',
+  r'relationships/related_person_or_organization/notes:Re-Issue_Distributor e distrib.*re\W*issue',
   r'relationships/related_places/notes:Print_Exhibition_Country e print\sexhibition\scountry',
   r'made/created/place e country',
   r'motion_picture_details/film_stock u film\sstock',
   r'motion_picture_details/length u film\slength',
-  r'motion_picture_details/sound/sound_notes:Language u language', # actually probably NOT sound; =titles
+  r'motion_picture_details/sound/sound_notes:Language e language', # actually probably NOT sound; =titles
   r'motion_picture_details/sound/film_sound *u sound\strack',
   r'motion_picture_details/sound/sound_notes:Type r NOSOURCECOLUMN', # populated from "sound track"
   r'motion_picture_details/frame_rate me NOSOURCECOLUMN',
   r'aspect_ratio - aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
   r'motion_picture_details/film_gauge/format r NOSOURCECOLUMN',
-  r'motion_picture_details/color_characteristics *u film\scolor',
+  r'motion_picture_details/color_characteristics *e film\scolor',
   r'parts/parts - film\sreels', # reels, revisit?
   r'general_notes/note:Best_Quality_DVD_Release em dvd\s+release',
   r'general_notes/note:Best_Quality_Blu-ray_Release em blu\W*ray\s+release',
@@ -185,7 +185,8 @@ for intsv in intsvlist:
     for colname in outcols:
       if colname not in colmap or colmap[colname] == None:
         continue
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0:
+      # various ways of being "empty"
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*unknown\W*$',lncols[colmap[colname]]):
         # some cols allowed to be empty
         if colname in okemptycols:
           outcolvals[colname] = None
