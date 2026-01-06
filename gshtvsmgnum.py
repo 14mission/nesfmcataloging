@@ -6,13 +6,14 @@ def oldnormalizeid(idstr):
   idstr = re.sub(r'\W+','',idstr) # clobber all punctuation except b
   idstr = re.sub(r'_DASH_','-',idstr) # now put _DASH_ back
   idstr = idstr.upper() # uppercase
-  idstr = re.sub(r'(?i)^mg','',idstr) # trim prefix MG
+  idstr = re.sub(r'(?i)^mg\W*','',idstr) # trim prefix MG
   idstr = re.sub(r'^0+','',idstr) # trim leading zeros
   idstr = "MG"+idstr # (re-)prefix MG
   return idstr
 
 def normalizeid(idstr):
-  idstr = re.sub(r'(?i)^mg','',idstr) # trim prefix MG
+  idstr = re.sub(r'(?i)^mg\W*','',idstr) # trim prefix MG
+  idstr = re.sub(r'^0+','',idstr) # trim leading zeros
   idstr = re.sub(r'\D.*$','',idstr) # clobber all suffixes (anything starting with a nondigit)
   return "MG"+idstr
 
@@ -32,7 +33,7 @@ for ln in mgnf:
   text = "("+rawid+") "+cols[1]
   normedid = normalizeid(rawid)
   if normedid in mgninfo:
-    print("normed id collision for: "+normedid+" "+mgninfo[normedid]+" _VS_ "+text)
+    print("normed id collision for: "+normedid+" "+mgninfo[normedid]+" _AND_ "+text)
     mgninfo[normedid] += " _AND_ "+text
   else:
     mgninfo[normedid] = text
@@ -42,7 +43,12 @@ print("")
 print("READ GSHTs")
 gshtinfo = {}
 for gshtfn in glob.glob("nesfm.archive.*tsv"):
-  if re.search('(?i)(4cit|videos)', gshtfn): continue
+  if re.search('(?i)(4cit|videos)', gshtfn):
+    print(f"ignore this file: {gshtfn}")
+    continue
+  if not re.search('(?i)comedy_shorts', gshtfn):
+    print(f"ignore not target genre {gshtfn}")
+    continue
   print(f"read {gshtfn}")
   gshtf = open(gshtfn)
   titlecolnum = None
@@ -74,7 +80,7 @@ for gshtfn in glob.glob("nesfm.archive.*tsv"):
       text = "("+rawid+") "+cols[titlecolnum]
       normedid = normalizeid(rawid)
       if normedid in gshtinfo:
-        print("normed id collision for: "+normedid+" "+gshtinfo[normedid]+" _VS_ "+text)
+        print("normed id collision for: "+normedid+" "+gshtinfo[normedid]+" _AND_ "+text)
         gshtinfo[normedid] += " _AND_ "+text
       else:
         gshtinfo[normedid] = text
