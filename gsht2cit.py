@@ -62,8 +62,8 @@ for row in [
   r'relationships/related_person_or_organization/notes:Re-Issue_Distributor e distrib.*re\W*issue',
   r'relationships/related_places/notes:Print_Exhibition_Country e print\sexhibition\scountry',
   r'made/created/place e country',
-  r'motion_picture_details/film_stock u film\sstock',
-  r'motion_picture_details/length u film\slength',
+  r'motion_picture_details/film_stock e film\sstock',
+  r'motion_picture_details/length e film\slength',
   r'motion_picture_details/sound/sound_notes:Language e language', # actually probably NOT sound; =titles
   r'motion_picture_details/sound/film_sound *u sound\strack',
   r'motion_picture_details/sound/sound_notes:Type r NOSOURCECOLUMN', # populated from "sound track"
@@ -78,6 +78,7 @@ for row in [
   r'general_notes/note:Stereotypes_or_Content_Issues e stereotypes',
   r'general_notes/note:General e notes', # label needed
   r'acquisition/source u don(at)?or|blackhawk\sassets|assett?s$', 
+  r'other_names_and_numbers/other_numbers/other_number r NOSOURCECOLUMN',
   ]:
   cols = row.split()
   if len(cols) != 3: raise Exception("misformatted label spec: "+row)
@@ -97,6 +98,9 @@ for row in [
       rulefillcols[label] = True
     elif c != '-':
       raise Exception("unexpected flag char "+c)
+
+# for assigning custom object id nums for MG's
+objid_base_seen = {}
 
 # process all input files specified on the command line
 for intsv in intsvlist:
@@ -206,6 +210,17 @@ for intsv in intsvlist:
       continue
 
     # special rules:
+
+    # handling of MG object ID's
+    if re.match(r'(?i)^mg', outcolvals["objid"]):
+      outcolvals["other_names_and_numbers/other_numbers/other_number"] = outcolvals["objid"]
+      basenum = re.sub(r'(?i)mg|\D.*$','',outcolvals["objid"])
+      while len(basenum) < 4: basenum = "0" + basenum
+      if "MG"+basenum in objid_base_seen:
+        objid_base_seen["MG"+basenum] += 1
+      else:
+        objid_base_seen["MG"+basenum] = 0
+      outcolvals["objid"] = "2011.1000."+basenum+str(objid_base_seen["MG"+basenum])
 
     # extract film gauge from title: can be like **35mm** or (35mm)
     aspect_ratio_title_match = re.match(r'(.+?)\s(?:\*\*|\()(\d+)(mm)(?:\*\*|\))\s*$', outcolvals["name/title"])
