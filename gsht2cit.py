@@ -288,6 +288,18 @@ for intsv in intsvlist:
     # if "series" in colmap and len(lncols[colmap["series"]].strip()):
     #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
 
+    # film gauge normalization, per LOC specs
+    # tbd, support subtypes of 8mm
+    if "motion_picture_details/film_gauge/format" in outcolvals and outcolvals["motion_picture_details/film_gauge/format"] != None:
+      film_gauge_match = re.match(r'(?i)(8|9\.5|16|35|70)\s*mm\s*$', outcolvals["motion_picture_details/film_gauge/format"])
+      if film_gauge_match == None:
+        badrow(f"unexpected film gauge in line {lnum}: "+outcolvals["motion_picture_details/film_gauge/format"])
+      else:
+        outcolvals["motion_picture_details/film_gauge/format"] = film_gauge_match.group(1) + " mm."
+
+
+    # aspect gauge normalization
+
     # check if cols that were supposed to be supplied by rules actually were
     for colname in colstoberulefilled:
       if colname not in outcolvals or outcolvals[colname] == None:
