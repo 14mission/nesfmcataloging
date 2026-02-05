@@ -68,7 +68,7 @@ for row in [
   r'motion_picture_details/sound/film_sound *u sound\strack',
   r'motion_picture_details/sound/sound_notes:Type r NOSOURCECOLUMN', # populated from "sound track"
   r'motion_picture_details/frame_rate me NOSOURCECOLUMN',
-  r'aspect_ratio - aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
+  r'aspect_ratio r aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
   r'motion_picture_details/film_gauge/format r NOSOURCECOLUMN',
   r'motion_picture_details/color_characteristics *e film\scolor',
   r'parts/parts - film\sreels', # reels, revisit?
@@ -185,6 +185,7 @@ for intsv in intsvlist:
     # regular line.  make sure all required fields filled
     # some fields can be empty, then we put UNKNOWN
     outcolvals = {}
+    colstoberulefilled = {}
     isbadrow = False
     for colname in outcols:
       if colname not in colmap or colmap[colname] == None:
@@ -198,6 +199,10 @@ for intsv in intsvlist:
         elif colname in okunkcols:
           print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip(), file=logh)
           outcolvals[colname] = "UNKNOWN"
+        # if col is empty and is to be filled by a rule, put it on list of cols to check for later
+        elif colname in rulefillcols:
+          outcolvals[colname] = None
+          colstoberulefilled[colname] = True
         # for others, an empty value is a fatal error
         else:
           print(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(), file=logh)
@@ -225,6 +230,7 @@ for intsv in intsvlist:
     # extract film gauge from title: can be like **35mm** or (35mm)
     aspect_ratio_title_match = re.match(r'(.+?)\s(?:\*\*|\()(\d+)(mm)(?:\*\*|\))\s*$', outcolvals["name/title"])
     if aspect_ratio_title_match != None:
+      print("bar: \""+outcolvals["name/title"]+"\"")
       coretitle = aspect_ratio_title_match.group(1)
       titlefilmgauge = aspect_ratio_title_match.group(2) + aspect_ratio_title_match.group(3)
       if outcolvals["aspect_ratio"] != None and re.search(r'\d+\s*mm', outcolvals["aspect_ratio"]) != None and re.search(titlefilmgauge,outcolvals["aspect_ratio"]) == None:
@@ -234,6 +240,8 @@ for intsv in intsvlist:
       outcolvals["name/title"] = coretitle
       if outcolvals["aspect_ratio"] == None:
         outcolvals["aspect_ratio"] = "UNKNOWN"
+    elif "35mm" in outcolvals["name/title"]:
+      print("foo: \""+outcolvals["name/title"]+"\"")
 
     # extract frame rate from aspect ratio, if present
     if outcolvals["aspect_ratio"] != None:
@@ -278,6 +286,12 @@ for intsv in intsvlist:
     # if series col, and filled, prefix to title
     # if "series" in colmap and len(lncols[colmap["series"]].strip()):
     #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
+
+    # check if cols that were supposed to be supplied by rules actually were
+    for colname in colstoberulefilled:
+      if colname not in outcolvals or outcolvals[colname] == None:
+        badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
+        isbadrow = True
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
     #novalstr = "None"
