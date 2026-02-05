@@ -228,20 +228,21 @@ for intsv in intsvlist:
       outcolvals["objid"] = "2011.1000."+basenum+str(objid_base_seen["MG"+basenum])
 
     # extract film gauge from title: can be like **35mm** or (35mm)
-    aspect_ratio_title_match = re.match(r'(.+?)\s(?:\*\*|\()(\d+)(mm)(?:\*\*|\))\s*$', outcolvals["name/title"])
+    aspect_ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+\s*mm)(?:\*\*|\))(.*?)$', outcolvals["name/title"])
     if aspect_ratio_title_match != None:
-      print("bar: \""+outcolvals["name/title"]+"\"")
-      coretitle = aspect_ratio_title_match.group(1)
-      titlefilmgauge = aspect_ratio_title_match.group(2) + aspect_ratio_title_match.group(3)
-      if outcolvals["aspect_ratio"] != None and re.search(r'\d+\s*mm', outcolvals["aspect_ratio"]) != None and re.search(titlefilmgauge,outcolvals["aspect_ratio"]) == None:
-        badrow("inconsistent film gauge: title=\""+outcolvals["title"]+"\" vs aspect ratio=\""+outcolvals["aspect_ratio"]+"\"",logh)
+      print("gauge in title: \""+outcolvals["name/title"]+"\"")
+      coretitle = " ".join((aspect_ratio_title_match.group(1) + " " + aspect_ratio_title_match.group(3)).split())
+      titlefilmgauge = aspect_ratio_title_match.group(2) 
+      if outcolvals["aspect_ratio"] != None and re.search(r'\d+\s*mm', outcolvals["aspect_ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["aspect_ratio"].lower()) == None:
+        badrow("inconsistent film gauge: title=\""+outcolvals["name/title"]+"\" vs aspect ratio=\""+outcolvals["aspect_ratio"]+"\"",logh)
         continue
       outcolvals["motion_picture_details/film_gauge/format"] = titlefilmgauge
       outcolvals["name/title"] = coretitle
       if outcolvals["aspect_ratio"] == None:
         outcolvals["aspect_ratio"] = "UNKNOWN"
+      print(" now title=\""+outcolvals["name/title"]+"\" gauge="+outcolvals["motion_picture_details/film_gauge/format"]+" aspect ratio="+outcolvals["aspect_ratio"])
     elif "35mm" in outcolvals["name/title"]:
-      print("foo: \""+outcolvals["name/title"]+"\"")
+      print("gauge REMAINING in title: \""+outcolvals["name/title"]+"\"")
 
     # extract frame rate from aspect ratio, if present
     if outcolvals["aspect_ratio"] != None:
