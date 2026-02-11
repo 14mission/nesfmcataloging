@@ -77,7 +77,7 @@ for row in [
   r'general_notes/note:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
   r'general_notes/note:Stereotypes_or_Content_Issues em stereotypes',
   r'general_notes/note:General e notes', # label needed
-  r'general_notes/note:Aspect_Ratio r NOSUCHCOLUMN',
+  r'general_notes/note:Aperture_Image_Format r NOSUCHCOLUMN',
   r'acquisition/source u don(at)?or|blackhawk\sassets|assett?s$', 
   r'other_names_and_numbers/other_numbers/other_number r NOSOURCECOLUMN',
   ]:
@@ -302,13 +302,13 @@ for intsv in intsvlist:
         ratiolabel = aspect_ratio_match.group(1) + " " + aspect_ratio_match.group(3)
         if len(ratiolabel.strip()) > 0:
           if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aspect_Ratio"] = "Movietone"
+            outcolvals["general_notes/note:Aperture_Image_Format"] = "Movietone"
           elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aspect_Ratio"] = "Full Silent"
+            outcolvals["general_notes/note:Aperture_Image_Format"] = "Full Silent"
           elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aspect_Ratio"] = "Academy"
+            outcolvals["general_notes/note:Aperture_Image_Format"] = "Academy"
           elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aspect_Ratio"] = "Matted"
+            outcolvals["general_notes/note:Aperture_Image_Format"] = "Matted"
           # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
           elif outcolvals["motion_picture_details/film_gauge/format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
             outcolvals["motion_picture_details/film_gauge/format"] = "super "+outcolvals["motion_picture_details/film_gauge/format"]
