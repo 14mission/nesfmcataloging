@@ -77,6 +77,7 @@ for row in [
   r'general_notes/note:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
   r'general_notes/note:Stereotypes_or_Content_Issues em stereotypes',
   r'general_notes/note:General e notes', # label needed
+  r'general_notes/note:Aspect_Ratio r NOSUCHCOLUMN',
   r'acquisition/source u don(at)?or|blackhawk\sassets|assett?s$', 
   r'other_names_and_numbers/other_numbers/other_number r NOSOURCECOLUMN',
   ]:
@@ -228,19 +229,19 @@ for intsv in intsvlist:
       outcolvals["objid"] = "2011.1000."+basenum+str(objid_base_seen["MG"+basenum])
 
     # extract film gauge from title: can be like **35mm** or (35mm)
-    aspect_ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+\s*mm)(?:\*\*|\))(.*?)$', outcolvals["name/title"])
+    aspect_ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["name/title"])
     if aspect_ratio_title_match != None:
-      print("gauge in title: \""+outcolvals["name/title"]+"\"")
+      #print("gauge in title: \""+outcolvals["name/title"]+"\"")
       coretitle = " ".join((aspect_ratio_title_match.group(1) + " " + aspect_ratio_title_match.group(3)).split())
-      titlefilmgauge = aspect_ratio_title_match.group(2) 
-      if outcolvals["aspect_ratio"] != None and re.search(r'\d+\s*mm', outcolvals["aspect_ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["aspect_ratio"].lower()) == None:
-        badrow("inconsistent film gauge: title=\""+outcolvals["name/title"]+"\" vs aspect ratio=\""+outcolvals["aspect_ratio"]+"\"",logh)
-        continue
+      titlefilmgauge = aspect_ratio_title_match.group(2) + " mm." # per LOC spec
+      #if outcolvals["aspect_ratio"] != None and re.search(r'\d+\s*mm', outcolvals["aspect_ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["aspect_ratio"].lower()) == None:
+      #  badrow("inconsistent film gauge: title=\""+outcolvals["name/title"]+"\" vs aspect ratio=\""+outcolvals["aspect_ratio"]+"\"",logh)
+      #  continue
       outcolvals["motion_picture_details/film_gauge/format"] = titlefilmgauge
       outcolvals["name/title"] = coretitle
       if outcolvals["aspect_ratio"] == None:
         outcolvals["aspect_ratio"] = "UNKNOWN"
-      print(" now title=\""+outcolvals["name/title"]+"\" gauge="+outcolvals["motion_picture_details/film_gauge/format"]+" aspect ratio="+outcolvals["aspect_ratio"])
+      #print(" now title=\""+outcolvals["name/title"]+"\" gauge="+outcolvals["motion_picture_details/film_gauge/format"]+" aspect ratio="+outcolvals["aspect_ratio"])
     elif "35mm" in outcolvals["name/title"]:
       print("gauge REMAINING in title: \""+outcolvals["name/title"]+"\"")
 
@@ -253,10 +254,13 @@ for intsv in intsvlist:
 
     # extract film gauge from aspect ratio
     if outcolvals["aspect_ratio"] != None:
-      apect_ratio_and_film_gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?\s*mm)(\s*.*?)$', outcolvals["aspect_ratio"])
+      apect_ratio_and_film_gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?)\s*mm(\s*.*?)$', outcolvals["aspect_ratio"])
       if apect_ratio_and_film_gauge_match != None:
         outcolvals["aspect_ratio"] = apect_ratio_and_film_gauge_match.group(1) + apect_ratio_and_film_gauge_match.group(3).strip()
-        outcolvals["motion_picture_details/film_gauge/format"] = apect_ratio_and_film_gauge_match.group(2)
+        extracted_gauge = apect_ratio_and_film_gauge_match.group(2) + " mm."
+        if "motion_picture_details/film_gauge/format" in outcolvals and outcolvals["motion_picture_details/film_gauge/format"] != None and extracted_gauge != outcolvals["motion_picture_details/film_gauge/format"]:
+          badrow("inconsistent film gauge info in line {lnum}: "+outcolvals["motion_picture_details/film_gauge/format"]+" vs "+extracted_gauge,logh)
+        outcolvals["motion_picture_details/film_gauge/format"] = extracted_gauge
 
     # if film gauge still not filled, that's a problem
     if "motion_picture_details/film_gauge/format" not in outcolvals or outcolvals["motion_picture_details/film_gauge/format"] == None:
@@ -288,17 +292,31 @@ for intsv in intsvlist:
     # if "series" in colmap and len(lncols[colmap["series"]].strip()):
     #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
 
-    # film gauge normalization, per LOC specs
-    # tbd, support subtypes of 8mm
-    if "motion_picture_details/film_gauge/format" in outcolvals and outcolvals["motion_picture_details/film_gauge/format"] != None:
-      film_gauge_match = re.match(r'(?i)(8|9\.5|16|35|70)\s*mm\s*$', outcolvals["motion_picture_details/film_gauge/format"])
-      if film_gauge_match == None:
-        badrow(f"unexpected film gauge in line {lnum}: "+outcolvals["motion_picture_details/film_gauge/format"])
+    # aspect gauge normalization; remove word parts, put into a note
+    if "aspect_ratio" in outcolvals and outcolvals["aspect_ratio"] != None:
+      aspect_ratio_match = re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["aspect_ratio"])
+      if aspect_ratio_match == None:
+        badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["aspect_ratio"],logh)
       else:
-        outcolvals["motion_picture_details/film_gauge/format"] = film_gauge_match.group(1) + " mm."
-
-
-    # aspect gauge normalization
+        outcolvals["aspect_ratio"] = aspect_ratio_match.group(2)
+        ratiolabel = aspect_ratio_match.group(1) + " " + aspect_ratio_match.group(3)
+        if len(ratiolabel.strip()) > 0:
+          if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
+            outcolvals["general_notes/note:Aspect_Ratio"] = "movietone"
+          elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
+            outcolvals["general_notes/note:Aspect_Ratio"] = "full silent"
+          elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
+            outcolvals["general_notes/note:Aspect_Ratio"] = "academy"
+          elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
+            outcolvals["general_notes/note:Aspect_Ratio"] = "matted"
+          # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
+          elif outcolvals["motion_picture_details/film_gauge/format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
+            outcolvals["motion_picture_details/film_gauge/format"] = "super "+outcolvals["motion_picture_details/film_gauge/format"]
+          elif outcolvals["motion_picture_details/film_gauge/format"] == "8 mm." and re.match(r'(?i)\W*(std|standard)?\W*$',ratiolabel):
+            outcolvals["motion_picture_details/film_gauge/format"] = "standard "+outcolvals["motion_picture_details/film_gauge/format"]
+          # any other random verbiage is an error
+          else:
+            badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
 
     # check if cols that were supposed to be supplied by rules actually were
     for colname in colstoberulefilled:
