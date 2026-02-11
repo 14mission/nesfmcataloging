@@ -302,13 +302,13 @@ for intsv in intsvlist:
         ratiolabel = aspect_ratio_match.group(1) + " " + aspect_ratio_match.group(3)
         if len(ratiolabel.strip()) > 0:
           if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aspect_Ratio"] = "movietone"
+            outcolvals["general_notes/note:Aspect_Ratio"] = "Movietone"
           elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aspect_Ratio"] = "full silent"
+            outcolvals["general_notes/note:Aspect_Ratio"] = "Full Silent"
           elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aspect_Ratio"] = "academy"
+            outcolvals["general_notes/note:Aspect_Ratio"] = "Academy"
           elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aspect_Ratio"] = "matted"
+            outcolvals["general_notes/note:Aspect_Ratio"] = "Matted"
           # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
           elif outcolvals["motion_picture_details/film_gauge/format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
             outcolvals["motion_picture_details/film_gauge/format"] = "super "+outcolvals["motion_picture_details/film_gauge/format"]
