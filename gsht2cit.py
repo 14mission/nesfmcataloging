@@ -183,7 +183,7 @@ for intsv in intsvlist:
       print(f"skip line: {lnum}: "+ln.strip(), file=logh)
       continue
 
-    # regular line.  make sure all required fields filled
+    # regular line. make sure all required fields filled
     # some fields can be empty, then we put UNKNOWN
     outcolvals = {}
     colstoberulefilled = {}
