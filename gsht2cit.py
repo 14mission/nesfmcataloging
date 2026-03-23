@@ -33,7 +33,7 @@ while ac < len(av):
 #  u if field is empty, fill with explicit UNKNOWN
 #  r field will be filled by a rule
 # note on patterns:
-#  these are matched agains the column headers of the input files, from google spreadsheets
+#  these are matched against the column headers of the input files, from google spreadsheets
 #  these are regular expressions
 #  they are matched case-insensitively
 #  they are matched at the beginning
