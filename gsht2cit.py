@@ -233,6 +233,10 @@ for intsv in intsvlist:
         raise Exception("more than 10 like MG"+basenum)
       outcolvals["objid"] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
 
+    # catch remaining noncanonical object id's
+    if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals["objid"]):
+      badrow("improper objecty id "+outcolvals["objid"]+f" in in line {lnum}: "+ln.strip(),logh)
+
     # extract film gauge from title: can be like **35mm** or (35mm)
     aspect_ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["name/title"])
     if aspect_ratio_title_match != None:
