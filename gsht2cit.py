@@ -218,15 +218,20 @@ for intsv in intsvlist:
     # special rules:
 
     # handling of MG object ID's
+    # chop off leading MG prefix and any suffix to get numerical part
+    # there may be collisions so suffix 0, 1, etc
+    # prefix 2011.50 accession num to make canonical obj id
     if re.match(r'(?i)^mg', outcolvals["objid"]):
       outcolvals["other_names_and_numbers/other_numbers/other_number"] = outcolvals["objid"]
-      basenum = re.sub(r'(?i)mg|\D.*$','',outcolvals["objid"])
-      while len(basenum) < 4: basenum = "0" + basenum
+      basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals["objid"])
+      basenum = re.sub(r'^0+','',basenum)
       if "MG"+basenum in objid_base_seen:
         objid_base_seen["MG"+basenum] += 1
       else:
         objid_base_seen["MG"+basenum] = 0
-      outcolvals["objid"] = "2011.1000."+basenum+str(objid_base_seen["MG"+basenum])
+      if objid_base_seen["MG"+basenum] > 10:
+        raise Exception("more than 10 like MG"+basenum)
+      outcolvals["objid"] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
 
     # extract film gauge from title: can be like **35mm** or (35mm)
     aspect_ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["name/title"])
