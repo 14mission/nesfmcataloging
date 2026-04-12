@@ -235,7 +235,7 @@ for intsv in intsvlist:
 
     # catch remaining noncanonical object id's
     if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals["objid"]):
-      badrow("improper objecty id "+outcolvals["objid"]+f" in in line {lnum}: "+ln.strip(),logh)
+      badrow("improper objecty id \""+outcolvals["objid"]+f"\" in in line {lnum}: "+ln.strip(),logh)
 
     # extract film gauge from title: can be like **35mm** or (35mm)
     aspect_ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["name/title"])
