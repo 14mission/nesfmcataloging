@@ -192,7 +192,7 @@ for intsv in intsvlist:
       if colname not in colmap or colmap[colname] == None:
         continue
       # various ways of being "empty"
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*unknown\W*$',lncols[colmap[colname]]):
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(unknown|20xx\.xx\.xx)\W*$',lncols[colmap[colname]]):
         # some cols allowed to be empty
         if colname in okemptycols:
           outcolvals[colname] = None
