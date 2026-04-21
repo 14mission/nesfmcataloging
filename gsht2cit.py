@@ -233,6 +233,24 @@ for intsv in intsvlist:
         raise Exception("more than 10 like MG"+basenum)
       outcolvals["objid"] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
 
+    # other oddball object id types to match
+    if re.match(r'^(UNKNOWN|\S*#|Paul|MASTER|FF|E-|BB)', outcolvals["objid"]):
+      if re.search(r'(?i)comedy.shorts',intsv): genre_offset = 0
+      elif re.search(r'(?i)features',intsv): genre_offset = 200
+      elif re.search(r'(?i)serials',intsv): genre_offset = 400
+      elif re.search(r'(?i)animation',intsv): genre_offset = 600
+      elif re.search(r'(?i)drama',intsv): genre_offset = 800
+      elif re.search(r'(?i)hist.*news',intsv): genre_offset = 1000
+      elif re.search(r'(?i)cinema.hist',intsv): genre_offset = 1200
+      elif re.search(r'(?i)bartel.*films',intsv): genre_offset = 1400
+      else: raise Exception("unk obj id and no genre mapping for "+intsv)
+      basenum = "2026.67."+str(genre_offset)
+      if basenum in objid_base_seen:
+        objid_base_seen[basenum] += 1
+      else:
+        objid_base_seen[basenum] = 0
+      outcolvals["objid"] = "2026.67."+str(genre_offset+objid_base_seen[basenum])
+
     # catch remaining noncanonical object id's
     if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals["objid"]):
       badrow("improper objecty id \""+outcolvals["objid"]+f"\" in in line {lnum}: "+ln.strip(),logh)
