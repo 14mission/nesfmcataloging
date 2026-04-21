@@ -103,6 +103,10 @@ for row in [
 # for assigning custom object id nums for MG's
 objid_base_seen = {}
 
+# avoid objid and shelvingcode collisions
+objid_seen = {}
+shelvingcode_seen = {}
+
 # process all input files specified on the command line
 for intsv in intsvlist:
 
@@ -350,6 +354,12 @@ for intsv in intsvlist:
       if colname not in outcolvals or outcolvals[colname] == None:
         badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
         isbadrow = True
+
+    # check for dup objid and dup shelving code
+    if outcolvals["objid"] in objid_seen:
+      badrow("dup objid: "+outcolvals["objid"]+": "+objid_seen[outcolvals["objid"]]+" VS "+str(lnum)+":"+outcolvals["name/title"],logh)
+    else:
+      objid_seen[outcolvals["objid"]] = str(lnum)+":"+outcolvals["name/title"]
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
     #novalstr = "None"
