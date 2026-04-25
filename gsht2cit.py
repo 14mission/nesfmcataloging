@@ -48,8 +48,8 @@ rulefillcols = {}
 for row in [ 
   r'objid u Acc?ession\s+Num', # unk not actually ok
   r'name/title - Title',
-  r'shelvingcode u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
-  r'location u Film\sRack',
+  r'other_names_and_numbers/other_numbers/shelvingcode u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
+  r'location/location u Film\sRack',
   r'collection em (comedy\s+)?Series',
   r'condition/notes:pq e p\s*q\b',
   r'motion_picture_details/production_date/date u prod.*year',
@@ -360,6 +360,13 @@ for intsv in intsvlist:
       badrow("dup objid: "+outcolvals["objid"]+": "+objid_seen[outcolvals["objid"]]+" VS "+str(lnum)+":"+outcolvals["name/title"],logh)
     else:
       objid_seen[outcolvals["objid"]] = str(lnum)+":"+outcolvals["name/title"]
+
+    # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
+    if "location/location" in outcolvals and re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["location/location"]):
+      outcolvals["location/location"] = re.sub(
+              r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
+        lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
+        outcolvals["location/location"])
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
     #novalstr = "None"
