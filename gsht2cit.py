@@ -360,6 +360,12 @@ for intsv in intsvlist:
       badrow("dup objid: "+outcolvals["objid"]+": "+objid_seen[outcolvals["objid"]]+" VS "+str(lnum)+":"+outcolvals["name/title"],logh)
     else:
       objid_seen[outcolvals["objid"]] = str(lnum)+":"+outcolvals["name/title"]
+    if "other_names_and_numbers/other_numbers/shelvingcode" in outcolvals:
+      normedshelvingcode = re.sub(r'\W','',outcolvals["other_names_and_numbers/other_numbers/shelvingcode"]).lower()
+      if normedshelvingcode in shelvingcode_seen:
+        badrow("dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+str(lnum)+":"+outcolvals["name/title"],logh)
+      else:
+        shelvingcode_seen[normedshelvingcode] = str(lnum)+":"+outcolvals["name/title"]
 
     # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
     if "location/location" in outcolvals and re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["location/location"]):
