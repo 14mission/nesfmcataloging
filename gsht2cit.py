@@ -358,17 +358,26 @@ for intsv in intsvlist:
       objid_seen[outcolvals["objid"]] = record_summary
     if "other_names_and_numbers/other_numbers/shelvingcode" in outcolvals:
       normedshelvingcode = re.sub(r'\W','',outcolvals["other_names_and_numbers/other_numbers/shelvingcode"]).lower()
-      if normedshelvingcode in shelvingcode_seen:
-        print("WARNING: dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary,logh)
+      if normedshelvingcode == "missing":
+        pass
+      elif normedshelvingcode in shelvingcode_seen:
+        print("WARNING: dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary)
       else:
         shelvingcode_seen[normedshelvingcode] = record_summary
 
     # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
-    if "location/location" in outcolvals and re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["location/location"]):
-      outcolvals["location/location"] = re.sub(
-              r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
-        lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
-        outcolvals["location/location"])
+    if "location/location" in outcolvals:
+      if re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["location/location"]):
+        outcolvals["location/location"] = re.sub(
+          r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
+          lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
+          outcolvals["location/location"])
+      elif re.match(r'(?i)^\W*missing\W*$',outcolvals["location/location"]):
+        outcolvals["location/location"] = "MISSING"
+      elif re.match(r'(?i)^freezer \w$',outcolvals["location/location"]):
+        pass
+      else:
+        isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["location/location"],logh)
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
     #novalstr = "None"
