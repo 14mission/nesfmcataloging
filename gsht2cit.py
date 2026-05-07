@@ -5,6 +5,7 @@ import sys,os,re
 def badrow(msg,logf):
   print("BAD ROW: "+msg,file=logf)
   print("BAD ROW: "+msg)
+  return 1
 
 # for importing spreadsheets into catalogit
 # see notes in doc "Mapping NESFM Silent Film Archive spreadsheet to catalog it"
@@ -191,7 +192,7 @@ for intsv in intsvlist:
     # some fields can be empty, then we put UNKNOWN
     outcolvals = {}
     colstoberulefilled = {}
-    isbadrow = False
+    isbadrow = 0
     for colname in outcols:
       if colname not in colmap or colmap[colname] == None:
         continue
@@ -211,13 +212,9 @@ for intsv in intsvlist:
         # for others, an empty value is a fatal error
         else:
           print(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(), file=logh)
-          badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(),logh)
-          isbadrow = True
+          isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(),logh)
       else:
         outcolvals[colname] = lncols[colmap[colname]].strip()
-    # in case badrow() just warns
-    if isbadrow:
-      continue
 
     # special rules:
 
@@ -257,7 +254,7 @@ for intsv in intsvlist:
 
     # catch remaining noncanonical object id's
     if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals["objid"]):
-      badrow("improper objecty id \""+outcolvals["objid"]+f"\" in in line {lnum}: "+ln.strip(),logh)
+      isbadrow += badrow("improper objecty id \""+outcolvals["objid"]+f"\" in in line {lnum}: "+ln.strip(),logh)
 
     # extract film gauge from title: can be like **35mm** or (35mm)
     aspect_ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["name/title"])
@@ -295,8 +292,7 @@ for intsv in intsvlist:
 
     # if film gauge still not filled, that's a problem
     if "motion_picture_details/film_gauge/format" not in outcolvals or outcolvals["motion_picture_details/film_gauge/format"] == None:
-      badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
-      continue
+      isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
 
     # country normalization
     for countryfield in [ "relationships/related_places/notes:Print_Exhibition_Country", "made/created/place" ]:
@@ -327,7 +323,7 @@ for intsv in intsvlist:
     if "aspect_ratio" in outcolvals and outcolvals["aspect_ratio"] != None:
       aspect_ratio_match = re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["aspect_ratio"])
       if aspect_ratio_match == None:
-        badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["aspect_ratio"],logh)
+        isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["aspect_ratio"],logh)
       else:
         outcolvals["aspect_ratio"] = aspect_ratio_match.group(2)
         ratiolabel = aspect_ratio_match.group(1) + " " + aspect_ratio_match.group(3)
@@ -347,18 +343,17 @@ for intsv in intsvlist:
             outcolvals["motion_picture_details/film_gauge/format"] = "standard "+outcolvals["motion_picture_details/film_gauge/format"]
           # any other random verbiage is an error
           else:
-            badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
+            isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
 
     # check if cols that were supposed to be supplied by rules actually were
     for colname in colstoberulefilled:
       if colname not in outcolvals or outcolvals[colname] == None:
-        badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
-        isbadrow = True
+        isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
 
     # check for dup objid and dup shelving code
     record_summary = str(lnum)+":"+outcolvals["name/title"]+":"+outcolvals["location/location"]+":"+outcolvals["other_names_and_numbers/other_numbers/shelvingcode"]
     if outcolvals["objid"] in objid_seen:
-      badrow("dup objid: "+outcolvals["objid"]+": "+objid_seen[outcolvals["objid"]]+" VS "+record_summary,logh)
+      isbadrow += badrow("dup objid: "+outcolvals["objid"]+": "+objid_seen[outcolvals["objid"]]+" VS "+record_summary,logh)
     else:
       objid_seen[outcolvals["objid"]] = record_summary
     if "other_names_and_numbers/other_numbers/shelvingcode" in outcolvals:
@@ -379,3 +374,8 @@ for intsv in intsvlist:
     #novalstr = "None"
     novalstr = ""
     print("\t".join(outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
+
+    # in case badrow() just warns
+    if isbadrow > 0:
+      print("bad row(s) found!")
+      sys.exit(666)
