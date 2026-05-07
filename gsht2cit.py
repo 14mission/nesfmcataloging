@@ -274,7 +274,7 @@ for intsv in intsvlist:
         outcolvals["aspect_ratio"] = "UNKNOWN"
       #print(" now title=\""+outcolvals["name/title"]+"\" gauge="+outcolvals["motion_picture_details/film_gauge/format"]+" aspect ratio="+outcolvals["aspect_ratio"])
     elif "35mm" in outcolvals["name/title"]:
-      print("gauge REMAINING in title: \""+outcolvals["name/title"]+"\"")
+      print("WARNING: gauge REMAINING in title: \""+outcolvals["name/title"]+"\"")
 
     # extract frame rate from aspect ratio, if present
     if outcolvals["aspect_ratio"] != None:
@@ -364,7 +364,7 @@ for intsv in intsvlist:
     if "other_names_and_numbers/other_numbers/shelvingcode" in outcolvals:
       normedshelvingcode = re.sub(r'\W','',outcolvals["other_names_and_numbers/other_numbers/shelvingcode"]).lower()
       if normedshelvingcode in shelvingcode_seen:
-        badrow("dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary,logh)
+        print("WARNING: dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary,logh)
       else:
         shelvingcode_seen[normedshelvingcode] = record_summary
 
