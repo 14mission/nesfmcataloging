@@ -356,16 +356,17 @@ for intsv in intsvlist:
         isbadrow = True
 
     # check for dup objid and dup shelving code
+    record_summary = str(lnum)+":"+outcolvals["name/title"]+":"+outcolvals["location/location"]+":"+outcolvals["other_names_and_numbers/other_numbers/shelvingcode"]
     if outcolvals["objid"] in objid_seen:
-      badrow("dup objid: "+outcolvals["objid"]+": "+objid_seen[outcolvals["objid"]]+" VS "+str(lnum)+":"+outcolvals["name/title"],logh)
+      badrow("dup objid: "+outcolvals["objid"]+": "+objid_seen[outcolvals["objid"]]+" VS "+record_summary,logh)
     else:
-      objid_seen[outcolvals["objid"]] = str(lnum)+":"+outcolvals["name/title"]
+      objid_seen[outcolvals["objid"]] = record_summary
     if "other_names_and_numbers/other_numbers/shelvingcode" in outcolvals:
       normedshelvingcode = re.sub(r'\W','',outcolvals["other_names_and_numbers/other_numbers/shelvingcode"]).lower()
       if normedshelvingcode in shelvingcode_seen:
-        badrow("dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+str(lnum)+":"+outcolvals["name/title"],logh)
+        badrow("dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary,logh)
       else:
-        shelvingcode_seen[normedshelvingcode] = str(lnum)+":"+outcolvals["name/title"]
+        shelvingcode_seen[normedshelvingcode] = record_summary
 
     # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
     if "location/location" in outcolvals and re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["location/location"]):
