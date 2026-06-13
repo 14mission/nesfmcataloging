@@ -43,4 +43,16 @@ for ln in sys.stdin:
     if re.search(r'(?i)(16\s*mm.+serials|8\s*mm)',vals["Collection"]):
         yeswhy.append("coll:"+vals["Collection"])
 
-    print(vals["Entry/Object ID"]+"\t"+vals["Name/Title"]+"\t"+("YES:"+", ".join(yeswhy) if len(yeswhy)>0 else "NO:gauge:"+vals["Motion Picture Details.Film Gauge/Format"]+",legacylex:"+vals["Lexicon.Legacy Lexicon.Object Name"]))
+    # look for counterevidence
+    nowhy = re.findall(r'(?i)\b(DVD|VHS|video|R to R tape|reel to reel)\b',ln)
+
+    if len(yeswhy) > 0 and len(nowhy) == 0:
+        result = "YES:"+",".join(yeswhy)
+    elif len(nowhy) > 0 and len(yeswhy) == 0:
+        result = "NO:"+",".join(nowhy)
+    elif len(yeswhy) == 0 and len(nowhy) == 0:
+        result = "NOCLUES"
+    else:
+        result = "MIXED:"+",".join(yeswhy)+"-VS-"+",".join(nowhy)
+
+    print(vals["Entry/Object ID"]+"\t"+vals["Name/Title"]+"\t"+result)
