@@ -1,21 +1,27 @@
 #!/usr/bin/env python
-import sys, json
+import sys, json, re
 
 jsfn = sys.argv[1]
 fields = sys.argv[2:]
 
+def escnltab(s):
+    s = re.sub(r'\n',r'\\n',s)
+    s = re.sub(r'\t',r'\\t',s)
+    return s
 
 def getfield(obj,field):
     chunks = field.split('.')
-    if len(chunks) > 1:
-        raise Exception(f"hierarchical fields like {field} not supported yet")
     curchunk = chunks[0]
     if curchunk not in obj:
         return "NONE"
-    if isinstance(obj[curchunk], list):
-        return "|".join(str(item) for item in obj[curchunk])
+    elif len(chunks) > 1:
+        return getfield(obj[curchunk], ".".join(chunks[1:]))
+    elif isinstance(obj[curchunk], list):
+        return "|".join(escnltab(str(item)) for item in obj[curchunk])
+    elif len(str(obj[curchunk]).strip()) == 0:
+        return "EMPTY"
     else:
-        return str(obj[curchunk])
+        return escnltab(str(obj[curchunk]))
 
 data = None
 with open(jsfn, 'r', encoding='utf-8') as file:
