@@ -4,7 +4,7 @@ import sys, re
 #how to run this
 #export CatalogIt contents as json
 #convert to tsv, extracting key fields, and pipe through this script like this
-# ./citjson2tsv.py catalogit.export.all_films.2026-06-11.json "Entry/Object ID" "Name/Title" Collection "Motion Picture Details.Film Gauge/Format" "Motion Picture Details.Length" "Made/Created.Notes" "Lexicon.Legacy Lexicon.Object Name" "Location.Location" "Parts.Parts" | ./citisitafilm.py
+# ./citjson2tsv.py catalogit.export.all_films.2026-06-11.json "CIT ID" "Entry/Object ID" "Name/Title" Collection "Motion Picture Details.Film Gauge/Format" "Motion Picture Details.Length" "Made/Created.Notes" "Lexicon.Legacy Lexicon.Object Name" "Location.Location" "Parts.Parts" | ./citisitafilm.py
 
 colmap = None
 for ln in sys.stdin:
@@ -55,4 +55,4 @@ for ln in sys.stdin:
     else:
         result = "MIXED:"+",".join(yeswhy)+"-VS-"+",".join(vidwhy)
 
-    print(vals["Entry/Object ID"]+"\t"+vals["Name/Title"]+"\t"+result)
+    print(vals["CIT ID"]+"\t"+vals["Entry/Object ID"]+"\t"+vals["Name/Title"]+"\t"+result)
