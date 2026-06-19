@@ -44,15 +44,15 @@ for ln in sys.stdin:
         yeswhy.append("coll:"+vals["Collection"])
 
     # look for counterevidence
-    nowhy = re.findall(r'(?i)\b(DVD|VHS|video|R to R tape|reel to reel)\b',ln)
+    vidwhy = re.findall(r'(?i)\b(DVD|VHS|video|R to R tape|reel to reel)\b',ln)
 
-    if len(yeswhy) > 0 and len(nowhy) == 0:
+    if len(yeswhy) > 0 and len(vidwhy) == 0:
         result = "YES:"+",".join(yeswhy)
-    elif len(nowhy) > 0 and len(yeswhy) == 0:
-        result = "NO:"+",".join(nowhy)
-    elif len(yeswhy) == 0 and len(nowhy) == 0:
+    elif len(vidwhy) > 0 and len(yeswhy) == 0:
+        result = "VID:"+",".join(vidwhy)
+    elif len(yeswhy) == 0 and len(vidwhy) == 0:
         result = "NOCLUES"
     else:
-        result = "MIXED:"+",".join(yeswhy)+"-VS-"+",".join(nowhy)
+        result = "MIXED:"+",".join(yeswhy)+"-VS-"+",".join(vidwhy)
 
     print(vals["Entry/Object ID"]+"\t"+vals["Name/Title"]+"\t"+result)
