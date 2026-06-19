@@ -44,7 +44,7 @@ for ln in sys.stdin:
         yeswhy.append("coll:"+vals["Collection"])
 
     # look for counterevidence
-    vidwhy = re.findall(r'(?i)\b(DVD|VHS|video|R to R tape|reel to reel)\b',ln)
+    vidwhy = re.findall(r'(?i)\b(DVD|VHS|video\w*|R to R tape|reel to reel)\b',ln)
 
     if len(yeswhy) > 0 and len(vidwhy) == 0:
         result = "YES:"+",".join(yeswhy)
