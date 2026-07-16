@@ -12,14 +12,24 @@ for tsvfn in sys.argv[1:]:
   for ln in inh:
     cols = ln.split("\t")
     cols[-1] = cols[-1].strip()
+
+    # if we have not gotten column names assume this is a header row, and get col names
     if colnames == None:
       cols[0] = re.sub(r'^#','',cols[0])
       colnames = cols
       print("cols: "+", ".join(colnames))
       continue
+
+    # otherwise assume data row
+
+    # make sure num cols for data row matches num cols in header
     if len(cols) != len(colnames):
       raise Exception("expected "+str(len(colnames))+" but found "+str(len(cols))+" in: "+ln)
+
+    # init empty record
     record = {}
+
+    # go thru cols
     for colname, colval in zip(colnames,cols):
       # do not include empty values
       if len(colval.strip()) == 0:
@@ -28,10 +38,14 @@ for tsvfn in sys.argv[1:]:
       elif colname in ["source","line"]:
         continue
 
+      # parse col name, figure out where to store data
       # replace underscore with whitespace in attrib name
       attribname = re.sub(r'_',' ',colname)
+      # break attrib name into hierarchy by / or :
       attribpath = re.sub(r':','/',attribname).split("/")
+      # | char is escaped /
       attribpath = [re.sub(r'\|','/',chunk) for chunk in attribpath]
+      # use attrib path to build out tree structure for record to store value
       recordnode = record
       for treelevel in range(len(attribpath)-1):
         if attribpath[treelevel] not in recordnode:
@@ -39,9 +53,6 @@ for tsvfn in sys.argv[1:]:
         recordnode = recordnode[attribpath[treelevel]]
       recordnode[attribpath[-1]] = colval
       
-
-
-
       # if colname contains ":", this is a multi-value attrib, and each val has a key; bit after colon is key
       #keynameformultivalattrib = None
       #if ":" in attribname:
