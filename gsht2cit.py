@@ -46,41 +46,42 @@ okunkcols = {}
 okemptycols = {}
 okmissingcols = {}
 rulefillcols = {}
+objidcolname = 'Entry|Object_ID'
 for row in [ 
-  r'objid u Acc?ession\s+Num', # unk not actually ok
-  r'name/title - Title',
-  r'other_names_and_numbers/other_numbers/shelvingcode u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
-  r'location/location u Film\sRack',
-  r'collection em (comedy\s+)?Series',
-  r'condition/notes:pq e p\s*q\b',
-  r'motion_picture_details/production_date/date u prod.*year',
-  r'made/created/notes:Re-Issue_Year e re\W*issue.*year',
-  r'motion_picture_details/cast *u star\W*s\W*',
-  r'motion_picture_details/director *u director',
-  r'motion_picture_details/producer/publisher *u produc(er|tion\sco)',
-  r'motion_picture_details/writer *em writer',
-  r'relationships/related_person_or_organization/notes:Original_Distributor e distrib.*orig',
-  r'relationships/related_person_or_organization/notes:Re-Issue_Distributor e distrib.*re\W*issue',
-  r'relationships/related_places/notes:Print_Exhibition_Country e print\sexhibition\scountry',
-  r'made/created/place e country',
-  r'motion_picture_details/film_stock e film\sstock',
-  r'motion_picture_details/length e film\slength',
-  r'motion_picture_details/sound/sound_notes:Language e language', # actually probably NOT sound; =titles
-  r'motion_picture_details/sound/film_sound *u sound\strack',
-  r'motion_picture_details/sound/sound_notes:Type r NOSOURCECOLUMN', # populated from "sound track"
-  r'motion_picture_details/frame_rate me NOSOURCECOLUMN',
-  r'aspect_ratio r aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
-  r'motion_picture_details/film_gauge/format r NOSOURCECOLUMN',
-  r'motion_picture_details/color_characteristics *e film\scolor',
-  r'parts/parts - film\sreels', # reels, revisit?
-  r'general_notes/note:Best_Quality_DVD_Release em dvd\s+release',
-  r'general_notes/note:Best_Quality_Blu-ray_Release em blu\W*ray\s+release',
-  r'general_notes/note:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
-  r'general_notes/note:Stereotypes_or_Content_Issues em stereotypes',
-  r'general_notes/note:General e notes', # label needed
-  r'general_notes/note:Aperture_Image_Format r NOSUCHCOLUMN',
-  r'acquisition/source u don(at)?or|blackhawk\sassets|assett?s$', 
-  r'other_names_and_numbers/other_numbers/other_number r NOSOURCECOLUMN',
+  objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
+  r'Name|Title - Title',
+  r'Other_Names_and_Numbers/Other_Numbers/Shelvingcode u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
+  r'Location/Location u Film\sRack',
+  r'Collection em (comedy\s+)?Series',
+  r'Condition/Notes:PQ e p\s*q\b',
+  r'Motion_Picture_Details/Production_Date/Date u prod.*year',
+  r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
+  r'Motion_picture_details/cast *u star\W*s\W*',
+  r'Motion_Picture_Details/director *u director',
+  r'Motion_Picture_Details/producer/publisher *u produc(er|tion\sco)',
+  r'Motion_Picture_Details/writer *em writer',
+  r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
+  r'Relationships/Related_Person_or_Organization/Notes:Re-Issue_Distributor e distrib.*re\W*issue',
+  r'Relationships/Related_Places/Notes:Print_Exhibition_Country e print\sexhibition\scountry',
+  r'Made/Created/Place e country',
+  r'Motion_Picture_Details/Film_Stock e film\sstock',
+  r'Motion_Picture_Details/Length e film\slength',
+  r'Motion_Picture_Details/Sound/Sound_Notes:Language e language', # actually probably NOT sound; =titles
+  r'Motion_Picture_Details/Sound/Film_Sound *u sound\strack',
+  r'Motion_Picture_Details/Sound/Sound_Notes:Type r NOSOURCECOLUMN', # populated from "sound track"
+  r'Motion_Picture_Details/Frame_Rate me NOSOURCECOLUMN',
+  r'Aspect_Ratio r aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
+  r'Motion_Picture_Details/Film_Gauge/Format r NOSOURCECOLUMN',
+  r'Motion_Picture_Details/Color_Characteristics *e film\scolor',
+  r'Parts/Parts - Film\sReels', # reels, revisit?
+  r'General_Notes/Note:Best_Quality_DVD_Release em dvd\s+release',
+  r'General_Notes/Note:Best_Quality_Blu-ray_Release em blu\W*ray\s+release',
+  r'General_Notes/note:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
+  r'General_Notes/note:Stereotypes_or_Content_Issues em stereotypes',
+  r'General_Notes/note:General e notes', # label needed
+  r'General_Notes/note:Aperture_Image_Format r NOSUCHCOLUMN',
+  r'Acquisition/Source u don(at)?or|blackhawk\sassets|assett?s$', 
+  r'Other_Names_and_Numbers/Other_Numbers/Other_Number r NOSOURCECOLUMN',
   ]:
   cols = row.split()
   if len(cols) != 3: raise Exception("misformatted label spec: "+row)
@@ -152,7 +153,7 @@ for intsv in intsvlist:
 
     # header line?
     # map input cls to output cols
-    if colmap["objid"] == None:
+    if colmap[objidcolname] == None:
       # map input cols to output cols
       for colnum, colstr in enumerate(lncols):
         for outcol in outcols:
@@ -222,9 +223,9 @@ for intsv in intsvlist:
     # chop off leading MG prefix and any suffix to get numerical part
     # there may be collisions so suffix 0, 1, etc
     # prefix 2011.50 accession num to make canonical obj id
-    if re.match(r'(?i)^mg', outcolvals["objid"]):
-      outcolvals["other_names_and_numbers/other_numbers/other_number"] = outcolvals["objid"]
-      basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals["objid"])
+    if re.match(r'(?i)^mg', outcolvals[objidcolname]):
+      outcolvals["Other_Names_and_Numbers/Other_Numbers/Other_Number"] = outcolvals[objidcolname]
+      basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals[objidcolname])
       basenum = re.sub(r'^0+','',basenum)
       if "MG"+basenum in objid_base_seen:
         objid_base_seen["MG"+basenum] += 1
@@ -232,10 +233,10 @@ for intsv in intsvlist:
         objid_base_seen["MG"+basenum] = 0
       if objid_base_seen["MG"+basenum] > 10:
         raise Exception("more than 10 like MG"+basenum)
-      outcolvals["objid"] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
+      outcolvals[objidcolname] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
 
     # other oddball object id types to match
-    if re.match(r'^(UNKNOWN|\S*#|Paul|MASTER|FF|E-|BB)', outcolvals["objid"]):
+    if re.match(r'^(UNKNOWN|\S*#|Paul|MASTER|FF|E-|BB)', outcolvals[objidcolname]):
       if re.search(r'(?i)comedy.shorts',intsv): genre_offset = 0
       elif re.search(r'(?i)features',intsv): genre_offset = 200
       elif re.search(r'(?i)serials',intsv): genre_offset = 400
@@ -250,48 +251,48 @@ for intsv in intsvlist:
         objid_base_seen[basenum] += 1
       else:
         objid_base_seen[basenum] = 0
-      outcolvals["objid"] = "2026.67."+str(genre_offset+objid_base_seen[basenum])
+      outcolvals[objidcolname] = "2026.67."+str(genre_offset+objid_base_seen[basenum])
 
     # catch remaining noncanonical object id's
-    if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals["objid"]):
-      isbadrow += badrow("improper objecty id \""+outcolvals["objid"]+f"\" in in line {lnum}: "+ln.strip(),logh)
+    if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
+      isbadrow += badrow("improper objecty id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip(),logh)
 
     # extract film gauge from title: can be like **35mm** or (35mm)
-    aspect_ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["name/title"])
-    if aspect_ratio_title_match != None:
-      #print("gauge in title: \""+outcolvals["name/title"]+"\"")
-      coretitle = " ".join((aspect_ratio_title_match.group(1) + " " + aspect_ratio_title_match.group(3)).split())
-      titlefilmgauge = aspect_ratio_title_match.group(2) + " mm." # per LOC spec
-      #if outcolvals["aspect_ratio"] != None and re.search(r'\d+\s*mm', outcolvals["aspect_ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["aspect_ratio"].lower()) == None:
-      #  badrow("inconsistent film gauge: title=\""+outcolvals["name/title"]+"\" vs aspect ratio=\""+outcolvals["aspect_ratio"]+"\"",logh)
+    Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name|Title"])
+    if Aspect_Ratio_title_match != None:
+      #print("gauge in title: \""+outcolvals["Name|Title"]+"\"")
+      coretitle = " ".join((Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3)).split())
+      titlefilmgauge = Aspect_Ratio_title_match.group(2) + " mm." # per LOC spec
+      #if outcolvals["Aspect_Ratio"] != None and re.search(r'\d+\s*mm', outcolvals["Aspect_Ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["Aspect_Ratio"].lower()) == None:
+      #  badrow("inconsistent film gauge: title=\""+outcolvals["Name|Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"",logh)
       #  continue
-      outcolvals["motion_picture_details/film_gauge/format"] = titlefilmgauge
-      outcolvals["name/title"] = coretitle
-      if outcolvals["aspect_ratio"] == None:
-        outcolvals["aspect_ratio"] = "UNKNOWN"
-      #print(" now title=\""+outcolvals["name/title"]+"\" gauge="+outcolvals["motion_picture_details/film_gauge/format"]+" aspect ratio="+outcolvals["aspect_ratio"])
-    elif "35mm" in outcolvals["name/title"]:
-      print("WARNING: gauge REMAINING in title: \""+outcolvals["name/title"]+"\"")
+      outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = titlefilmgauge
+      outcolvals["Name|Title"] = coretitle
+      if outcolvals["Aspect_Ratio"] == None:
+        outcolvals["Aspect_Ratio"] = "UNKNOWN"
+      #print(" now title=\""+outcolvals["Name|Title"]+"\" gauge="+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" aspect ratio="+outcolvals["Aspect_Ratio"])
+    elif "35mm" in outcolvals["Name|Title"]:
+      print("WARNING: gauge REMAINING in title: \""+outcolvals["Name|Title"]+"\"")
 
     # extract frame rate from aspect ratio, if present
-    if outcolvals["aspect_ratio"] != None:
-      apect_ratio_and_frame_rate_match = re.match(r'(?i)^(.+?)\s+(\d+\s*fps)\s*$', outcolvals["aspect_ratio"])
+    if outcolvals["Aspect_Ratio"] != None:
+      apect_ratio_and_frame_rate_match = re.match(r'(?i)^(.+?)\s+(\d+\s*fps)\s*$', outcolvals["Aspect_Ratio"])
       if apect_ratio_and_frame_rate_match != None:
-        outcolvals["aspect_ratio"] = apect_ratio_and_frame_rate_match.group(1)
-        outcolvals["motion_picture_details/frame_rate"] = apect_ratio_and_frame_rate_match.group(2).upper()
+        outcolvals["Aspect_Ratio"] = apect_ratio_and_frame_rate_match.group(1)
+        outcolvals["Motion_Picture_Details/frame_rate"] = apect_ratio_and_frame_rate_match.group(2).upper()
 
     # extract film gauge from aspect ratio
-    if outcolvals["aspect_ratio"] != None:
-      apect_ratio_and_film_gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?)\s*mm(\s*.*?)$', outcolvals["aspect_ratio"])
-      if apect_ratio_and_film_gauge_match != None:
-        outcolvals["aspect_ratio"] = apect_ratio_and_film_gauge_match.group(1) + apect_ratio_and_film_gauge_match.group(3).strip()
-        extracted_gauge = apect_ratio_and_film_gauge_match.group(2) + " mm."
-        if "motion_picture_details/film_gauge/format" in outcolvals and outcolvals["motion_picture_details/film_gauge/format"] != None and extracted_gauge != outcolvals["motion_picture_details/film_gauge/format"]:
-          badrow("inconsistent film gauge info in line {lnum}: "+outcolvals["motion_picture_details/film_gauge/format"]+" vs "+extracted_gauge,logh)
-        outcolvals["motion_picture_details/film_gauge/format"] = extracted_gauge
+    if outcolvals["Aspect_Ratio"] != None:
+      apect_ratio_and_Film_Gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?)\s*mm(\s*.*?)$', outcolvals["Aspect_Ratio"])
+      if apect_ratio_and_Film_Gauge_match != None:
+        outcolvals["Aspect_Ratio"] = apect_ratio_and_Film_Gauge_match.group(1) + apect_ratio_and_Film_Gauge_match.group(3).strip()
+        extracted_gauge = apect_ratio_and_Film_Gauge_match.group(2) + " mm."
+        if "Motion_Picture_Details/Film_Gauge/Format" in outcolvals and outcolvals["Motion_Picture_Details/Film_Gauge/Format"] != None and extracted_gauge != outcolvals["Motion_Picture_Details/Film_Gauge/Format"]:
+          badrow("inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge,logh)
+        outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = extracted_gauge
 
     # if film gauge still not filled, that's a problem
-    if "motion_picture_details/film_gauge/format" not in outcolvals or outcolvals["motion_picture_details/film_gauge/format"] == None:
+    if "Motion_Picture_Details/Film_Gauge/Format" not in outcolvals or outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == None:
       isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
 
     # country normalization
@@ -304,15 +305,15 @@ for intsv in intsvlist:
         outcolvals[countryfield] = outcolvals[countryfield].title()
 
     # sound normalization
-    if "motion_picture_details/sound/film_sound" in outcolvals and outcolvals["motion_picture_details/sound/film_sound"] != None:
-      soundval = outcolvals["motion_picture_details/sound/film_sound"]
+    if "Motion_Picture_Details/sound/film_sound" in outcolvals and outcolvals["Motion_Picture_Details/sound/film_sound"] != None:
+      soundval = outcolvals["Motion_Picture_Details/sound/film_sound"]
       if re.match(r'(?i)^silent$',soundval):
         soundval = "si."
       else:
-        outcolvals["motion_picture_details/sound/sound_notes:Type"] = soundval
+        outcolvals["Motion_Picture_Details/sound/sound_notes:Type"] = soundval
         soundval = "sd."
-      #print(outcolvals["motion_picture_details/sound/film_sound"]+" -> "+soundval+" + "+(outcolvals["motion_picture_details/sound/sound_notes:Type"] if "motion_picture_details/sound/sound_notes:Type" in outcolvals else ""))
-      outcolvals["motion_picture_details/sound/film_sound"] = soundval
+      #print(outcolvals["Motion_Picture_Details/sound/film_sound"]+" -> "+soundval+" + "+(outcolvals["Motion_Picture_Details/sound/sound_notes:Type"] if "Motion_Picture_Details/sound/sound_notes:Type" in outcolvals else ""))
+      outcolvals["Motion_Picture_Details/sound/film_sound"] = soundval
 
     # TBD: handle serieses
     # if series col, and filled, prefix to title
@@ -320,27 +321,27 @@ for intsv in intsvlist:
     #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
 
     # aspect gauge normalization; remove word parts, put into a note
-    if "aspect_ratio" in outcolvals and outcolvals["aspect_ratio"] != None:
-      aspect_ratio_match = re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["aspect_ratio"])
-      if aspect_ratio_match == None:
-        isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["aspect_ratio"],logh)
+    if "Aspect_Ratio" in outcolvals and outcolvals["Aspect_Ratio"] != None:
+      Aspect_Ratio_match = re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])
+      if Aspect_Ratio_match == None:
+        isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"],logh)
       else:
-        outcolvals["aspect_ratio"] = aspect_ratio_match.group(2)
-        ratiolabel = aspect_ratio_match.group(1) + " " + aspect_ratio_match.group(3)
+        outcolvals["Aspect_Ratio"] = Aspect_Ratio_match.group(2)
+        ratiolabel = Aspect_Ratio_match.group(1) + " " + Aspect_Ratio_match.group(3)
         if len(ratiolabel.strip()) > 0:
           if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aperture_Image_Format"] = "Movietone"
+            outcolvals["General_Notes/note:Aperture_Image_Format"] = "Movietone"
           elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aperture_Image_Format"] = "Full Silent"
+            outcolvals["General_Notes/note:Aperture_Image_Format"] = "Full Silent"
           elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aperture_Image_Format"] = "Academy"
+            outcolvals["General_Notes/note:Aperture_Image_Format"] = "Academy"
           elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
-            outcolvals["general_notes/note:Aperture_Image_Format"] = "Matted"
+            outcolvals["General_Notes/note:Aperture_Image_Format"] = "Matted"
           # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
-          elif outcolvals["motion_picture_details/film_gauge/format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
-            outcolvals["motion_picture_details/film_gauge/format"] = "super "+outcolvals["motion_picture_details/film_gauge/format"]
-          elif outcolvals["motion_picture_details/film_gauge/format"] == "8 mm." and re.match(r'(?i)\W*(std|standard)?\W*$',ratiolabel):
-            outcolvals["motion_picture_details/film_gauge/format"] = "standard "+outcolvals["motion_picture_details/film_gauge/format"]
+          elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
+            outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "super "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
+          elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*(std|standard)?\W*$',ratiolabel):
+            outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "standard "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
           # any other random verbiage is an error
           else:
             isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
@@ -351,13 +352,13 @@ for intsv in intsvlist:
         isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
 
     # check for dup objid and dup shelving code
-    record_summary = str(lnum)+":"+outcolvals["name/title"]+":"+outcolvals["location/location"]+":"+outcolvals["other_names_and_numbers/other_numbers/shelvingcode"]
-    if outcolvals["objid"] in objid_seen:
-      isbadrow += badrow("dup objid: "+outcolvals["objid"]+": "+objid_seen[outcolvals["objid"]]+" VS "+record_summary,logh)
+    record_summary = str(lnum)+":"+outcolvals["Name|Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers/Shelvingcode"]
+    if outcolvals[objidcolname] in objid_seen:
+      isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary,logh)
     else:
-      objid_seen[outcolvals["objid"]] = record_summary
-    if "other_names_and_numbers/other_numbers/shelvingcode" in outcolvals:
-      normedshelvingcode = re.sub(r'\W','',outcolvals["other_names_and_numbers/other_numbers/shelvingcode"]).lower()
+      objid_seen[outcolvals[objidcolname]] = record_summary
+    if "Other_Names_and_Numbers/Other_Numbers/Shelvingcode" in outcolvals:
+      normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers/Shelvingcode"]).lower()
       if normedshelvingcode == "missing":
         pass
       elif normedshelvingcode in shelvingcode_seen:
@@ -366,18 +367,18 @@ for intsv in intsvlist:
         shelvingcode_seen[normedshelvingcode] = record_summary
 
     # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
-    if "location/location" in outcolvals:
-      if re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["location/location"]):
-        outcolvals["location/location"] = re.sub(
+    if "Location/Location" in outcolvals:
+      if re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["Location/Location"]):
+        outcolvals["Location/Location"] = re.sub(
           r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
           lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
-          outcolvals["location/location"])
-      elif re.match(r'(?i)^\W*missing\W*$',outcolvals["location/location"]):
-        outcolvals["location/location"] = "MISSING"
-      elif re.match(r'(?i)^freezer \w$',outcolvals["location/location"]):
+          outcolvals["Location/Location"])
+      elif re.match(r'(?i)^\W*missing\W*$',outcolvals["Location/Location"]):
+        outcolvals["Location/Location"] = "MISSING"
+      elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
         pass
       else:
-        isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["location/location"],logh)
+        isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"],logh)
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
     #novalstr = "None"
