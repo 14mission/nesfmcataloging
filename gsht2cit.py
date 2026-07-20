@@ -46,9 +46,11 @@ okunkcols = {}
 okemptycols = {}
 okmissingcols = {}
 rulefillcols = {}
-objidcolname = 'Entry|Object_ID'
+objidcolname = r'Entry|Object_ID'
+accnumcolname = r'Acquisition|Accession|Accession_Number'
 for row in [ 
   objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
+  accnumcolname+r' r NOSOURCECOLUMN', # truncated obj id
   r'Name|Title - Title',
   r'Other_Names_and_Numbers/Other_Numbers/Shelvingcode u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
   r'Location/Location u Film\sRack',
@@ -256,6 +258,11 @@ for intsv in intsvlist:
     # catch remaining noncanonical object id's
     if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
       isbadrow += badrow("improper objecty id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip(),logh)
+
+    # trim object id to create accession number
+    outcolvals[accnumcolname] = re.sub(r'\.[^\.]+$','',outcolvals[objidcolname])
+    if outcolvals[accnumcolname] == outcolvals[objidcolname]:
+      raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
 
     # extract film gauge from title: can be like **35mm** or (35mm)
     Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name|Title"])
