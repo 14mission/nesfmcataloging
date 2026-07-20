@@ -47,7 +47,7 @@ okemptycols = {}
 okmissingcols = {}
 rulefillcols = {}
 objidcolname = r'Entry|Object_ID'
-accnumcolname = r'Acquisition|Accession|Accession_Number'
+accnumcolname = r'Acquisition/Accession/Accession_Number'
 for row in [ 
   objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
   accnumcolname+r' r NOSOURCECOLUMN', # truncated obj id
@@ -82,7 +82,7 @@ for row in [
   r'General_Notes/note:Stereotypes_or_Content_Issues em stereotypes',
   r'General_Notes/note:General e notes', # label needed
   r'General_Notes/note:Aperture_Image_Format r NOSUCHCOLUMN',
-  r'Acquisition/Source u don(at)?or|blackhawk\sassets|assett?s$', 
+  r'Acquisition/Accession/Source_or_Donor u don(at)?or|blackhawk\sassets|assett?s$', 
   r'Other_Names_and_Numbers/Other_Numbers/Other_Number r NOSOURCECOLUMN',
   ]:
   cols = row.split()
