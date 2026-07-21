@@ -78,10 +78,10 @@ for row in [
   r'Parts/Parts - Film\sReels', # reels, revisit?
   r'General_Notes/Note:Best_Quality_DVD_Release em dvd\s+release',
   r'General_Notes/Note:Best_Quality_Blu-ray_Release em blu\W*ray\s+release',
-  r'General_Notes/note:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
-  r'General_Notes/note:Stereotypes_or_Content_Issues em stereotypes',
-  r'General_Notes/note:General e notes', # label needed
-  r'General_Notes/note:Aperture_Image_Format r NOSUCHCOLUMN',
+  r'General_Notes/Note:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
+  r'General_Notes/Note:Stereotypes_or_Content_Issues em stereotypes',
+  r'General_Notes/Note:General e notes', # label needed
+  r'General_Notes/Note:Aperture_Image_Format r NOSUCHCOLUMN',
   r'Acquisition/Accession/Source_or_Donor u don(at)?or|blackhawk\sassets|assett?s$', 
   r'Other_Names_and_Numbers/Other_Numbers/Other_Number r NOSOURCECOLUMN',
   ]:
@@ -337,13 +337,13 @@ for intsv in intsvlist:
         ratiolabel = Aspect_Ratio_match.group(1) + " " + Aspect_Ratio_match.group(3)
         if len(ratiolabel.strip()) > 0:
           if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes/note:Aperture_Image_Format"] = "Movietone"
+            outcolvals["General_Notes/Note:Aperture_Image_Format"] = "Movietone"
           elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes/note:Aperture_Image_Format"] = "Full Silent"
+            outcolvals["General_Notes/Note:Aperture_Image_Format"] = "Full Silent"
           elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes/note:Aperture_Image_Format"] = "Academy"
+            outcolvals["General_Notes/Note:Aperture_Image_Format"] = "Academy"
           elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
-            outcolvals["General_Notes/note:Aperture_Image_Format"] = "Matted"
+            outcolvals["General_Notes/Note:Aperture_Image_Format"] = "Matted"
           # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
           elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
             outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "super "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
@@ -352,6 +352,16 @@ for intsv in intsvlist:
           # any other random verbiage is an error
           else:
             isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
+
+    # extract parenthetical notes from title
+    for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name|Title']):
+      if "General_Notes/Note:General" in outcolvals and outcolvals["General_Notes/Note:General"] != None and len(outcolvals["General_Notes/Note:General"].strip()) > 0:
+        outcolvals["General_Notes/Note:General"] += "|"+parenexp.strip(" ()")
+      else:
+        outcolvals["General_Notes/Note:General"] = parenexp.strip().strip(" ()")
+    # delte paren exprs from title.  also do whitespace norm
+    outcolvals['Name|Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name|Title'])
+    outcolvals['Name|Title'] = " ".join(outcolvals['Name|Title'].split())
 
     # check if cols that were supposed to be supplied by rules actually were
     for colname in colstoberulefilled:
