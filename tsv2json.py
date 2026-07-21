@@ -38,6 +38,10 @@ for tsvfn in sys.argv[1:]:
       elif colname in ["source","line"]:
         continue
 
+      # if value contains | char this means multiple values
+      if "|" in colval:
+        colval = [s.strip() for s in colval.split("|")]
+
       # parse col name, figure out where to store data
       # replace underscore with whitespace in attrib name
       attribname = re.sub(r'_',' ',colname)
