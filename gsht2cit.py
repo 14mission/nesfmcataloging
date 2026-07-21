@@ -33,6 +33,7 @@ while ac < len(av):
 #  m ok for the field to be missing entirely (not in the input spreadsheet at all)
 #  u if field is empty, fill with explicit UNKNOWN
 #  r field will be filled by a rule
+#  c means split on comma
 # note on patterns:
 #  these are matched against the column headers of the input files, from google spreadsheets
 #  these are regular expressions
@@ -46,6 +47,7 @@ okunkcols = {}
 okemptycols = {}
 okmissingcols = {}
 rulefillcols = {}
+commasplitcols = {}
 objidcolname = r'Entry|Object_ID'
 accnumcolname = r'Acquisition/Accession/Accession_Number'
 for row in [ 
@@ -58,10 +60,10 @@ for row in [
   r'Condition/Notes:PQ e p\s*q\b',
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
-  r'Motion_Picture_Details/Cast *u star\W*s\W*',
-  r'Motion_Picture_Details/Director *u director',
+  r'Motion_Picture_Details/Cast *uc star\W*s\W*',
+  r'Motion_Picture_Details/Director *uc director',
   r'Motion_Picture_Details/Producer/Publisher *u produc(er|tion\sco)',
-  r'Motion_Picture_Details/Writer *em writer',
+  r'Motion_Picture_Details/Writer *emc writer',
   r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
   r'Relationships/Related_Person_or_Organization/Notes:Re-Issue_Distributor e distrib.*re\W*issue',
   r'Relationships/Related_Places/Notes:Print_Exhibition_Country e print\sexhibition\scountry',
@@ -101,6 +103,8 @@ for row in [
       okemptycols[label] = True
     elif c == 'r':
       rulefillcols[label] = True
+    elif c == 'c':
+      commasplitcols[label] = True
     elif c != '-':
       raise Exception("unexpected flag char "+c)
 
@@ -396,6 +400,15 @@ for intsv in intsvlist:
         pass
       else:
         isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"],logh)
+
+    # for all commasplit cols, replace comma with pipe.  tsv2json will map to separate vals
+    for colname in outcolvals:
+      if outcolvals[colname] != None:
+        if colname in commasplitcols:
+          outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
+        # in other cols, replace any random | with ; but there are exceptions where rules may create multiple vals with |
+        elif colname != "General_Notes/Note:General":
+          outcolvals[colname] = re.sub(r'\|',';',outcolvals[colname])
 
     # cols allowed to be empty get explicit "None" for now, may change to empty string later
     #novalstr = "None"
