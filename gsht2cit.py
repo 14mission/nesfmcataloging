@@ -26,7 +26,7 @@ while ac < len(av):
 # columns that should be in output
 # format of rows below is output-column-name, flags, input-column-name-pattern
 #  note: / can mean either hierarchy field arrangement, or just "aka" in a field name
-#  also: a colon in and outcol name means CIt field is an array, with label/vals, and the bit after colon is a label
+#  also: if there is a colon, the bit after the colon should be prefixed to the value string
 # note on flags:
 #  - means none
 #  * mark with a * in output, meaning should be manually edited
@@ -58,7 +58,7 @@ for row in [
   r'Other_Names_and_Numbers/Other_Numbers/Shelvingcode u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
   r'Location/Location u Film\sRack',
   r'Collection em (comedy\s+)?Series',
-  r'Condition/Notes:PQ e p\s*q\b',
+  r'Condition/Overall_Condition e p\s*q\b', # note from nk: original spec was Condition/Notes:PQ but not in CatalogIt schema
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
   r'Motion_Picture_Details/Cast *uc star\W*s\W*',
@@ -79,12 +79,12 @@ for row in [
   r'Motion_Picture_Details/Film_Gauge/Format r NOSOURCECOLUMN',
   r'Motion_Picture_Details/Color_Characteristics *e film\scolor',
   r'Parts/Parts - Film\sReels', # reels, revisit?
-  r'General_Notes/Note:Best_Quality_DVD_Release em dvd\s+release',
-  r'General_Notes/Note:Best_Quality_Blu-ray_Release em blu\W*ray\s+release',
-  r'General_Notes/Note:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
-  r'General_Notes/Note:Stereotypes_or_Content_Issues em stereotypes',
-  r'General_Notes/Note:General e notes', # label needed
-  r'General_Notes/Note:Aperture_Image_Format r NOSUCHCOLUMN',
+  r'General_Notes e notes',
+  r'General_Notes:Best_Quality_DVD_Release em dvd\s+release',
+  r'General_Notes:Best_Quality_Blu-ray_Release em blu\W*ray\s+release',
+  r'General_Notes:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
+  r'General_Notes:Stereotypes_or_Content_Issues em stereotypes',
+  r'General_Notes:Aperture_Image_Format r NOSUCHCOLUMN',
   r'Acquisition/Accession/Source_or_Donor u don(at)?or|blackhawk\sassets|assett?s$', 
   r'Other_Names_and_Numbers/Other_Numbers/Other_Number r NOSOURCECOLUMN',
   ]:
@@ -108,6 +108,14 @@ for row in [
       commasplitcols[label] = True
     elif c != '-':
       raise Exception("unexpected flag char "+c)
+  # cols with colon will not be printed directly, they'll be mapped into cols with base name before colon
+  # so we'll define cols with base name, to be filled by rule
+  if ":" in label:
+    beforecolon = re.sub(r':.*$','',label)
+    if beforecolon not in outcols:
+      outcols.append(beforecolon)
+      hdrpats[beforecolon] = "NOSOURCECOLUMN"
+      rulefillcols[beforecolon] = True
 
 # for assigning custom object id nums for MG's
 objid_base_seen = {}
@@ -134,7 +142,7 @@ for intsv in intsvlist:
   outfn += ".4cit.tsv"
   print(f"write output to {outfn}")
   outh = open(outfn,"w")
-  print("\t".join(outcols)+"\tsource\tline",file=outh)
+  print("\t".join([colname for colname in outcols if ":" not in colname])+"\tsource\tline",file=outh)
 
   # log file
   logfn = re.sub(r'\.\w+$','',intsv)
@@ -221,6 +229,10 @@ for intsv in intsvlist:
         else:
           print(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(), file=logh)
           isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(),logh)
+      # pipe char will cause problems later
+      elif "|" in lncols[colmap[colname]]:
+        raise Exception(f"pipe char in line {lnum}: "+ln.strip())
+      # regular valid value
       else:
         outcolvals[colname] = lncols[colmap[colname]].strip()
 
@@ -342,13 +354,13 @@ for intsv in intsvlist:
         ratiolabel = Aspect_Ratio_match.group(1) + " " + Aspect_Ratio_match.group(3)
         if len(ratiolabel.strip()) > 0:
           if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes/Note:Aperture_Image_Format"] = "Movietone"
+            outcolvals["General_Notes:Aperture_Image_Format"] = "Movietone"
           elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes/Note:Aperture_Image_Format"] = "Full Silent"
+            outcolvals["General_Notes:Aperture_Image_Format"] = "Full Silent"
           elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes/Note:Aperture_Image_Format"] = "Academy"
+            outcolvals["General_Notes:Aperture_Image_Format"] = "Academy"
           elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
-            outcolvals["General_Notes/Note:Aperture_Image_Format"] = "Matted"
+            outcolvals["General_Notes:Aperture_Image_Format"] = "Matted"
           # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
           elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
             outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "super "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
@@ -360,10 +372,10 @@ for intsv in intsvlist:
 
     # extract parenthetical notes from title
     for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name|Title']):
-      if "General_Notes/Note:General" in outcolvals and outcolvals["General_Notes/Note:General"] != None and len(outcolvals["General_Notes/Note:General"].strip()) > 0:
-        outcolvals["General_Notes/Note:General"] += "|"+parenexp.strip(" ()")
+      if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
+        outcolvals["General_Notes:General"] += "|"+parenexp.strip(" ()")
       else:
-        outcolvals["General_Notes/Note:General"] = parenexp.strip().strip(" ()")
+        outcolvals["General_Notes:General"] = parenexp.strip().strip(" ()")
     # delte paren exprs from title.  also do whitespace norm
     outcolvals['Name|Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name|Title'])
     outcolvals['Name|Title'] = " ".join(outcolvals['Name|Title'].split())
@@ -407,20 +419,32 @@ for intsv in intsvlist:
       if outcolvals[colname] != None:
         if colname in commasplitcols:
           outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
-        # in other cols, replace any random | with ; but there are exceptions where rules may create multiple vals with |
-        elif colname != "General_Notes/Note:General":
-          outcolvals[colname] = re.sub(r'\|',';',outcolvals[colname])
+
+    # cols with colon: strip to basename, store value there, prefix bit after colon
+    for coloncol in [colname for colname in outcols if ":" in colname]:
+      if coloncol in outcolvals and outcolvals[coloncol] != None and len(outcolvals[coloncol]) > 0:
+        beforecolon, aftercolon = coloncol.split(":")
+        prefixedval = aftercolon + ": " + outcolvals[coloncol]
+        outcolvals[beforecolon] = outcolvals[beforecolon] + "|" + prefixedval if beforecolon in outcolvals and outcolvals[beforecolon] != None else prefixedval
 
     # reformat cols with multiple, pipe-delimited values, with json
     for colname in outcolvals:
-      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and "|" in outcolvals[colname]:
+      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname == "General_Notes"):
         vallist = [s.strip() for s in outcolvals[colname].split("|")]
+        if colname == "General_Notes":
+          vallist = [{"Note:": s} for s in vallist]
         outcolvals[colname] = json.dumps(vallist)
 
     # print columns
-    #novalstr = "None"
     novalstr = ""
-    print("\t".join(outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
+    print("\t".join(
+      # if undef replace with str indicating empty
+      outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr
+      # for almost all columns
+      for colname in
+      # skip ones in colon in name because they were mapped into base (before colon) name
+      [colname for colname in outcols if ":" not in colname]
+    )+"\t"+source+"\t"+str(lnum), file=outh)
 
     # in case badrow()
     if isbadrow > 0:
