@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys,os,re
+import json
 
 # later we will make this a fatal error
 def badrow(msg,logf):
@@ -401,7 +402,7 @@ for intsv in intsvlist:
       else:
         isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"],logh)
 
-    # for all commasplit cols, replace comma with pipe.  tsv2json will map to separate vals
+    # for all commasplit cols, replace comma with pipe.
     for colname in outcolvals:
       if outcolvals[colname] != None:
         if colname in commasplitcols:
@@ -410,12 +411,18 @@ for intsv in intsvlist:
         elif colname != "General_Notes/Note:General":
           outcolvals[colname] = re.sub(r'\|',';',outcolvals[colname])
 
-    # cols allowed to be empty get explicit "None" for now, may change to empty string later
+    # reformat cols with multiple, pipe-delimited values, with json
+    for colname in outcolvals:
+      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and "|" in outcolvals[colname]:
+        vallist = [s.strip() for s in outcolvals[colname].split("|")]
+        outcolvals[colname] = json.dumps(vallist)
+
+    # print columns
     #novalstr = "None"
     novalstr = ""
     print("\t".join(outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr for colname in outcols)+"\t"+source+"\t"+str(lnum), file=outh)
 
-    # in case badrow() just warns
+    # in case badrow()
     if isbadrow > 0:
       print("bad row(s) found!")
       sys.exit(666)
