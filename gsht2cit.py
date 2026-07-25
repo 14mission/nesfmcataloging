@@ -319,6 +319,16 @@ for intsv in intsvlist:
     if "Motion_Picture_Details/Film_Gauge/Format" not in outcolvals or outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == None:
       isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
 
+    # PQ normalization
+    if "Condition/Overall_Condition" in outcolvals and outcolvals["Condition/Overall_Condition"] != None and len(outcolvals["Condition/Overall_Condition"].strip()) > 0:
+      # if numeric prefix PQ
+      if re.match(r'^\s*\d+(\s*[\+\&-]\s*\d*)?\s*$',outcolvals["Condition/Overall_Condition"]):
+        outcolvals["Condition/Overall_Condition"] = "PQ" + outcolvals["Condition/Overall_Condition"]
+        outcolvals["Condition/Overall_Condition"] = "".join(outcolvals["Condition/Overall_Condition"].split())
+      # if n/a, drop
+      elif re.match(r'(?i)^\s*n\/a\s*$',outcolvals["Condition/Overall_Condition"]):
+        outcolvals["Condition/Overall_Condition"] = None
+
     # country normalization
     for countryfield in [ "relationships/related_places/notes:Print_Exhibition_Country", "made/created/place" ]:
       if countryfield in outcolvals and outcolvals[countryfield] != None:
