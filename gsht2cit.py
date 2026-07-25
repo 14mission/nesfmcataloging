@@ -125,6 +125,12 @@ objid_base_seen = {}
 objid_seen = {}
 shelvingcode_seen = {}
 
+# objid's already in use
+objid_incit = {}
+citobjidfh = open("existing.catalogit.objectids.txt")
+for ln in citobjidfh:
+  objid_incit[ln.strip().lower()] = True
+
 # process all input files specified on the command line
 for intsv in intsvlist:
 
@@ -416,6 +422,8 @@ for intsv in intsvlist:
       isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary,logh)
     else:
       objid_seen[outcolvals[objidcolname]] = record_summary
+    if outcolvals[objidcolname].lower() in objid_incit:
+      isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname],logh)
     if "Other_Names_and_Numbers/Other_Numbers/Shelvingcode" in outcolvals:
       normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers/Shelvingcode"]).lower()
       if normedshelvingcode == "missing":
