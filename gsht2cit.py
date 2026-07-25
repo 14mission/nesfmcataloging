@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys,os,re
 import json
+import csv
 
 # later we will make this a fatal error
 def badrow(msg,logf):
@@ -139,10 +140,13 @@ for intsv in intsvlist:
 
   # output file
   outfn = re.sub(r'\.\w+$','',intsv)
-  outfn += ".4cit.tsv"
+  outfn += ".4cit.csv"
   print(f"write output to {outfn}")
-  outh = open(outfn,"w")
-  print("\t".join([colname for colname in outcols if ":" not in colname])+"\tsource\tline",file=outh)
+  outh = csv.writer(open(outfn,"w"))
+  hdrcols = [colname for colname in outcols if ":" not in colname]
+  hdrcols.append("source")
+  hdrcols.append("linenum")
+  outh.writerow(hdrcols)
 
   # log file
   logfn = re.sub(r'\.\w+$','',intsv)
@@ -447,14 +451,17 @@ for intsv in intsvlist:
 
     # print columns
     novalstr = ""
-    print("\t".join(
+    outrow = [
       # if undef replace with str indicating empty
       outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr
       # for almost all columns
       for colname in
       # skip ones in colon in name because they were mapped into base (before colon) name
       [colname for colname in outcols if ":" not in colname]
-    )+"\t"+source+"\t"+str(lnum), file=outh)
+    ]
+    outrow.append(source)
+    outrow.append(str(lnum))
+    outh.writerow(outrow)
 
     # in case badrow()
     if isbadrow > 0:
