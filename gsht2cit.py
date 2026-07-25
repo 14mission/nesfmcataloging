@@ -50,12 +50,12 @@ okemptycols = {}
 okmissingcols = {}
 rulefillcols = {}
 commasplitcols = {}
-objidcolname = r'Entry|Object_ID'
-accnumcolname = r'Acquisition/Accession/Accession_Number'
+objidcolname = r'Entry/Object_ID'
+accnumcolname = r'Acquisition/Accession'
 for row in [ 
   objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
   accnumcolname+r' r NOSOURCECOLUMN', # truncated obj id
-  r'Name|Title - Title',
+  r'Name/Title - Title',
   r'Other_Names_and_Numbers/Other_Numbers/Shelvingcode u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
   r'Location/Location u Film\sRack',
   r'Collection em (comedy\s+)?Series',
@@ -286,21 +286,21 @@ for intsv in intsvlist:
       raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
 
     # extract film gauge from title: can be like **35mm** or (35mm)
-    Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name|Title"])
+    Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
     if Aspect_Ratio_title_match != None:
-      #print("gauge in title: \""+outcolvals["Name|Title"]+"\"")
+      #print("gauge in title: \""+outcolvals["Name/Title"]+"\"")
       coretitle = " ".join((Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3)).split())
       titlefilmgauge = Aspect_Ratio_title_match.group(2) + " mm." # per LOC spec
       #if outcolvals["Aspect_Ratio"] != None and re.search(r'\d+\s*mm', outcolvals["Aspect_Ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["Aspect_Ratio"].lower()) == None:
-      #  badrow("inconsistent film gauge: title=\""+outcolvals["Name|Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"",logh)
+      #  badrow("inconsistent film gauge: title=\""+outcolvals["Name/Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"",logh)
       #  continue
       outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = titlefilmgauge
-      outcolvals["Name|Title"] = coretitle
+      outcolvals["Name/Title"] = coretitle
       if outcolvals["Aspect_Ratio"] == None:
         outcolvals["Aspect_Ratio"] = "UNKNOWN"
-      #print(" now title=\""+outcolvals["Name|Title"]+"\" gauge="+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" aspect ratio="+outcolvals["Aspect_Ratio"])
-    elif "35mm" in outcolvals["Name|Title"]:
-      print("WARNING: gauge REMAINING in title: \""+outcolvals["Name|Title"]+"\"")
+      #print(" now title=\""+outcolvals["Name/Title"]+"\" gauge="+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" aspect ratio="+outcolvals["Aspect_Ratio"])
+    elif "35mm" in outcolvals["Name/Title"]:
+      print("WARNING: gauge REMAINING in title: \""+outcolvals["Name/Title"]+"\"")
 
     # extract frame rate from aspect ratio, if present
     if outcolvals["Aspect_Ratio"] != None:
@@ -316,12 +316,23 @@ for intsv in intsvlist:
         outcolvals["Aspect_Ratio"] = apect_ratio_and_Film_Gauge_match.group(1) + apect_ratio_and_Film_Gauge_match.group(3).strip()
         extracted_gauge = apect_ratio_and_Film_Gauge_match.group(2) + " mm."
         if "Motion_Picture_Details/Film_Gauge/Format" in outcolvals and outcolvals["Motion_Picture_Details/Film_Gauge/Format"] != None and extracted_gauge != outcolvals["Motion_Picture_Details/Film_Gauge/Format"]:
-          badrow("inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge,logh)
+          isbadrow += badrow(f"inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge,logh)
         outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = extracted_gauge
 
     # if film gauge still not filled, that's a problem
     if "Motion_Picture_Details/Film_Gauge/Format" not in outcolvals or outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == None:
       isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
+
+    # film length
+    if "Motion_Picture_Details/Length" in outcolvals and outcolvals["Motion_Picture_Details/Length"] != None and len(outcolvals["Motion_Picture_Details/Length"]) > 0:
+      # catalogit doesn't want commas in length
+      outcolvals["Motion_Picture_Details/Length"] = re.sub(r',','',outcolvals["Motion_Picture_Details/Length"])
+      # fix spinal tap stonehenge error
+      outcolvals["Motion_Picture_Details/Length"] = re.sub(r'"','\'',outcolvals["Motion_Picture_Details/Length"])
+      # if length is not in a valid format, drop it
+      if not re.match(r'^\d+(\'|\s*ft)\s*$', outcolvals["Motion_Picture_Details/Length"]):
+        print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
+        outcolvals["Motion_Picture_Details/Length"] = None
 
     # PQ normalization
     if "Condition/Overall_Condition" in outcolvals and outcolvals["Condition/Overall_Condition"] != None and len(outcolvals["Condition/Overall_Condition"].strip()) > 0:
@@ -385,14 +396,14 @@ for intsv in intsvlist:
             isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
 
     # extract parenthetical notes from title
-    for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name|Title']):
+    for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name/Title']):
       if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
         outcolvals["General_Notes:General"] += "|"+parenexp.strip(" ()")
       else:
         outcolvals["General_Notes:General"] = parenexp.strip().strip(" ()")
     # delte paren exprs from title.  also do whitespace norm
-    outcolvals['Name|Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name|Title'])
-    outcolvals['Name|Title'] = " ".join(outcolvals['Name|Title'].split())
+    outcolvals['Name/Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name/Title'])
+    outcolvals['Name/Title'] = " ".join(outcolvals['Name/Title'].split())
 
     # check if cols that were supposed to be supplied by rules actually were
     for colname in colstoberulefilled:
@@ -400,7 +411,7 @@ for intsv in intsvlist:
         isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
 
     # check for dup objid and dup shelving code
-    record_summary = str(lnum)+":"+outcolvals["Name|Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers/Shelvingcode"]
+    record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers/Shelvingcode"]
     if outcolvals[objidcolname] in objid_seen:
       isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary,logh)
     else:
@@ -445,8 +456,6 @@ for intsv in intsvlist:
     for colname in outcolvals:
       if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname == "General_Notes"):
         vallist = [s.strip() for s in outcolvals[colname].split("|")]
-        if colname == "General_Notes":
-          vallist = [{"Note:": s} for s in vallist]
         outcolvals[colname] = json.dumps(vallist)
 
     # print columns
