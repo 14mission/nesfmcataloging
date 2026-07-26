@@ -206,6 +206,7 @@ for intsv in intsvlist:
 
     # film not actually in archive?
     if re.search(r'(?i)NO prints in Archive',ln) != None:
+      print(f"skip line: {lnum}: "+ln.strip(), file=logh)
       continue
 
     # section divider line? print it but then ignore
