@@ -56,14 +56,15 @@ for row in [
   objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
   accnumcolname+r' r NOSOURCECOLUMN', # truncated obj id
   r'Name/Title - Title',
-  r'Other_Names_and_Numbers/Other_Numbers/Shelvingcode u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
+  r'Other_Names_and_Numbers/Other_Numbers/Other_Number:shelving u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
+  r'Other_Names_and_Numbers/Other_Numbers/Other_Number:oldid r NOSOURCECOLUMN',
   r'Location/Location u Film\sRack',
   r'Collection em (comedy\s+)?Series',
   r'Condition/Overall_Condition e p\s*q\b', # note from nk: original spec was Condition/Notes:PQ but not in CatalogIt schema
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
   r'Motion_Picture_Details/Cast *uc star\W*s\W*',
-  r'Motion_Picture_Details/Director *uc director',
+  r'Motion_Picture_Details/Director *u director', # note: flags should be *uc, but multivals not supported by CatalogIt yet
   r'Motion_Picture_Details/Producer/Publisher *u produc(er|tion\sco)',
   r'Motion_Picture_Details/Writer *emc writer',
   r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
@@ -86,8 +87,8 @@ for row in [
   r'General_Notes:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
   r'General_Notes:Stereotypes_or_Content_Issues em stereotypes',
   r'General_Notes:Aperture_Image_Format r NOSUCHCOLUMN',
+  r'General_Notes:General r NOSUCHCOLUMN',
   r'Acquisition/Accession/Source_or_Donor u don(at)?or|blackhawk\sassets|assett?s$', 
-  r'Other_Names_and_Numbers/Other_Numbers/Other_Number r NOSOURCECOLUMN',
   ]:
   cols = row.split()
   if len(cols) != 3: raise Exception("misformatted label spec: "+row)
@@ -150,7 +151,7 @@ for intsv in intsvlist:
   print(f"write output to {outfn}")
   outh = csv.writer(open(outfn,"w"))
   hdrcols = [colname for colname in outcols if ":" not in colname]
-  hdrcols.append("source")
+  hdrcols.append("Tags")
   hdrcols.append("linenum")
   outh.writerow(hdrcols)
 
@@ -164,6 +165,7 @@ for intsv in intsvlist:
   source = intsv
   source = re.sub(r'^.*- *','',source)
   source = re.sub(r'\.tsv$','',source)
+  source = re.sub(r'^nesfm\.archive\.','',source)
 
   # we will look at header row and figure out what input col maps to what output col
   colmap = {}
@@ -254,7 +256,7 @@ for intsv in intsvlist:
     # there may be collisions so suffix 0, 1, etc
     # prefix 2011.50 accession num to make canonical obj id
     if re.match(r'(?i)^mg', outcolvals[objidcolname]):
-      outcolvals["Other_Names_and_Numbers/Other_Numbers/Other_Number"] = outcolvals[objidcolname]
+      outcolvals["Other_Names_and_Numbers/Other_Numbers/Other_Number:oldid"] = outcolvals[objidcolname]
       basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals[objidcolname])
       basenum = re.sub(r'^0+','',basenum)
       if "MG"+basenum in objid_base_seen:
@@ -418,15 +420,15 @@ for intsv in intsvlist:
         isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
 
     # check for dup objid and dup shelving code
-    record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers/Shelvingcode"]
+    record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers/Other_Number:shelving"]
     if outcolvals[objidcolname] in objid_seen:
       isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary,logh)
     else:
       objid_seen[outcolvals[objidcolname]] = record_summary
     if outcolvals[objidcolname].lower() in objid_incit:
       isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname],logh)
-    if "Other_Names_and_Numbers/Other_Numbers/Shelvingcode" in outcolvals:
-      normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers/Shelvingcode"]).lower()
+    if "Other_Names_and_Numbers/Other_Numbers/Other_Number:shelving" in outcolvals:
+      normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers/Other_Number:shelving"]).lower()
       if normedshelvingcode == "missing":
         pass
       elif normedshelvingcode in shelvingcode_seen:
@@ -458,14 +460,28 @@ for intsv in intsvlist:
     for coloncol in [colname for colname in outcols if ":" in colname]:
       if coloncol in outcolvals and outcolvals[coloncol] != None and len(outcolvals[coloncol]) > 0:
         beforecolon, aftercolon = coloncol.split(":")
-        prefixedval = aftercolon + ": " + outcolvals[coloncol]
+        prefixedval = re.sub(r'_',' ',aftercolon) + ": " + outcolvals[coloncol]
         outcolvals[beforecolon] = outcolvals[beforecolon] + "|" + prefixedval if beforecolon in outcolvals and outcolvals[beforecolon] != None else prefixedval
 
     # reformat cols with multiple, pipe-delimited values, with json
     for colname in outcolvals:
       if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname == "General_Notes"):
-        vallist = [s.strip() for s in outcolvals[colname].split("|")]
+        if colname == "General_Notes":
+          vallist = []
+          for note in outcolvals[colname].split("|"):
+            if ":" in note:
+              notetype, notetext = note.split(":",maxsplit=1)
+              notetype = " ".join(notetype.strip().split("_"))
+              vallist.append({
+                "http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": notetype.strip(),
+                "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": notetext.strip()})
+            else:
+              vallist.append({"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": note.strip()})
+        else:
+          vallist = [s.strip() for s in outcolvals[colname].split("|")]
         outcolvals[colname] = json.dumps(vallist)
+        if len(vallist) > 1:
+          print("FOO: "+colname+": "+outcolvals[colname])
 
     # print columns
     novalstr = ""
