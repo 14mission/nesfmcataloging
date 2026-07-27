@@ -56,8 +56,8 @@ for row in [
   objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
   accnumcolname+r' r NOSOURCECOLUMN', # truncated obj id
   r'Name/Title - Title',
-  r'Other_Names_and_Numbers/Other_Numbers/Other_Number:shelving u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
-  r'Other_Names_and_Numbers/Other_Numbers/Other_Number:oldid r NOSOURCECOLUMN',
+  r'Other_Names_and_Numbers/Other_Numbers:Shelving u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
+  r'Other_Names_and_Numbers/Other_Numbers:Old_Object_ID r NOSOURCECOLUMN',
   r'Location/Location u Film\sRack',
   r'Collection em (comedy\s+)?Series',
   r'Condition/Overall_Condition e p\s*q\b', # note from nk: original spec was Condition/Notes:PQ but not in CatalogIt schema
@@ -256,7 +256,7 @@ for intsv in intsvlist:
     # there may be collisions so suffix 0, 1, etc
     # prefix 2011.50 accession num to make canonical obj id
     if re.match(r'(?i)^mg', outcolvals[objidcolname]):
-      outcolvals["Other_Names_and_Numbers/Other_Numbers/Other_Number:oldid"] = outcolvals[objidcolname]
+      outcolvals["Other_Names_and_Numbers/Other_Numbers:Old_Object_ID"] = outcolvals[objidcolname]
       basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals[objidcolname])
       basenum = re.sub(r'^0+','',basenum)
       if "MG"+basenum in objid_base_seen:
@@ -420,15 +420,15 @@ for intsv in intsvlist:
         isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
 
     # check for dup objid and dup shelving code
-    record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers/Other_Number:shelving"]
+    record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]
     if outcolvals[objidcolname] in objid_seen:
       isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary,logh)
     else:
       objid_seen[outcolvals[objidcolname]] = record_summary
     if outcolvals[objidcolname].lower() in objid_incit:
       isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname],logh)
-    if "Other_Names_and_Numbers/Other_Numbers/Other_Number:shelving" in outcolvals:
-      normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers/Other_Number:shelving"]).lower()
+    if "Other_Names_and_Numbers/Other_Numbers:Shelving" in outcolvals:
+      normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]).lower()
       if normedshelvingcode == "missing":
         pass
       elif normedshelvingcode in shelvingcode_seen:
@@ -477,6 +477,13 @@ for intsv in intsvlist:
                 "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": notetext.strip()})
             else:
               vallist.append({"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": note.strip()})
+        elif colname == "Other_Names_and_Numbers/Other_Numbers":
+          vallist = []
+          for othernum in outcolvals[colname].split("|"):
+            numtype, number = othernum.split(":")
+            vallist.append({
+              "http://www.catalogit.me/rdf/ontologies/core/common#hasType": numtype.strip(),
+              "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": number.strip()})
         else:
           vallist = [s.strip() for s in outcolvals[colname].split("|")]
         outcolvals[colname] = json.dumps(vallist)
