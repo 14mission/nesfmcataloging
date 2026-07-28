@@ -464,8 +464,9 @@ for intsv in intsvlist:
         outcolvals[beforecolon] = outcolvals[beforecolon] + "|" + prefixedval if beforecolon in outcolvals and outcolvals[beforecolon] != None else prefixedval
 
     # reformat cols with multiple, pipe-delimited values, with json
+    # some cols with complicated structures need this even for just one value
     for colname in outcolvals:
-      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname == "General_Notes"):
+      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
         if colname == "General_Notes":
           vallist = []
           for note in outcolvals[colname].split("|"):
@@ -487,8 +488,6 @@ for intsv in intsvlist:
         else:
           vallist = [s.strip() for s in outcolvals[colname].split("|")]
         outcolvals[colname] = json.dumps(vallist)
-        if len(vallist) > 1:
-          print("FOO: "+colname+": "+outcolvals[colname])
 
     # print columns
     novalstr = ""
