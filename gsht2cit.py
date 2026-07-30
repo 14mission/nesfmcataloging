@@ -448,6 +448,17 @@ for intsv in intsvlist:
       #print(outcolvals["Motion_Picture_Details/Sound/Film_Sound"]+" -> "+soundval+" + "+(outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] if "Motion_Picture_Details/Sound/Sound_Notes:Type" in outcolvals else ""))
       outcolvals["Motion_Picture_Details/Sound/Film_Sound"] = soundval
 
+    # color normalization: only specific set of values are allowed
+    if "Motion_Picture_Details/Color_Characteristics" in outcolvals and outcolvals["Motion_Picture_Details/Color_Characteristics"] != None:
+      if re.match(r'(?i)\s*b\s*\&\s*w\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
+        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
+      elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
+        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
+      elif re.match(r'(?i)\s*(tint(ed|s)?|toned)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted)"
+      else:
+        isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"],logh)
+
     # TBD: handle serieses
     # if series col, and filled, prefix to title
     # if "series" in colmap and len(lncols[colmap["series"]].strip()):
