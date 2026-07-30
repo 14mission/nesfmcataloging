@@ -357,6 +357,7 @@ for intsv in intsvlist:
     for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
       if countryfield in outcolvals and outcolvals[countryfield] != None:
         outcolvals[countryfield] = re.sub(r'^U\W*S\W*A\W*','United States',outcolvals[countryfield])
+        outcolvals[countryfield] = re.sub(r'^U\W*S\W*(,|$)',r'United States\1',outcolvals[countryfield])
         outcolvals[countryfield] = re.sub(r'^U\W*K\W*','United Kingdom',outcolvals[countryfield])
         outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
         outcolvals[countryfield] = " ".join(outcolvals[countryfield].split())
