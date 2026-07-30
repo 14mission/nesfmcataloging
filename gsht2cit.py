@@ -277,6 +277,7 @@ for intsv in intsvlist:
       elif re.search(r'(?i)hist.*news',intsv): genre_offset = 1000
       elif re.search(r'(?i)cinema.hist',intsv): genre_offset = 1200
       elif re.search(r'(?i)bartel.*films',intsv): genre_offset = 1400
+      elif re.search(r'(?i)test',intsv): genre_offset = 2000
       else: raise Exception("unk obj id and no genre mapping for "+intsv)
       basenum = "2026.67."+str(genre_offset)
       if basenum in objid_base_seen:
