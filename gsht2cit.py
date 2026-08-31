@@ -226,7 +226,7 @@ for intsv in intsvlist:
       if colname not in colmap or colmap[colname] == None:
         continue
       # various ways of being "empty"
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(unknown|20xx\.xx\.xx)\W*$',lncols[colmap[colname]]):
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|20xx\.xx\.xx)\W*$',lncols[colmap[colname]]):
         # some cols allowed to be empty
         if colname in okemptycols:
           outcolvals[colname] = None
@@ -365,7 +365,7 @@ for intsv in intsvlist:
         outcolvals[countryfield] = outcolvals[countryfield].title()
 
     # actor/director name normalization
-    for namefield in [ "Motion_Picture_Details/Cast" ]:
+    for namefield in [ "Motion_Picture_Details/Cast", "Motion_Picture_Details/Director" ]:
       if namefield in outcolvals and outcolvals[namefield] != None:
         oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
         # clobber end-of-string elipses/etc
@@ -382,6 +382,8 @@ for intsv in intsvlist:
         outcolvals[namefield] = re.sub(r'(?i)^arbuckle\/ford sterling\b', 'Roscoe Arbuckle,Ford Sterling', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*normand\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*keaton\b', 'Roscoe Arbuckle,Buster Keaton', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bmax davidson\W*stan laurel\b', 'Max Davidson,Stan Laurel', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bAnita Garvin\W*Edgar Kennedy\b', 'Anita Garvin,Edgar Kennedy', outcolvals[namefield])
         # clean up first names, mostly mapping initials to full names
         outcolvals[namefield] = re.sub(r'(?i)\b(c|charles|chas)\W+chaplin\b', 'Charlie Chaplin', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\b(j)\W+finlayson\b', 'James Finlayson', outcolvals[namefield])
@@ -393,8 +395,8 @@ for intsv in intsvlist:
         outcolvals[namefield] = re.sub(r'(?i)\be\W+campbell\b','Eric Cambpell', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bgord\W+griffith\b','Gordon Griffith', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bc\W+conklin\b','Chester Conklin', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bm\W+normand\b','Mabel Normand', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bf\W+sterling\b','Ford Sterling', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\b(m|mable)\W+normand\b','Mabel Normand', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bf\W+st(er|re)ling\b','Ford Sterling', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\b(e\W+|edgar)kennedy\b','Edgar Kennedy', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bm\W+sennett\b','Mack Sennett', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\b(c|charles|chas)\W+chase\b','Charley Chase', outcolvals[namefield])
@@ -423,6 +425,15 @@ for intsv in intsvlist:
         outcolvals[namefield] = re.sub(r'(?i)\bM.BuschT.Todd\b','Mae Busch,Thelma Todd', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bw\W*c\W+fields\b','W. C. Fields', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bJackie\s*\/Jack\s+Dailey\b','Jackie Dailey', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bSnub\W*Pollard\b','Snub Pollard', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bFrancis\W*X\W*Bushman\b','Francis X. Bushman', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bstan\W*laur?el(\s+w\W*)\b','Stan Laurel', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bslim\W*(summ?erville\b|sumr\.)','Slim Summerville', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bkewpie mor\.','Kewpie Morgan', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bmilded\b','Mildred', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bmonte banks\b','Monty Banks', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\broscoe\W*fatty\W*arbuckle\b','Roscoe Arbuckle', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\b([A-Z]\.)(?=\w+)\b',r'\1 ', outcolvals[namefield]) # space inits
         # if syd chaplin is with charlie, he's often just "syd"
         if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
           outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
@@ -431,11 +442,13 @@ for intsv in intsvlist:
           outcolvals[namefield] = ",".join(s.strip() for s in re.split(r'[,\&\|\/]',outcolvals[namefield]))
         # check for problematic names 
         for name in outcolvals[namefield].split(","):
-          if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields)\s*$',name) == None: # check for names with fn still an initial, and single-word names
+          if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
             isbadrow += badrow(f"suspect name in line {lnum}: "+name,logh)
         newval = outcolvals[namefield]
         if newval != oldval:
           print(f"NAMEFIX: {oldval} -> {newval}")
+        for n in newval.split(","):
+          print(f"NAME: {n}")
 
     # sound normalization
     if "Motion_Picture_Details/sound/film_sound" in outcolvals and outcolvals["Motion_Picture_Details/Sound/Film_Sound"] != None:
