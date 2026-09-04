@@ -425,7 +425,7 @@ for intsv in intsvlist:
         outcolvals[namefield] = re.sub(r'(?i)\bJackie\s*\/Jack\s+Dailey\b','Jackie Dailey', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bSnub\W*Pollard\b','Snub Pollard', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bFrancis\W*X\W*Bushman\b','Francis X. Bushman', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bstan\W*laur?el(\s+w\W*)?\b','Stan Laurel', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\b(stan|s)\W*laur?el\b','Stan Laurel', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\b(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)','Slim Summerville', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bkewpie mor\.','Kewpie Morgan', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bmilded\b','Mildred', outcolvals[namefield])
@@ -435,9 +435,9 @@ for intsv in intsvlist:
         # if syd chaplin is with charlie, he's often just "syd"
         if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
           outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
-        # change ampersand to comma keep mr & mrs (sydney drew); also slash
+        # change ampersand to comma keep mr & mrs (sydney drew); also slash, pipe, and w/
         if not re.match(r'(?i)^(mr\W*\&\W*mrs)', outcolvals[namefield]):
-          outcolvals[namefield] = ",".join(s.strip() for s in re.split(r'[,\&\|\/]',outcolvals[namefield]))
+          outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/',outcolvals[namefield]))
         # extract ACTORNAME as PARTNAME
         while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+)(,.+|)$',outcolvals[namefield])) != None:
           uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
