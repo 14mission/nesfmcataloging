@@ -337,8 +337,8 @@ for intsv in intsvlist:
     if "Motion_Picture_Details/Length" in outcolvals and outcolvals["Motion_Picture_Details/Length"] != None and len(outcolvals["Motion_Picture_Details/Length"]) > 0:
       # catalogit doesn't want commas in length
       outcolvals["Motion_Picture_Details/Length"] = re.sub(r',','',outcolvals["Motion_Picture_Details/Length"])
-      # fix spinal tap stonehenge error
-      outcolvals["Motion_Picture_Details/Length"] = re.sub(r'"','\'',outcolvals["Motion_Picture_Details/Length"])
+      # fix spinal tap stonehenge error, and "pretty apostrophe" issue
+      outcolvals["Motion_Picture_Details/Length"] = re.sub(r'"|’','\'',outcolvals["Motion_Picture_Details/Length"])
       # if length is not in a valid format, drop it
       if not re.match(r'^\d+(\'|\s*ft)\s*$', outcolvals["Motion_Picture_Details/Length"]):
         print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
@@ -399,8 +399,7 @@ for intsv in intsvlist:
         outcolvals[namefield] = re.sub(r'(?i)\bf\W+st(er|re)ling\b','Ford Sterling', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\b(e\W+|edgar)kennedy\b','Edgar Kennedy', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bm\W+sennett\b','Mack Sennett', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(c|charles|chas)\W+chase\b','Charley Chase', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(c|charles|chas)\W+parrott\b','Charles Parrott', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\b(c|charles|chas|charl(ey|ie))\W+(chase|par+ot+)\b','Charley Chase', outcolvals[namefield]) # nb, billed as Parrott as dir, but norm to Chase
         outcolvals[namefield] = re.sub(r'(?i)\bm\W+sennett\b','Mack Sennett', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bm\W+swain\b','Mack Swain', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bc\W+bennett\b','Constance Bennett', outcolvals[namefield])
@@ -439,6 +438,15 @@ for intsv in intsvlist:
         # change ampersand to comma keep mr & mrs (sydney drew); also slash
         if not re.match(r'(?i)^(mr\W*\&\W*mrs)', outcolvals[namefield]):
           outcolvals[namefield] = ",".join(s.strip() for s in re.split(r'[,\&\|\/]',outcolvals[namefield]))
+        # extract ACTORNAME as PARTNAME
+        while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+)(,.+|)$',outcolvals[namefield])) != None:
+          uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
+          print(f"XASYMATCH: {outcolvals[namefield]}: pre={uptocomma}, actor={actor}, aswho={aswho}, post={commaetc}")
+          outcolvals[namefield] = uptocomma.strip() + actor.strip() + commaetc.strip()
+          if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
+            outcolvals["General_Notes:General"] += "|"+(actor+aswho).strip()
+          else:
+            outcolvals["General_Notes:General"] = (actor+aswho).strip()
         # check for problematic names 
         for name in outcolvals[namefield].split(","):
           if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
