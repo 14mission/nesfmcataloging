@@ -431,6 +431,7 @@ for intsv in intsvlist:
         outcolvals[namefield] = re.sub(r'(?i)\bmilded\b','Mildred', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bmonte banks\b','Monty Banks', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\broscoe\W*fatty\W*arbuckle\b','Roscoe Arbuckle', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\b(minta|m|martha|araminta)\W*dur?fr?ee(\W*arbuckle)?\b','Minta Durfee', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\b([A-Z]\.)(?=\w+)\b',r'\1 ', outcolvals[namefield]) # space inits
         # if syd chaplin is with charlie, he's often just "syd"
         if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
