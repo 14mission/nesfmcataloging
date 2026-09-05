@@ -483,8 +483,12 @@ for intsv in intsvlist:
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
       elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-      elif re.match(r'(?i)\s*(tint(ed|s)?|toned)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      elif re.match(r'(?i)\s*(tint(ed|s|ing)?)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted)"
+      elif re.match(r'(?i)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
+      elif re.match(r'(?i)\s*(tint(ed|s|ing))\s*(and|\W+)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted and toned)"
       else:
         isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"],logh)
 
