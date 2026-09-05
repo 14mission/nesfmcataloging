@@ -367,7 +367,15 @@ for intsv in intsvlist:
     # actor/director name normalization
     for namefield in [ "Motion_Picture_Details/Cast", "Motion_Picture_Details/Director" ]:
       if namefield in outcolvals and outcolvals[namefield] != None:
+        # slightly normalized original value for logging changes
         oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
+        # treat "in animated form" as a note, not an actor
+        if re.search(r'(?i)in\s+animated\s+form', outcolvals[namefield]) != None:
+          if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
+            outcolvals["General_Notes:General"] += "|"+outcolvals[namefield]
+          else:
+            outcolvals["General_Notes:General"] = outcolvals[namefield]
+          outcolvals[namefield] = "" 
         # clobber end-of-string elipses/etc
         outcolvals[namefield] = re.sub(r'\s*,(\W+|\s*etc\.?\s*)$','', outcolvals[namefield])
         # split up some prominent duos
@@ -439,8 +447,8 @@ for intsv in intsvlist:
         # change ampersand to comma keep mr & mrs (sydney drew); also slash, pipe, and w/
         if not re.match(r'(?i)^(mr\W*\&\W*mrs)', outcolvals[namefield]):
           outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/',outcolvals[namefield]))
-        # extract ACTORNAME as PARTNAME
-        while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+)(,.+|)$',outcolvals[namefield])) != None:
+        # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
+        while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
           uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
           print(f"XASYMATCH: {outcolvals[namefield]}: pre={uptocomma}, actor={actor}, aswho={aswho}, post={commaetc}")
           outcolvals[namefield] = uptocomma.strip() + actor.strip() + commaetc.strip()
