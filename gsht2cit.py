@@ -64,7 +64,7 @@ for row in [
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
   r'Motion_Picture_Details/Cast *uc star\W*s\W*',
-  r'Motion_Picture_Details/Director *u director', # note: flags should be *uc, but multivals not supported by CatalogIt yet
+  r'Motion_Picture_Details/Director *uc director',
   r'Motion_Picture_Details/Producer/Publisher *u produc(er|tion\sco)',
   r'Motion_Picture_Details/Writer *emc writer',
   r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
@@ -226,7 +226,7 @@ for intsv in intsvlist:
       if colname not in colmap or colmap[colname] == None:
         continue
       # various ways of being "empty"
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|20xx\.xx\.xx)\W*$',lncols[colmap[colname]]):
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|20xx\.xx\.xx|no\W*credit)\W*$',lncols[colmap[colname]]):
         # some cols allowed to be empty
         if colname in okemptycols:
           outcolvals[colname] = None
