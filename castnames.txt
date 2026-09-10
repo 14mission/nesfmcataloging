@@ -32,7 +32,7 @@ Billy Barty
 Billy Bevan
 Billy Dooley
 Billy Engle
-Billy Gilbert 1894-1971	b\W+gilbert # there's another billy gilbert, so we need to look out for that
+Billy Gilbert 1894-1971	b(illy)?\W+gilbert # there's another billy gilbert, so we need to look out for that
 Billy Quirk
 Billy Ruge
 Billy West
@@ -109,6 +109,7 @@ Frank E. Powell
 Frank Griffin
 Frank Terry
 Fraunie Fraunholz
+Fred C. Newmeyer #nk
 Fred Fishback
 Fred Guiol
 Fred Karno
@@ -121,13 +122,14 @@ George Jeske
 George Nichols
 Georges Monca
 Gilbert M. Anderson	g\W+(m\W+|broncho\W+billy\W+)*anderson
-Gilbert W. Pratt
+Gilbert W. Pratt	(gilbert|gil+) pratt #is initial needed?
 Glen Cavender
 Glenn Tyron
 Gloria Swanson
 Gordon Griffith	gord\W+griffith
 Hal Roach #nk
 Hank Mann
+Harold Beaudine #nk
 Harold Lloyd
 Harry Depp
 Harry Edwards #nk
@@ -145,6 +147,7 @@ Jackie Dailey	Jackie\s*\/Jack\s+Dailey #nk
 James Aubrey
 James Finlayson	(j)\W+finlayson
 James Parrott	paul parrott
+James W. Horne #nk
 Jay Belasco
 Jean Harlow
 Jimmie Adams
@@ -179,6 +182,7 @@ Madeline Hurlock	mad\W+hurlock
 Madge Kirby
 Mae Busch	m\W+busch
 Mae Laurel
+Malcolm St. Clair	malcom st\W*clair
 Marie Dressler
 Marie Mosquini
 Matty Kemp
@@ -196,6 +200,7 @@ Minnie Devereaux
 Minta Durfee	(minta|m|martha|araminta)\W*dur?fr?ee(\W*arbuckle)?
 Monty Banks	mont(e|y) banks
 Neal Burns
+Norman Taurog #nk
 Oliver Hardy	o\W+hardy
 Ora Carew
 Otto Messmer #nk
@@ -203,11 +208,12 @@ Paddy McGuire
 Pat Sullivan #nk
 Pauline Curley
 Peter Lang
-Pete the Pup (Dog)
+Pete the Pup (Dog)	pete the pup
 Phyllis Allen
 Polidor
 Polly Moran
 Priscilla Dean
+Ralph Ceder	ralph ced[ea]r #nk
 Raymond Griffith
 René Leprince
 Richard Jones
@@ -216,9 +222,10 @@ Robert F. McGowan	robert\s+mcgowan
 Roscoe Arbuckle	(r)\W+arbuckle|roscoe\W*fatty\W*arbuckle
 Sally Phipps
 Sammy Morrison
+Scott Pembroke	percy scott pembroke
 Sidney Drew
 Slim Summerville	(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)
-Snooky (Chimpanzee)
+Snooky (Chimpanzee)	Snooky the Humanzee
 Snub Pollard	(snub|s)\W*Pollard
 Stan Laurel	(stan|s)\W*laur?el
 Stanley Sandford	(t|tiny)\W+sandford # nk screen name is "Tiny"
@@ -234,6 +241,7 @@ Virginia Pearson
 Vivien Oakland
 Wallace Beery
 Wallace Lupino
+Walter Wright #nk
 W. C. Fields	w\W*c\W+fields
 William Franey
 William Garwood
