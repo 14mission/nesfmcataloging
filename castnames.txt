@@ -9,7 +9,7 @@ Alfred Goulding
 Alice Day
 Alice Guy
 Alice Howell
-Al St. John
+Al St. John	al\W+st\W+john
 Alyce Ardell
 A. Massard
 André Deed
@@ -19,32 +19,32 @@ Arthur Hotaling
 Arthur Lake
 Arvid E. Gillstrom
 Babe London
-Barney Oldfield
+Barney Oldfield	b\W+oldfield
 Barry Bernard
 Barry O'Neil
 Beatrice La Plante
 Bebe Daniels
-Ben Turpin
+Ben Turpin	(b)\W+turpin
 Bert Williams
 Billie Rhodes
-Billy Armstrong
+Billy Armstrong	b\W+armstrong
 Billy Barty
 Billy Bevan
 Billy Dooley
 Billy Engle
-Billy Gilbert, 1894-1971
+Billy Gilbert 1894-1971	b\W+gilbert # there's another billy gilbert, so we need to look out for that
 Billy Quirk
 Billy Ruge
 Billy West
 Blanche Cornwall
-Blanche Payson
+Blanche Payson	b\W+payson
 Bobby Dunn
 Bobby Emmet
 Bobby Nelson
-Bobby Ray, 1899-1957
+Bobby Ray 1899-1957
 Bobby Vernon
 Bud Duncan
-Bud Jamison
+Bud Jamison	b\W+jamison
 Buster Keaton
 Camille de Morlhon
 Carole Lombard
@@ -54,17 +54,17 @@ Charles Hall
 Charles J. Bennett
 Charles Lamont
 Charles-Lucien Lépine
-Charley Chase
-Charlie Chaplin
+Charley Chase	(c|charles|chas|charl(ey|ie))\W+(chase|par+ot+) # nb, billed as Parrott as dir, but norm to Chase
+Charlie Chaplin	(c|charles|chas)\W+chaplin
 Charlie Murray
-Chester Conklin
+Chester Conklin	c\W+conklin
 C. Jay Williams
 Clarence G. Badger
 Cliff Bowes
 Clyde Bruckman
 Clyde Cook
 Colleen Moore
-Constance Bennett
+Constance Bennett	c\W+bennett
 Craig Hutchinson
 Daphne Pollard
 David Kirkland
@@ -80,17 +80,17 @@ Earl Mohan
 Earl Montgomery
 Eddie Lyons
 Eddie Quillan
-Edgar Kennedy
-Edna Purviance
+Edgar Kennedy	(e\W+|edgar)kennedy
+Edna Purviance	(e)\W+purviance
 Edward Baker
-Edward Cline
+Edward Cline	(e|eddie|edward)\W+(f\W+)?cline
 Edward Everett Horton
 Edward Ludwig
 Edwin Middleton
 Eleuterio Rodolfi
 Elsa Lanchester
 Emmett Flynn
-Eric Campbell
+Eric Campbell	e(ric)?\W+cam(pb|bp)ell
 Erle C. Kenton
 Ernie Shields
 Ethelyn Gibson
@@ -100,9 +100,9 @@ Ferdinand Zecca
 Ferris Hartman
 Flora Finch
 Florence Lawrence
-Ford Sterling
+Ford Sterling	f\W+st(er|re)ling
 Frances Lee
-Francis X. Bushman
+Francis X. Bushman	Francis\W*X\W*Bushman
 Frank Alexander
 Frank Butler
 Frank E. Powell
@@ -120,12 +120,12 @@ George D. Baker
 George Jeske
 George Nichols
 Georges Monca
-Gilbert M. Anderson
+Gilbert M. Anderson	g\W+(m\W+|broncho\W+billy\W+)*anderson
 Gilbert W. Pratt
 Glen Cavender
 Glenn Tyron
 Gloria Swanson
-Gordon Griffith
+Gordon Griffith	gord\W+griffith
 Hank Mann
 Harold Lloyd
 Harry Depp
@@ -136,10 +136,11 @@ Henry Lehrman
 Hilliard Karr
 Hughey Mack
 Jack Cooper
-Jack Duffy
+Jack Duffy	j\W+duffy
 Jackie Coogan
+Jackie Dailey	Jackie\s*\/Jack\s+Dailey #nk
 James Aubrey
-James Finlayson
+James Finlayson	(j)\W+finlayson
 James Parrott
 Jay Belasco
 Jean Harlow
@@ -153,26 +154,25 @@ John T. Dillon
 Kate Price
 Katherine Grant
 Kathryn Reed Altman
-Kewpie Morgan
+Kewpie Morgan	kewpie mor\.
 Kewpie Ross
 Keystone Kops
 Larry Semon
-(leave blank)
 Lee Beggs
 Lee Moran
 Lew Fields
 Lige Conley
-Lloyd Hamilton
+Lloyd Hamilton	l\W+hamilton
 Lola Maxam
-Louise Fazenda
+Louise Fazenda	(louis\W+|,\W*)fazenda	fazenda
 Lucille McVey
 Lupino Lane
-Mabel Normand
-Mack Sennett
-Mack Swain
-Madeline Hurlock
+Mabel Normand	(m|mable)\W+normand
+Mack Sennett	m\W+sennett
+Mack Swain	m\W+swain
+Madeline Hurlock	mad\W+hurlock
 Madge Kirby
-Mae Busch
+Mae Busch	m\W+busch
 Mae Laurel
 Marie Dressler
 Marie Mosquini
@@ -180,18 +180,18 @@ Matty Kemp
 Maurice Schwartz
 Max Davidson
 Max Linder
-Mickey Daniels
+Mickey Daniels	m\W+daniels
 Mickey Rooney
 Mignon Anderson
 Mildred Davis
-Mildred Harris
+Mildred Harris	milded harris
 Mildred June
 Minerva Courtney #nk
 Minnie Devereaux
-Minta Durfee
-Monty Banks
+Minta Durfee	(minta|m|martha|araminta)\W*dur?fr?ee(\W*arbuckle)?
+Monty Banks	mont(e|y) banks
 Neal Burns
-Oliver Hardy
+Oliver Hardy	o\W+hardy
 Ora Carew
 Otto Messmer #nk
 Paddy McGuire
@@ -207,19 +207,19 @@ Raymond Griffith
 René Leprince
 Richard Jones
 Robert Bolder
-Roscoe Arbuckle
+Roscoe Arbuckle	(r)\W+arbuckle|roscoe\W*fatty\W*arbuckle
 Sally Phipps
 Sammy Morrison
 Sidney Drew
-Slim Summerville
+Slim Summerville	(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)
 Snooky (Chimpanzee)
-Snub Pollard
-Stan Laurel
-Stanley Sandford
+Snub Pollard	(snub|s)\W*Pollard
+Stan Laurel	(stan|s)\W*laur?el
+Stanley Sandford	(t|tiny)\W+sandford # nk screen name is "Tiny"
 Stuart Erwin
 Syd Chaplin
-Thelma Todd
-Tom Kennedy
+Thelma Todd	t\W+todd
+Tom Kennedy	tom kendy
 Vera Steadman
 Vernon Dent
 Victor Potel
@@ -228,7 +228,7 @@ Virginia Pearson
 Vivien Oakland
 Wallace Beery
 Wallace Lupino
-W. C. Fields
+W. C. Fields	w\W*c\W+fields
 William Franey
 William Garwood
 Will Rogers

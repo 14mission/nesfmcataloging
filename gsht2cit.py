@@ -145,7 +145,10 @@ for ln in cnh:
   cols = ln.split("\t")
   castnames[cols[0].strip()] = True
   for othercol in cols[1:]:
-    castnamecorrections[othercol] = cols[0].strip()
+    print("OTHERCOL")
+    pat = re.sub(r'\(',r'(?:',othercol.strip())
+    print(f"PAT: {pat}")
+    castnamecorrections[pat] = cols[0]
 cnh.close()
 print("loaded "+str(len(castnames.keys()))+" names")
 
@@ -409,61 +412,17 @@ for intsv in intsvlist:
         outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*keaton\b', 'Roscoe Arbuckle,Buster Keaton', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bmax davidson\W*stan laurel\b', 'Max Davidson,Stan Laurel', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bAnita Garvin\W*Edgar Kennedy\b', 'Anita Garvin,Edgar Kennedy', outcolvals[namefield])
-        # clean up first names, mostly mapping initials to full names
-        outcolvals[namefield] = re.sub(r'(?i)\b(c|charles|chas)\W+chaplin\b', 'Charlie Chaplin', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(j)\W+finlayson\b', 'James Finlayson', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(e)\W+purviance\b', 'Edna Purviance', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(r)\W+arbuckle\b', 'Roscoe Arbuckle', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(b)\W+turpin\b', 'Ben Turpin', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bkarr\W*[\&,]\W*alexander\b', 'Hillard Karr,Frank Alexander', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bg\W+(m\W+|broncho\W+billy\W+)*anderson\b','Gilbert M. Anderson', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\be\W+campbell\b','Eric Cambpell', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bgord\W+griffith\b','Gordon Griffith', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bc\W+conklin\b','Chester Conklin', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(m|mable)\W+normand\b','Mabel Normand', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bf\W+st(er|re)ling\b','Ford Sterling', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(e\W+|edgar)kennedy\b','Edgar Kennedy', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bm\W+sennett\b','Mack Sennett', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(c|charles|chas|charl(ey|ie))\W+(chase|par+ot+)\b','Charley Chase', outcolvals[namefield]) # nb, billed as Parrott as dir, but norm to Chase
-        outcolvals[namefield] = re.sub(r'(?i)\bm\W+sennett\b','Mack Sennett', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bm\W+swain\b','Mack Swain', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bc\W+bennett\b','Constance Bennett', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bb\W+jamison\b','Bud Jamison', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bb\W+armstrong\b','Billy Armstrong', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bj\W+duffy\b','Jack Duffy', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bb\W+payson\b','Blanche Payson', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bmad\W+hurlock\b','Madeline Hurlock', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)(\blouis\W+|,\W*)fazenda\b','Louise Fazenda', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bo\W+hardy\b','Oliver Hardy', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bt\W+sandford\b','Tiny Sandford', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bb\W+gilbert\b','Billy Gilbert', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bl\W+hamilton\b','Lloyd Hamilton', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bm\W+daniels\b','Mickey Daniels', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bt\W+todd\b','Thelma Todd', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bm\W+busch\b','Mae Busch', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(e|eddie|edward)\W+(f\W+)?cline\b','Edward Cline', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bst\W+john\b','St. John', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\btom kendy\b','Tom Kennedy', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bb\W+oldfield\b','Barney Oldfield', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bM.BuschT.Todd\b','Mae Busch,Thelma Todd', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bw\W*c\W+fields\b','W. C. Fields', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bJackie\s*\/Jack\s+Dailey\b','Jackie Dailey', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bSnub\W*Pollard\b','Snub Pollard', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bFrancis\W*X\W*Bushman\b','Francis X. Bushman', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(stan|s)\W*laur?el\b','Stan Laurel', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)','Slim Summerville', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bkewpie mor\.','Kewpie Morgan', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bmilded\b','Mildred', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bmonte banks\b','Monty Banks', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\broscoe\W*fatty\W*arbuckle\b','Roscoe Arbuckle', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(minta|m|martha|araminta)\W*dur?fr?ee(\W*arbuckle)?\b','Minta Durfee', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bM.BuschT.Todd\b','Mae Busch,Thelma Todd', outcolvals[namefield])        
+        outcolvals[namefield] = re.sub(r'(?i)\bmr\W+(and|\&)\s+mrs\W+sidney drew\b', 'Sidney Drew,Lucille McVey', outcolvals[namefield]) # other mrs drew for films up thru 1913, but we don't have any
+        outcolvals[namefield] = re.sub(r'(?i)jackie\s*\/jack\W+dailey','Jackie Dailey', outcolvals[namefield])
+        # space inits
         outcolvals[namefield] = re.sub(r'(?i)\b([A-Z]\.)(?=\w+)\b',r'\1 ', outcolvals[namefield]) # space inits
         # if syd chaplin is with charlie, he's often just "syd"
         if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
           outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
-        # change ampersand to comma keep mr & mrs (sydney drew); also slash, pipe, and w/
-        if not re.match(r'(?i)^(mr\W*\&\W*mrs)', outcolvals[namefield]):
-          outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/',outcolvals[namefield]))
+        # change ampersand to comma; also slash, pipe, and w/
+        outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/',outcolvals[namefield]))
         # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
         while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
           uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
@@ -473,6 +432,9 @@ for intsv in intsvlist:
             outcolvals["General_Notes:General"] += "|"+(actor+aswho).strip()
           else:
             outcolvals["General_Notes:General"] = (actor+aswho).strip()
+        # apply name normalization rules form castnames file
+        for pat in castnamecorrections:
+          outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*('+pat+r')\s*($|,)',r'\1'+castnamecorrections[pat]+r'\3',outcolvals[namefield])
         # check for problematic names 
         for name in outcolvals[namefield].split(","):
           if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
