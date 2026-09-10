@@ -132,6 +132,23 @@ citobjidfh = open("existing.catalogit.objectids.txt")
 for ln in citobjidfh:
   objid_incit[ln.strip().lower()] = True
 
+# load cast names
+castnames = {}
+castnamecorrections = {}
+cnfn = "castnames.txt"
+print(f"get cast names from {cnfn}")
+cnh = open(cnfn)
+for ln in cnh:
+  ln = ln.strip()
+  ln = re.sub(r'\s*#.*$','',ln)
+  if len(ln) == 0: continue
+  cols = ln.split("\t")
+  castnames[cols[0].strip()] = True
+  for othercol in cols[1:]:
+    castnamecorrections[othercol] = cols[0].strip()
+cnh.close()
+print("loaded "+str(len(castnames.keys()))+" names")
+
 # process all input files specified on the command line
 for intsv in intsvlist:
 
@@ -465,6 +482,13 @@ for intsv in intsvlist:
           print(f"NAMEFIX: {oldval} -> {newval}")
         for n in newval.split(","):
           print(f"NAME: {n}")
+        # check for names not in approved set
+        if len(newval.strip()) > 0:
+          for n in newval.split(","):
+            if len(n.strip()) == 0:
+              isbadrow += badrow(f"empty name in line {lnum}",logh)
+            elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
+              print(f"WARNING: unknown name \"{n}\" in line {lnum} ")
 
     # sound normalization
     if "Motion_Picture_Details/sound/film_sound" in outcolvals and outcolvals["Motion_Picture_Details/Sound/Film_Sound"] != None:
