@@ -63,6 +63,7 @@ for row in [
   r'Condition/Overall_Condition e p\s*q\b', # note from nk: original spec was Condition/Notes:PQ but not in CatalogIt schema
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
+  r'Made/Created/Date_made/Date r NOSUCHCOLNUM',
   r'Motion_Picture_Details/Cast *uc star\W*s\W*',
   r'Motion_Picture_Details/Director *uc director',
   r'Motion_Picture_Details/Producer/Publisher *u produc(er|tion\sco)',
@@ -508,6 +509,36 @@ for intsv in intsvlist:
           # any other random verbiage is an error
           else:
             isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
+
+    # film stock normalization
+    if "Motion_Picture_Details/Film_Stock" in outcolvals and outcolvals["Motion_Picture_Details/Film_Stock"] != None and len(outcolvals["Motion_Picture_Details/Film_Stock"].strip()) > 0:
+      # fix spelling etc
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ac[ei]t[aie]te','acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)di\W*acetate','di-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)tri\W*acetate','tri-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)g[aer]+v[ae]+r[ts]*','Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)agfa\W*gevaert','Agfa-Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ferramia','ferrania',outcolvals["Motion_Picture_Details/Film_Stock"])
+      # extract date
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'\b(\d{4})\s*(\&|and|-)\s*(\d{4})',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+      for yearmatch in re.findall(r'(\b\d\d\d\d|\'\d\d)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
+        if "Made/Created/Date_made/Date" in outcolvals:
+          isbadrow += badrow(f"multiple date specs in line {lnum}",logh)
+        yearmatch = re.sub(r'^\'','19',yearmatch)
+        outcolvals["Made/Created/Date_made/Date"] = yearmatch
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(\b\d\d\d\d|\'\d\d)\b',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+      # clean up stray parens and puncs
+      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'"|\(|\)|\.',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+      # standardize unmarked
+      if re.search(r'(?i)unmarked|no.+mark',outcolvals["Motion_Picture_Details/Film_Stock"]) != None:
+        outcolvals["Motion_Picture_Details/Film_Stock"] = "no marks"
+      # whitespace and case normalization
+      outcolvals["Motion_Picture_Details/Film_Stock"] = " ".join(
+        [
+          w if re.match(r'.*\d.*',w) else "DuPont" if re.match(r'(?i)\bdupont\b',w) else w.title() if re.match(r'(?i)^(kodak|eastman|dupont|agfa|agfa-gevaert|gevaert|ferrania|fuji|kodascope|belgium)$',w) else w.lower()
+          for w in outcolvals["Motion_Picture_Details/Film_Stock"].split()
+        ]
+      )
 
     # extract parenthetical notes from title
     for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name/Title']):
