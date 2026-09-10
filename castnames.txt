@@ -5,9 +5,9 @@ Albert Herman
 Albert Ray
 Al Christie
 Alfred Davis
-Alfred Goulding
+Alfred Goulding	alfred\W+j\W+goulding
 Alice Day
-Alice Guy
+Alice Guy-Blaché	alice\s+(guy\W*blach[eé]|guy|blach[eé]) #nk
 Alice Howell
 Al St. John	al\W+st\W+john
 Alyce Ardell
@@ -50,7 +50,7 @@ Camille de Morlhon
 Carole Lombard
 Cecile Arnold
 Charles Avery
-Charles Hall
+Charles Hall	charl(ey|ie) hall
 Charles J. Bennett
 Charles Lamont
 Charles-Lucien Lépine
@@ -81,7 +81,7 @@ Earl Montgomery
 Eddie Lyons
 Eddie Quillan
 Edgar Kennedy	(e\W+|edgar)kennedy
-Edna Purviance	(e)\W+purviance
+Edna Purviance	(e|edn+a)\W+purviance
 Edward Baker
 Edward Cline	(e|eddie|edward)\W+(f\W+)?cline
 Edward Everett Horton
@@ -126,22 +126,25 @@ Glen Cavender
 Glenn Tyron
 Gloria Swanson
 Gordon Griffith	gord\W+griffith
+Hal Roach #nk
 Hank Mann
 Harold Lloyd
 Harry Depp
+Harry Edwards #nk
 Harry Gribbon
 Harry Langdon
 Helen Carruthers
 Henry Lehrman
 Hilliard Karr
 Hughey Mack
+J. A. Howe
 Jack Cooper
 Jack Duffy	j\W+duffy
 Jackie Coogan
 Jackie Dailey	Jackie\s*\/Jack\s+Dailey #nk
 James Aubrey
 James Finlayson	(j)\W+finlayson
-James Parrott
+James Parrott	paul parrott
 Jay Belasco
 Jean Harlow
 Jimmie Adams
@@ -160,7 +163,9 @@ Keystone Kops
 Larry Semon
 Lee Beggs
 Lee Moran
+Leo McCarey #nk
 Lew Fields
+Lewis R. Foster #nk
 Lige Conley
 Lloyd Hamilton	l\W+hamilton
 Lola Maxam
@@ -207,6 +212,7 @@ Raymond Griffith
 René Leprince
 Richard Jones
 Robert Bolder
+Robert F. McGowan	robert\s+mcgowan
 Roscoe Arbuckle	(r)\W+arbuckle|roscoe\W*fatty\W*arbuckle
 Sally Phipps
 Sammy Morrison

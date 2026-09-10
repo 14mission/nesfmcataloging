@@ -440,10 +440,10 @@ for intsv in intsvlist:
           if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
             isbadrow += badrow(f"suspect name in line {lnum}: "+name,logh)
         newval = outcolvals[namefield]
-        if newval != oldval:
-          print(f"NAMEFIX: {oldval} -> {newval}")
-        for n in newval.split(","):
-          print(f"NAME: {n}")
+        #if newval != oldval:
+        #  print(f"NAMEFIX: {oldval} -> {newval}")
+        #for n in newval.split(","):
+        #  print(f"NAME: {n}")
         # check for names not in approved set
         if len(newval.strip()) > 0:
           for n in newval.split(","):
