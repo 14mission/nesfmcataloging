@@ -11,7 +11,7 @@ def badrow(msg,logf):
 
 # handy funcs for dealing with records
 def isfilled(record,colname):
-  colname in record and record[colname] != None and len(record[colname].strip()) > 0
+  return colname in record and record[colname] != None and len(record[colname].strip()) > 0
 def addcolval(record,colname,newval,delim=","):
   if newval == None or len(newval.strip()) == 0:
     return
