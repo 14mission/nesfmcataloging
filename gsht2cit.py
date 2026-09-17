@@ -9,6 +9,17 @@ def badrow(msg,logf):
   print("BAD ROW: "+msg)
   return 1
 
+# handy funcs for dealing with records
+def isfilled(record,colname):
+  colname in record and record[colname] != None and len(record[colname].strip()) > 0
+def addcolval(record,colname,newval,delim=","):
+  if newval == None or len(newval.strip()) == 0:
+    return
+  elif isfilled(record,colname):
+    record[colname] += delim + newval
+  else:
+    record[colname] = newval
+
 # for importing spreadsheets into catalogit
 # see notes in doc "Mapping NESFM Silent Film Archive spreadsheet to catalog it"
 
@@ -63,7 +74,6 @@ for row in [
   r'Condition/Overall_Condition e p\s*q\b', # note from nk: original spec was Condition/Notes:PQ but not in CatalogIt schema
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
-  r'Made/Created/Date_made/Date r NOSUCHCOLNUM',
   r'Motion_Picture_Details/Cast *uc star\W*s\W*',
   r'Motion_Picture_Details/Director *uc director',
   r'Motion_Picture_Details/Producer/Publisher *u produc(er|tion\sco)',
@@ -73,6 +83,8 @@ for row in [
   r'Relationships/Related_Places/Notes:Print_Exhibition_Country e print\sexhibition\scountry',
   r'Made/Created/Place e country',
   r'Motion_Picture_Details/Film_Stock e film\sstock',
+  r'Motion_Picture_Details/Film_Base r NOSOURCECOLNUM',
+  r'Motion_Picture_Details/Date_Code r NOSOURCECOLNUM',
   r'Motion_Picture_Details/Length e film\slength',
   r'Motion_Picture_Details/Sound/Sound_Notes:Language e language', # actually probably NOT sound; =titles
   r'Motion_Picture_Details/Sound/Film_Sound *u sound\strack',
@@ -387,7 +399,7 @@ for intsv in intsvlist:
 
     # actor/director name normalization
     for namefield in [ "Motion_Picture_Details/Cast", "Motion_Picture_Details/Director" ]:
-      if namefield in outcolvals and outcolvals[namefield] != None:
+      if isfilled(outcolvals,namefield):
         # slightly normalized original value for logging changes
         oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
         # treat "in animated form" as a note, not an actor
@@ -454,7 +466,7 @@ for intsv in intsvlist:
               print(f"WARNING: unknown name \"{n}\" in line {lnum} ")
 
     # sound normalization
-    if "Motion_Picture_Details/sound/film_sound" in outcolvals and outcolvals["Motion_Picture_Details/Sound/Film_Sound"] != None:
+    if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
       soundval = outcolvals["Motion_Picture_Details/Sound/Film_Sound"]
       if re.match(r'(?i)^silent$',soundval):
         soundval = "si."
@@ -465,7 +477,7 @@ for intsv in intsvlist:
       outcolvals["Motion_Picture_Details/Sound/Film_Sound"] = soundval
 
     # color normalization: only specific set of values are allowed
-    if "Motion_Picture_Details/Color_Characteristics" in outcolvals and outcolvals["Motion_Picture_Details/Color_Characteristics"] != None:
+    if isfilled(outcolvals,"Motion_Picture_Details/Color_Characteristics"):
       if re.match(r'(?i)\s*b\s*\&\s*w\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
       elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
@@ -485,7 +497,7 @@ for intsv in intsvlist:
     #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
 
     # aspect gauge normalization; remove word parts, put into a note
-    if "Aspect_Ratio" in outcolvals and outcolvals["Aspect_Ratio"] != None:
+    if isfilled(outcolvals,"Aspect_Ratio"):
       Aspect_Ratio_match = re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])
       if Aspect_Ratio_match == None:
         isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"],logh)
@@ -511,7 +523,7 @@ for intsv in intsvlist:
             isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
 
     # film stock normalization
-    if "Motion_Picture_Details/Film_Stock" in outcolvals and outcolvals["Motion_Picture_Details/Film_Stock"] != None and len(outcolvals["Motion_Picture_Details/Film_Stock"].strip()) > 0:
+    if isfilled(outcolvals,"Motion_Picture_Details/Film_Stock"):
       # fix spelling etc
       outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ac[ei]t[aie]te','acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
       outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)di\W*acetate','di-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
@@ -522,16 +534,20 @@ for intsv in intsvlist:
       # extract date
       outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'\b(\d{4})\s*(\&|and|-)\s*(\d{4})',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
       for yearmatch in re.findall(r'(\b\d\d\d\d|\'\d\d)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
-        if "Made/Created/Date_made/Date" in outcolvals:
+        if isfilled(outcolvals,"Motion_Picture_Details/Date_Code"):
           isbadrow += badrow(f"multiple date specs in line {lnum}",logh)
         yearmatch = re.sub(r'^\'','19',yearmatch)
-        outcolvals["Made/Created/Date_made/Date"] = yearmatch
+        outcolvals["Motion_Picture_Details/Date_Code"] = yearmatch
       outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(\b\d\d\d\d|\'\d\d)\b',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
       # clean up stray parens and puncs
       outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'"|\(|\)|\.',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
       # standardize unmarked
       if re.search(r'(?i)unmarked|no.+mark',outcolvals["Motion_Picture_Details/Film_Stock"]) != None:
         outcolvals["Motion_Picture_Details/Film_Stock"] = "no marks"
+      # find film base type and copy to Film_Base
+      for basetypematch in re.findall(r'\b((?:(?:di|tri-)?acetate|safety)(?:\s+film))\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
+        addcolval(outcolvals,"Motion_Picture_Details/Film_Base",basetypematch)
+
       # whitespace and case normalization
       outcolvals["Motion_Picture_Details/Film_Stock"] = " ".join(
         [
@@ -552,7 +568,8 @@ for intsv in intsvlist:
 
     # check if cols that were supposed to be supplied by rules actually were
     for colname in colstoberulefilled:
-      if colname not in outcolvals or outcolvals[colname] == None:
+      print(f"TOBERULEFILLED: {colname}")
+      if not isfilled(outcolvals,colname):
         isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
 
     # check for dup objid and dup shelving code
