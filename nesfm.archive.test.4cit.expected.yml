@@ -1,382 +1,360 @@
 1999.07.24:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: This Movie
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM069"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s67
- Location/Location: This Series
- Collection: PQ2
- Condition/Overall_Condition: 1917
- Motion_Picture_Details/Production_Date/Date: Re-Issue Year: 1938
- Made/Created/Notes: Hobart Bosworth
- Motion_Picture_Details/Cast: Erich von Stroheim
- Motion_Picture_Details/Director: Hollywood Fat Cat
- Motion_Picture_Details/Writer: ["Original Distributor: Central Film Co", "Re-Issue Distributor: Cheap Film Co"]
- Relationships/Related_Person_or_Organization/Notes: Print Exhibition Country: United States
- Relationships/Related_Places/Notes: United States
- Made/Created/Place: Eastman
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Length: Language: English
- Motion_Picture_Details/Sound/Sound_Notes: none
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Misspelled Intertitles"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Best Quality DVD Release", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "NONE"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Best Quality Blu-ray Release", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "NONE"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Stereotypes or Content Issues", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Canadians"}]
- General_Notes: Generous Donor
- Acquisition/Accession/Source_or_Donor: test
- Tags: 2
+ Acquisition/Accession: 1999.07
+ Name/Title: This Movie
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM069"}]
+ Location/Location: r42 s67
+ Collection: This Series
+ Condition/Overall_Condition: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1917
+ Made/Created/Notes: Re-Issue Year: 1938
+ Motion_Picture_Details/Cast: Hobart Bosworth
+ Motion_Picture_Details/Director: Erich von Stroheim
+ Motion_Picture_Details/Producer/Publisher: Hollywood Fat Cat
+ Relationships/Related_Person_or_Organization/Notes: ["Original Distributor: Central Film Co", "Re-Issue Distributor: Cheap Film Co"]
+ Relationships/Related_Places/Notes: Print Exhibition Country: United States
+ Made/Created/Place: United States
+ Motion_Picture_Details/Film_Stock: Eastman
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Sound_Notes: Language: English
+ Motion_Picture_Details/Sound/Film_Sound: none
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Misspelled Intertitles"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Best Quality DVD Release", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "NONE"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Best Quality Blu-ray Release", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "NONE"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Stereotypes or Content Issues", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Canadians"}]
+ Acquisition/Accession/Source_or_Donor: Generous Donor
+ Tags: test
+ linenum: 2
 1999.07.25:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Has Name Abbreviations
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM070"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s67b
- Collection: PQ1
- Condition/Overall_Condition: 1918
- Made/Created/Notes: ["Charlie Chaplin", "Edna Purviance", "James Finlayson"]
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Has Name Abbreviations
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM070"}]
+ Location/Location: r42 s67b
+ Condition/Overall_Condition: PQ1
+ Motion_Picture_Details/Production_Date/Date: 1918
+ Motion_Picture_Details/Cast: ["Charlie Chaplin", "Edna Purviance", "James Finlayson"]
  Motion_Picture_Details/Director: UNKNOWN
- Relationships/Related_Person_or_Organization/Notes: Print Exhibition Country: United States
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Sound/Sound_Notes: none
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 3
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Relationships/Related_Places/Notes: Print Exhibition Country: United States
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Film_Sound: none
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 3
 2026.67.2000:
- Entry/Object_ID: 2026.67
- Acquisition/Accession: Film With No Object ID
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM071"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s67c
- Collection: PQ3
- Condition/Overall_Condition: 1926
- Made/Created/Notes: Chester Conklin
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 2026.67
+ Name/Title: Film With No Object ID
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM071"}]
+ Location/Location: r42 s67c
+ Condition/Overall_Condition: PQ3
+ Motion_Picture_Details/Production_Date/Date: 1926
+ Motion_Picture_Details/Cast: Chester Conklin
  Motion_Picture_Details/Director: UNKNOWN
- Relationships/Related_Person_or_Organization/Notes: Print Exhibition Country: United Kingdom
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 4
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Relationships/Related_Places/Notes: Print Exhibition Country: United Kingdom
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 4
 2026.67.2001:
- Entry/Object_ID: 2026.67
- Acquisition/Accession: Film With Unknown Object ID
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM072"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s67c
- Collection: PQ3
- Condition/Overall_Condition: 1926
- Made/Created/Notes: Mabel Normand
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 2026.67
+ Name/Title: Film With Unknown Object ID
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM072"}]
+ Location/Location: r42 s67c
+ Condition/Overall_Condition: PQ3
+ Motion_Picture_Details/Production_Date/Date: 1926
+ Motion_Picture_Details/Cast: Mabel Normand
  Motion_Picture_Details/Director: UNKNOWN
- Relationships/Related_Person_or_Organization/Notes: Print Exhibition Country: Mexico
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 5
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Relationships/Related_Places/Notes: Print Exhibition Country: Mexico
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 5
 2011.50.6660:
- Entry/Object_ID: 2011.50
- Acquisition/Accession: EmGee Film
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm-073"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Old Object ID", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "MG666"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s67d
- Collection: PQ2
- Condition/Overall_Condition: 1921
- Made/Created/Notes: Eric Campbell
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 2011.50
+ Name/Title: EmGee Film
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm-073"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Old Object ID", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "MG666"}]
+ Location/Location: r42 s67d
+ Condition/Overall_Condition: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1921
+ Motion_Picture_Details/Cast: Eric Campbell
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 6
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 6
 2011.50.6661:
- Entry/Object_ID: 2011.50
- Acquisition/Accession: EmGee Film With Same Core Number
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM 073b"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Old Object ID", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "MG666-cs"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s69a
- Collection: PQ2
- Condition/Overall_Condition: 1925
- Made/Created/Notes: Buster Keaton
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 2011.50
+ Name/Title: EmGee Film With Same Core Number
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM 073b"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Old Object ID", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "MG666-cs"}]
+ Location/Location: r42 s69a
+ Condition/Overall_Condition: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1925
+ Motion_Picture_Details/Cast: Buster Keaton
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 7
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 7
 1999.07.26:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Film with Gauge in Parens
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM 073b"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s69b
- Collection: PQ1
- Condition/Overall_Condition: 1925
- Made/Created/Notes: Alice Howell
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Film with Gauge in Parens
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM 073b"}]
+ Location/Location: r42 s69b
+ Condition/Overall_Condition: PQ1
+ Motion_Picture_Details/Production_Date/Date: 1925
+ Motion_Picture_Details/Cast: Alice Howell
  Motion_Picture_Details/Director: UNKNOWN
- Relationships/Related_Person_or_Organization/Notes: Print Exhibition Country: United States
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.37:1
- Aspect_Ratio: 35 mm.
- Motion_Picture_Details/Film_Gauge/Format: col.
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Aperture Image Format", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Academy"}]
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 8
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Relationships/Related_Places/Notes: Print Exhibition Country: United States
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.37:1
+ Motion_Picture_Details/Film_Gauge/Format: 35 mm.
+ Motion_Picture_Details/Color_Characteristics: col.
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Aperture Image Format", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Academy"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 8
 1999.07.27:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Film with Parenthetical Note in Title
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 074"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s70
- Collection: PQ3
- Condition/Overall_Condition: 1918
- Made/Created/Notes: Charley Chase
- Motion_Picture_Details/Cast: UNKNOWN
- Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Don\u2019t show this one"}]
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 9
-1999.07.28:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Looks like Gauge in Title but Isn’t
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 075"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s70e
- Collection: PQ3
- Condition/Overall_Condition: 1918
- Made/Created/Notes: Charlie Chaplin
- Motion_Picture_Details/Cast: UNKNOWN
- Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 360'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Use 35mm print instead"}]
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 10
-1999.07.29:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Actor Name with Alias
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "flm076"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s70f
- Collection: PQ1
- Condition/Overall_Condition: 1917
- Made/Created/Notes: Charley Chase
+ Acquisition/Accession: 1999.07
+ Name/Title: Film with Parenthetical Note in Title
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 074"}]
+ Location/Location: r42 s70
+ Condition/Overall_Condition: PQ3
+ Motion_Picture_Details/Production_Date/Date: 1918
  Motion_Picture_Details/Cast: Charley Chase
- Motion_Picture_Details/Director: Hal Roach
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "C. Chase as Jimmy Jump"}]
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 11
+ Motion_Picture_Details/Director: UNKNOWN
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Don\u2019t show this one"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 9
+1999.07.28:
+ Acquisition/Accession: 1999.07
+ Name/Title: Looks like Gauge in Title but Isn’t
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 075"}]
+ Location/Location: r42 s70e
+ Condition/Overall_Condition: PQ3
+ Motion_Picture_Details/Production_Date/Date: 1918
+ Motion_Picture_Details/Cast: Charlie Chaplin
+ Motion_Picture_Details/Director: UNKNOWN
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 360'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Use 35mm print instead"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 10
+1999.07.29:
+ Acquisition/Accession: 1999.07
+ Name/Title: Actor Name with Alias
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "flm076"}]
+ Location/Location: r42 s70f
+ Condition/Overall_Condition: PQ1
+ Motion_Picture_Details/Production_Date/Date: 1917
+ Motion_Picture_Details/Cast: Charley Chase
+ Motion_Picture_Details/Director: Charley Chase
+ Motion_Picture_Details/Producer/Publisher: Hal Roach
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "C. Chase as Jimmy Jump"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 11
 1999.07.30:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Embedded Actor Name with Alias
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "flm077"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71a
- Collection: PQ2
- Condition/Overall_Condition: 1916
- Made/Created/Notes: ["Ford Sterling", "Charley Chase", "Mabel Normand"]
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Embedded Actor Name with Alias
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "flm077"}]
+ Location/Location: r42 s71a
+ Condition/Overall_Condition: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1916
+ Motion_Picture_Details/Cast: ["Ford Sterling", "Charley Chase", "Mabel Normand"]
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Charles Chase as James Jump"}]
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 12
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Charles Chase as James Jump"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 12
 1999.07.31:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Double Director
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 078"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71b
- Collection: PQ3
- Condition/Overall_Condition: 1918
- Made/Created/Notes: ["Charlie Chaplin", "Edna Purviance", "Snub Pollard"]
- Motion_Picture_Details/Cast: ["Charlie Chaplin", "Leo White"]
- Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 13
+ Acquisition/Accession: 1999.07
+ Name/Title: Double Director
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 078"}]
+ Location/Location: r42 s71b
+ Condition/Overall_Condition: PQ3
+ Motion_Picture_Details/Production_Date/Date: 1918
+ Motion_Picture_Details/Cast: ["Charlie Chaplin", "Edna Purviance", "Snub Pollard"]
+ Motion_Picture_Details/Director: ["Charlie Chaplin", "Leo White"]
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 13
 1999.07.32:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Parenthetical Note in Cast
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 080"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71b
- Collection: PQ2
- Condition/Overall_Condition: 1919
- Made/Created/Notes: ["Jack Cooper", "Minta Durfee"]
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Parenthetical Note in Cast
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 080"}]
+ Location/Location: r42 s71b
+ Condition/Overall_Condition: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1919
+ Motion_Picture_Details/Cast: ["Jack Cooper", "Minta Durfee"]
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Jack Cooper (NOT Jackie)"}]
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 14
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Jack Cooper (NOT Jackie)"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 14
 1999.07.33:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Actor in Animated Form
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 081"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71b
- Collection: PQ3
- Condition/Overall_Condition: 1917
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Actor in Animated Form
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 081"}]
+ Location/Location: r42 s71b
+ Condition/Overall_Condition: PQ3
+ Motion_Picture_Details/Production_Date/Date: 1917
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Charlie Chaplin (in animated form)"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "s"}]
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 15
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Charlie Chaplin (in animated form)"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "s"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 15
 1999.07.34:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Multiple Actors in Animated Form
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 082"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71b
- Collection: PQ3
- Condition/Overall_Condition: 1920
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Multiple Actors in Animated Form
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 082"}]
+ Location/Location: r42 s71b
+ Condition/Overall_Condition: PQ3
+ Motion_Picture_Details/Production_Date/Date: 1920
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- Parts/Parts: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Laurel & Hardy in animated form"}]
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 16
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 400'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "Laurel & Hardy in animated form"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 16
 1999.07.35:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Film with Tinting
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 083"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71c
- Collection: PQ2
- Condition/Overall_Condition: 1919
- Made/Created/Notes: Ford Sterling
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Film with Tinting
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 083"}]
+ Location/Location: r42 s71c
+ Condition/Overall_Condition: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1919
+ Motion_Picture_Details/Cast: Ford Sterling
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w (tinted)
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 17
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w (tinted)
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 17
 1999.07.36:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Film with Toning
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 084"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71c
- Collection: PQ2
- Condition/Overall_Condition: 1919
- Made/Created/Notes: Snub Pollard
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Film with Toning
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 084"}]
+ Location/Location: r42 s71c
+ Condition/Overall_Condition: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1919
+ Motion_Picture_Details/Cast: Snub Pollard
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w (toned)
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 18
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w (toned)
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 18
 1999.07.37:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Tinting and Toning
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 085"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71c
- Collection: PQ2
- Condition/Overall_Condition: 1919
- Made/Created/Notes: Alice Howell
- Motion_Picture_Details/Cast: UNKNOWN
+ Acquisition/Accession: 1999.07
+ Name/Title: Tinting and Toning
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 085"}]
+ Location/Location: r42 s71c
+ Condition/Overall_Condition: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1919
+ Motion_Picture_Details/Cast: Alice Howell
  Motion_Picture_Details/Director: UNKNOWN
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w (tinted and toned)
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 19
-1999.07.38:
- Entry/Object_ID: 1999.07
- Acquisition/Accession: Interesting Film Stock
- Name/Title: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 086"}]
- Other_Names_and_Numbers/Other_Numbers: r42 s71d
- Collection: PQ2
- Condition/Overall_Condition: 1919
- Made/Created/Notes: Eric Campbell
- Motion_Picture_Details/Cast: UNKNOWN
- Motion_Picture_Details/Director: UNKNOWN
- Made/Created/Place: Kodak di-acetate safety film
- Motion_Picture_Details/Film_Stock: safety film
- Motion_Picture_Details/Film_Base: 1968
- Motion_Picture_Details/Date_Code: 400'
- Motion_Picture_Details/Sound/Sound_Notes: UNKNOWN
- Motion_Picture_Details/Frame_Rate: 1.33:1
- Aspect_Ratio: 16 mm.
- Motion_Picture_Details/Film_Gauge/Format: b&w
- Motion_Picture_Details/Color_Characteristics: 1 x 400'
- General_Notes: UNKNOWN
- Acquisition/Accession/Source_or_Donor: test
- Tags: 20
+ Motion_Picture_Details/Producer/Publisher: UNKNOWN
+ Motion_Picture_Details/Length: 400'
+ Motion_Picture_Details/Sound/Film_Sound: UNKNOWN
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w (tinted and toned)
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 19

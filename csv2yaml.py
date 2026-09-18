@@ -12,7 +12,8 @@ for csvfn in sys.argv[1:]:
     if colnames == None:
       colnames = row
     else:
-      print(row[0]+":", file=ymlwriter)
-      for colnum, colval in enumerate(row[1:]):
-        if colval != None and len(colval.strip()) > 0:
+      for colnum, colval in enumerate(row):
+        if colnum == 0:
+          print(row[0]+":", file=ymlwriter)
+        elif colval != None and len(colval.strip()) > 0:
           print(" "+colnames[colnum]+": "+colval.strip(), file=ymlwriter)
