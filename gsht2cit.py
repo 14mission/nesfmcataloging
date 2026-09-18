@@ -71,7 +71,7 @@ for row in [
   r'Other_Names_and_Numbers/Other_Numbers:Old_Object_ID r NOSOURCECOLUMN',
   r'Location/Location u Film\sRack',
   r'Collection em (comedy\s+)?Series',
-  r'Condition/Overall_Condition e p\s*q\b', # note from nk: original spec was Condition/Notes:PQ but not in CatalogIt schema
+  r'Condition/Notes:PQ e p\s*q\b',
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
   r'Motion_Picture_Details/Cast *uc star\W*s\W*',
@@ -363,11 +363,11 @@ for intsv in intsvlist:
         outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = extracted_gauge
 
     # if film gauge still not filled, that's a problem
-    if "Motion_Picture_Details/Film_Gauge/Format" not in outcolvals or outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == None:
+    if not isfilled(outcolvals,"Motion_Picture_Details/Film_Gauge/Format"):
       isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
 
     # film length
-    if "Motion_Picture_Details/Length" in outcolvals and outcolvals["Motion_Picture_Details/Length"] != None and len(outcolvals["Motion_Picture_Details/Length"]) > 0:
+    if isfilled(outcolvals,"Motion_Picture_Details/Length"):
       # catalogit doesn't want commas in length
       outcolvals["Motion_Picture_Details/Length"] = re.sub(r',','',outcolvals["Motion_Picture_Details/Length"])
       # fix spinal tap stonehenge error, and "pretty apostrophe" issue
@@ -378,18 +378,18 @@ for intsv in intsvlist:
         outcolvals["Motion_Picture_Details/Length"] = None
 
     # PQ normalization
-    if "Condition/Overall_Condition" in outcolvals and outcolvals["Condition/Overall_Condition"] != None and len(outcolvals["Condition/Overall_Condition"].strip()) > 0:
+    if isfilled(outcolvals, "Condition/Notes:PQ"):
       # if numeric prefix PQ
-      if re.match(r'^\s*\d+(\s*[\+\&-]\s*\d*)?\s*$',outcolvals["Condition/Overall_Condition"]):
-        outcolvals["Condition/Overall_Condition"] = "PQ" + outcolvals["Condition/Overall_Condition"]
-        outcolvals["Condition/Overall_Condition"] = "".join(outcolvals["Condition/Overall_Condition"].split())
+      if re.match(r'^\s*\d+(\s*[\+\&-]\s*\d*)?\s*$',outcolvals["Condition/Notes:PQ"]):
+        outcolvals["Condition/Notes:PQ"] = "PQ" + outcolvals["Condition/Notes:PQ"]
+        outcolvals["Condition/Notes:PQ"] = "".join(outcolvals["Condition/Notes:PQ"].split())
       # if n/a, drop
-      elif re.match(r'(?i)^\s*n\/a\s*$',outcolvals["Condition/Overall_Condition"]):
-        outcolvals["Condition/Overall_Condition"] = None
+      elif re.match(r'(?i)^\s*n\/a\s*$',outcolvals["Condition/Notes:PQ"]):
+        outcolvals["Condition/Notes:PQ"] = None
 
     # country normalization
     for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
-      if countryfield in outcolvals and outcolvals[countryfield] != None:
+      if isfilled(outcolvals,countryfield):
         outcolvals[countryfield] = re.sub(r'^U\W*S\W*A\W*','United States',outcolvals[countryfield])
         outcolvals[countryfield] = re.sub(r'^U\W*S\W*(,|$)',r'United States\1',outcolvals[countryfield])
         outcolvals[countryfield] = re.sub(r'^U\W*K\W*','United Kingdom',outcolvals[countryfield])
@@ -619,7 +619,7 @@ for intsv in intsvlist:
     # reformat cols with multiple, pipe-delimited values, with json
     # some cols with complicated structures need this even for just one value
     for colname in outcolvals:
-      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
+      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers", "Condition/Notes"]):
         if colname == "General_Notes":
           vallist = []
           for note in outcolvals[colname].split("|"):
