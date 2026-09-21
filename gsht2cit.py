@@ -259,7 +259,7 @@ for intsv in intsvlist:
       if colname not in colmap or colmap[colname] == None:
         continue
       # various ways of being "empty"
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|20xx\.xx\.xx|no\W*credit|see individual listings)\W*$',lncols[colmap[colname]]):
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|20xx\.xx\.xx|no\W*credit|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
         # some cols allowed to be empty
         if colname in okemptycols:
           outcolvals[colname] = None
@@ -376,16 +376,6 @@ for intsv in intsvlist:
       if not re.match(r'^\d+(\'|\s*ft)\s*$', outcolvals["Motion_Picture_Details/Length"]):
         print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
         outcolvals["Motion_Picture_Details/Length"] = None
-
-    # PQ normalization
-    if isfilled(outcolvals, "Condition/Notes:PQ"):
-      # if numeric prefix PQ
-      if re.match(r'^\s*\d+(\s*[\+\&-]\s*\d*)?\s*$',outcolvals["Condition/Notes:PQ"]):
-        outcolvals["Condition/Notes:PQ"] = "PQ" + outcolvals["Condition/Notes:PQ"]
-        outcolvals["Condition/Notes:PQ"] = "".join(outcolvals["Condition/Notes:PQ"].split())
-      # if n/a, drop
-      elif re.match(r'(?i)^\s*n\/a\s*$',outcolvals["Condition/Notes:PQ"]):
-        outcolvals["Condition/Notes:PQ"] = None
 
     # country normalization
     for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
