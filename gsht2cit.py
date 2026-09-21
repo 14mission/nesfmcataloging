@@ -556,6 +556,12 @@ for intsv in intsvlist:
     outcolvals['Name/Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name/Title'])
     outcolvals['Name/Title'] = " ".join(outcolvals['Name/Title'].split())
 
+    # title fixes
+    # clobber final period
+    outcolvals['Name/Title'] = re.sub(r'\s*\.\s*$','',outcolvals['Name/Title'])
+    # "movie title, the" -> "the movie title"
+    outcolvals['Name/Title'] = re.sub(r'(?i)^(.+)\s*,\s*the\s*$',r'The \1',outcolvals['Name/Title'])
+
     # check if cols that were supposed to be supplied by rules actually were
     for colname in colstoberulefilled:
       print(f"TOBERULEFILLED: {colname}")
