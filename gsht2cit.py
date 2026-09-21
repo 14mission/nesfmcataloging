@@ -535,8 +535,8 @@ for intsv in intsvlist:
       if re.search(r'(?i)unmarked|no.+mark',outcolvals["Motion_Picture_Details/Film_Stock"]) != None:
         outcolvals["Motion_Picture_Details/Film_Stock"] = "no marks"
       # find film base type and copy to Film_Base
-      for basetypematch in re.findall(r'\b((?:(?:di|tri-)?acetate|safety)(?:\s+film))\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
-        addcolval(outcolvals,"Motion_Picture_Details/Film_Base",basetypematch)
+      for basetypematch in re.findall(r'\b((?:(?:di-?|tri-)?acetate|safety)(?:\s+film)?)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
+        addcolval(outcolvals,"Motion_Picture_Details/Film_Base",basetypematch," ")
 
       # whitespace and case normalization
       outcolvals["Motion_Picture_Details/Film_Stock"] = " ".join(
