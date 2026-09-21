@@ -70,7 +70,7 @@ for row in [
   r'Other_Names_and_Numbers/Other_Numbers:Shelving u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
   r'Other_Names_and_Numbers/Other_Numbers:Old_Object_ID r NOSOURCECOLUMN',
   r'Location/Location u Film\sRack',
-  r'Collection em (comedy\s+)?Series',
+  r'Other_Names_and_Numbers/Other_Numbers:Series_Item em (comedy\s+)?Series',
   r'Condition/Notes:PQ e p\s*q\b',
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
