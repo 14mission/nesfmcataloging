@@ -440,9 +440,9 @@ for intsv in intsvlist:
         for pat in castnamecorrections:
           outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*('+pat+r')\s*($|,)',r'\1'+castnamecorrections[pat]+r'\3',outcolvals[namefield])
         # check for problematic names 
-        for name in outcolvals[namefield].split(","):
-          if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
-            isbadrow += badrow(f"suspect name in line {lnum}: "+name,logh)
+        #for name in outcolvals[namefield].split(","):
+        #  if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
+        #    isbadrow += badrow(f"suspect name in line {lnum}: "+name,logh)
         newval = outcolvals[namefield]
         #if newval != oldval:
         #  print(f"NAMEFIX: {oldval} -> {newval}")
@@ -454,7 +454,8 @@ for intsv in intsvlist:
             if len(n.strip()) == 0:
               isbadrow += badrow(f"empty name in line {lnum}",logh)
             elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
-              print(f"WARNING: unknown name \"{n}\" in line {lnum} ")
+              print(f"WARNING: unknown name \"{n}\" in line {lnum}")
+              #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}",logh)
             print("NAME:",n)
 
     # sound normalization
