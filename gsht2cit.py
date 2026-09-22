@@ -61,6 +61,7 @@ okemptycols = {}
 okmissingcols = {}
 rulefillcols = {}
 commasplitcols = {}
+personnamecols = [ "Motion_Picture_Details/Cast", "Motion_Picture_Details/Director" ]
 objidcolname = r'Entry/Object_ID'
 accnumcolname = r'Acquisition/Accession'
 for row in [ 
@@ -388,7 +389,7 @@ for intsv in intsvlist:
         outcolvals[countryfield] = outcolvals[countryfield].title()
 
     # actor/director name normalization
-    for namefield in [ "Motion_Picture_Details/Cast", "Motion_Picture_Details/Director" ]:
+    for namefield in personnamecols:
       if isfilled(outcolvals,namefield):
         # slightly normalized original value for logging changes
         oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
@@ -454,6 +455,7 @@ for intsv in intsvlist:
               isbadrow += badrow(f"empty name in line {lnum}",logh)
             elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
               print(f"WARNING: unknown name \"{n}\" in line {lnum} ")
+            print("NAME:",n)
 
     # sound normalization
     if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
@@ -604,6 +606,8 @@ for intsv in intsvlist:
       if outcolvals[colname] != None:
         if colname in commasplitcols:
           outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
+        if colname in personnamecols:
+          outcolvals[colname] = re.sub(r'([a-z]) (\d{4}-\d{4})\b',r'\1, \2',outcolvals[colname])
 
     # cols with colon: strip to basename, store value there, prefix bit after colon
     for coloncol in [colname for colname in outcols if ":" in colname]:
