@@ -86,7 +86,6 @@ for row in [
   r'Motion_Picture_Details/Film_Base r NOSOURCECOLNUM',
   r'Motion_Picture_Details/Date_Code r NOSOURCECOLNUM',
   r'Motion_Picture_Details/Length e film\slength',
-  r'Motion_Picture_Details/Sound/Sound_Notes:Language e language', # actually probably NOT sound; =titles
   r'Motion_Picture_Details/Sound/Film_Sound *u sound\strack',
   r'Motion_Picture_Details/Sound/Sound_Notes:Type r NOSOURCECOLUMN', # populated from "sound track"
   r'Motion_Picture_Details/Frame_Rate me NOSOURCECOLUMN',
@@ -100,6 +99,7 @@ for row in [
   r'General_Notes:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
   r'General_Notes:Stereotypes_or_Content_Issues em stereotypes',
   r'General_Notes:Aperture_Image_Format r NOSUCHCOLUMN',
+  r'General_Notes:Intertitle_Language e language', 
   r'General_Notes:General r NOSUCHCOLUMN',
   r'Acquisition/Accession/Source_or_Donor u don(at)?or|blackhawk\sassets|assett?s$', 
   ]:
