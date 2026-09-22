@@ -1,4 +1,5 @@
 Al Alt
+Al Nathan #tbd
 Albert Austin
 Albert Capellani
 Albert Herman
@@ -7,18 +8,21 @@ Al Christie
 Alfred Davis
 Alfred Goulding	alfred\W+j\W+goulding
 Alice Day
-Alice Guy-Blaché	alice\s+(guy\W*blach[eé]|guy|blach[eé]) #nk
+Alice Guy	alice\s+(guy\W*blach[eé]|guy|blach[eé]) #nk
 Alice Howell
 Al St. John	al\W+st\W+john
 Alyce Ardell
-A. Massard
+A. Massard	armand\W*massard
 André Deed
 Andy Clyde
 Anita Garvin
+Archie Burke #tbd
 Arthur Hotaling
 Arthur Lake
+Arthur Trimble #tbd
 Arvid E. Gillstrom
 Babe London
+Baptiste Léon Géraud	Baptiste L[eé]on G[ée]raud #tbd
 Barney Oldfield	b\W+oldfield
 Barry Bernard
 Barry O'Neil
@@ -36,29 +40,32 @@ Billy Gilbert 1894-1971	b(illy)?\W+gilbert # there's another billy gilbert, so w
 Billy Quirk
 Billy Ruge
 Billy West
+Billy Whiskers #unmapped
 Blanche Cornwall
 Blanche Payson	b\W+payson
-Bobby Dunn
+Bobby Dunn	bobby\W*dunn\W*
 Bobby Emmet
 Bobby Nelson
-Bobby Ray 1899-1957
+Bobby Ray 1899-1957	bobby\W+ray
 Bobby Vernon
 Bud Duncan
 Bud Jamison	b\W+jamison
+Bud Shaw #tbd
 Buster Keaton
 Camille de Morlhon
 Carole Lombard
 Cecile Arnold
 Charles Avery
 Charles Hall	charl(ey|ie) hall
-Charles J. Bennett
+Charles J. Bennett	charles\W+bennett
 Charles Lamont
 Charles-Lucien Lépine
 Charley Chase	(c|charles|chas|charl(ey|ie))\W+(chase|par+ot+) # nb, billed as Parrott as dir, but norm to Chase
 Charlie Chaplin	(c|charles|chas)\W+chaplin
-Charlie Murray
+Charlie Murray	charl(es|ie|ey)\W+murray
+Charlie Joy #tbd
 Chester Conklin	c\W+conklin
-C. Jay Williams
+C. Jay Williams	c\W+j\W+williams
 Clarence G. Badger
 Cliff Bowes
 Clyde Bruckman
@@ -70,6 +77,7 @@ Daphne Pollard
 David Kirkland
 Dell Henderson
 Del Lord
+Dick Lee #tbd
 Dorothy Devore
 Dot Farley
 D. Ross Lederman
@@ -78,11 +86,12 @@ Earle Rodney
 Earl McCarthy
 Earl Mohan
 Earl Montgomery
+Eddie Clayton #tbd
 Eddie Lyons
 Eddie Quillan
 Edgar Kennedy	(e\W+|edgar)kennedy
 Edna Purviance	(e|edn+a)\W+purviance
-Edward Baker
+Edward Baker	eddie\W+baker
 Edward Cline	(e|eddie|edward)\W+(f\W+)?cline
 Edward Everett Horton
 Edward Ludwig
@@ -92,7 +101,7 @@ Elsa Lanchester
 Emmett Flynn
 Eric Campbell	e(ric)?\W+cam(pb|bp)ell
 Erle C. Kenton
-Ernie Shields
+Ernie Shields	Ernest Shields
 Ethelyn Gibson
 Eugenia Gilbert
 Federick A. Thomson
@@ -100,7 +109,7 @@ Ferdinand Zecca
 Ferris Hartman
 Flora Finch
 Florence Lawrence
-Ford Sterling	f\W+st(er|re)ling
+Ford Sterling	(f|ford)\W+st(er|re)ling
 Frances Lee
 Francis X. Bushman	Francis\W*X\W*Bushman
 Frank Alexander
@@ -109,7 +118,7 @@ Frank E. Powell
 Frank Griffin
 Frank Terry
 Fraunie Fraunholz
-Fred C. Newmeyer #nk
+Fred Newmeyer	fred\W*c\W*newmeyer
 Fred Fishback
 Fred Guiol
 Fred Karno
@@ -123,71 +132,113 @@ George Nichols
 Georges Monca
 Gilbert M. Anderson	g\W+(m\W+|broncho\W+billy\W+)*anderson
 Gilbert W. Pratt	(gilbert|gil+) pratt #is initial needed?
-Glen Cavender
-Glenn Tyron
+Giovanni Pastrone # unmapped
+Glen Cavender	gl[ea]n+\W+cavender
+Glenn Tyron	glen+\W*(tryon|tyron)
 Gloria Swanson
 Gordon Griffith	gord\W+griffith
+Grover Jones # unmapped
+Gus Meins	gus\W+meins\W*our\W*gang\W*
 Hal Roach #nk
-Hank Mann
-Harold Beaudine #nk
+Hal Mohr
+Hal Yates
+Hampton Del Ruth
+Hannah Washington
+Hank Mann # cf hair and moustache in box in office
+Harold Beaudine #nk; tbd in eb's list
 Harold Lloyd
+Harry C. Mathews	harry\W+matthews #tbd
 Harry Depp
 Harry Edwards #nk
 Harry Gribbon
 Harry Langdon
-Helen Carruthers
+Harry L. Solter	Harry Solter
+Harry Sweet
+Harry Williams 1879-1922	Harry Williams
+Helen Carruthers	Helen Carr+uthers
+Henry Gambart	Henr[iy] Gambart
 Henry Lehrman
-Hilliard Karr
-Hughey Mack
-J. A. Howe
+Herbert Rice
+Herman Raymaker	herman\W*c\W*raymaker
+Hilliard Karr	hilli?ard karr
+Hugh Fay
+Hughey Mack	Hughie Mack
+Ivor Goldsmid Samuel Montagu	Ivor Montagu
+Jay A. Howe	J\W*A\W*Howe
 Jack Cooper
 Jack Duffy	j\W+duffy
 Jackie Coogan
-Jackie Dailey	Jackie\s*\/Jack\s+Dailey #nk
+Jackie Dailey	Jackie\s*\/Jack\s+Dailey #tbd
 James Aubrey
+James D. Davis	james\W+(d\W+)?davis #tbd
 James Finlayson	(j)\W+finlayson
 James Parrott	paul parrott
+James Stuart Blackton	j\W*stuart\W*blackton
 James W. Horne #nk
 Jay Belasco
 Jean Harlow
+Jess Robbins
 Jimmie Adams
+Jimmy Rosen #tbd
 Joe Keaton
 Joe Murphy
+Joe Rock
 Joe Weber
 John Bunny
+John Lancaster #tbd
 Johnny Arthur
-John T. Dillon
+John T. Dillon	john\W+dillon
+John Tansey
+Joseph Burke #tbd
+Joseph Henabery
+Joseph Maddern
 Kate Price
 Katherine Grant
-Kathryn Reed Altman
+Kathryn Reed Altman	Kathryn Reed
 Kewpie Morgan	kewpie mor\.
 Kewpie Ross
 Keystone Kops
+Lance Nicholson #tbd
 Larry Semon
+Larry Trimble	(larry|la[wu]rence) trimble
 Lee Beggs
 Lee Moran
+Len Powers
 Leo McCarey #nk
+Leo White
+Leslie Goodwins
 Lew Fields
 Lewis R. Foster #nk
-Lige Conley
+Lewis Seiler
+Lige Conley	lie?ge\W+conle?y
+Lloyd Bacon
+Lloyd French
 Lloyd Hamilton	l\W+hamilton
 Lola Maxam
 Louise Fazenda	(louis\W+|,\W*)fazenda	fazenda
+Louis J. Gasnier	louis\W*gasnier
+Louis Moret #tbd
+Lucien Nonguet
 Lucille McVey
 Lupino Lane
 Mabel Normand	(m|mable)\W+normand
+Mabel Nicholson #tbd
 Mack Sennett	m\W+sennett
-Mack Swain	m\W+swain
+Mack Swain	(m|mack)\W+s(wa|aw)in
 Madeline Hurlock	mad\W+hurlock
 Madge Kirby
 Mae Busch	m\W+busch
 Mae Laurel
 Malcolm St. Clair	malcom st\W*clair
+Marcel Perez	((marcel|fern[áa]ndez)\W*)+per[ée]z|Marcel Fabre|Michel Fabre|Robinet
 Marie Dressler
 Marie Mosquini
+Mark Sandrich 1900-1945	Mark Sandrich
+Marshall A. Neilan	marshall\W*neilan
 Matty Kemp
 Maurice Schwartz
 Max Davidson
+Max Gold #tbd
 Max Linder
 Mickey Daniels	m\W+daniels
 Mickey Rooney
@@ -198,9 +249,15 @@ Mildred June
 Minerva Courtney #nk
 Minnie Devereaux
 Minta Durfee	(minta|m|martha|araminta)\W*dur?fr?ee(\W*arbuckle)?
-Monty Banks	mont(e|y) banks
+Monte Banks	mont(e|y) banks
+Monte Collins #tbd
 Neal Burns
+Nicholas T. Barrows	n\W*t\W*barrows
+Nita Cavalier
+Noah Reynolds #tbd
+Noel Smith	noel\W*m\W*smith
 Norman Taurog #nk
+Norval MacGregor
 Oliver Hardy	o\W+hardy
 Ora Carew
 Otto Messmer #nk
@@ -209,40 +266,66 @@ Pat Sullivan #nk
 Pauline Curley
 Peter Lang
 Pete the Pup (Dog)	pete the pup
+Phil Whitman
 Phyllis Allen
-Polidor
+Polidor	Ferdinand Guillaume
 Polly Moran
 Priscilla Dean
 Ralph Ceder	ralph ced[ea]r #nk
+Ray Grey	Ray Gr[ea]y
 Raymond Griffith
+Reggie Morris
 René Leprince
 Richard Jones
+Rob Wagner
 Robert Bolder
-Robert F. McGowan	robert\s+mcgowan
+Robert McGowan	robert\W*(f\W*)?mcgowan
+Robert P. Kerr	robert\W*p\W*kerr
+Roland H. Totheroh	roland\W*(h\W*)?totheroh
+Roy Clements
+Roy Del Ruth
 Roscoe Arbuckle	(r)\W+arbuckle|roscoe\W*fatty\W*arbuckle
 Sally Phipps
+Sam Newfield
 Sammy Morrison
 Scott Pembroke	percy scott pembroke
+Scott Sidney
 Sidney Drew
+Siegmund Lubin
 Slim Summerville	(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)
 Snooky (Chimpanzee)	Snooky the Humanzee
 Snub Pollard	(snub|s)\W*Pollard
+Stan De Lay #tbd
 Stan Laurel	(stan|s)\W*laur?el
 Stanley Sandford	(t|tiny)\W+sandford # nk screen name is "Tiny"
+Stephen Roberts
 Stuart Erwin
 Syd Chaplin
 Thelma Todd	t\W+todd
+Tom Buckingham
 Tom Kennedy	tom kendy
+Thomas La Rose #tbd
 Vera Steadman
 Vernon Dent
+Victor Heerman
 Victor Potel
+Vincent Bryan
 Virginia Fox
 Virginia Pearson
-Vivien Oakland
+Vivien Oakland	vi+vi[ea]n\W*oakland
 Wallace Beery
 Wallace Lupino
 Walter Wright #nk
+Ward Hayes
 W. C. Fields	w\W*c\W+fields
-William Franey
+W. W. Kelly #nk: one-off
+Wildred Lucas
+Wilfrid North
+Willard Louis
+William Beaudine
+William Franey	(Billy|William) Franey
 William Garwood
+William Holland #tbd
+William S. Campbell	william\W*campbell
+William Watson #tbd
 Will Rogers
