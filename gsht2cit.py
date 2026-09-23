@@ -77,7 +77,7 @@ for row in [
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
   r'Motion_Picture_Details/Cast *uc star\W*s\W*',
   r'Motion_Picture_Details/Director *uc director',
-  r'Motion_Picture_Details/Producer/Publisher *u produc(er|tion\sco)',
+  r'Motion_Picture_Details/Producer/Publisher *e produc(er|tion\sco)',
   r'Motion_Picture_Details/Writer *emc writer',
   r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
   r'Relationships/Related_Person_or_Organization/Notes:Re-Issue_Distributor e distrib.*re\W*issue',
@@ -87,7 +87,7 @@ for row in [
   r'Motion_Picture_Details/Film_Base r NOSOURCECOLNUM',
   r'Motion_Picture_Details/Date_Code r NOSOURCECOLNUM',
   r'Motion_Picture_Details/Length e film\slength',
-  r'Motion_Picture_Details/Sound/Film_Sound *u sound\strack',
+  r'Motion_Picture_Details/Sound/Film_Sound *e sound\strack',
   r'Motion_Picture_Details/Sound/Sound_Notes:Type r NOSOURCECOLUMN', # populated from "sound track"
   r'Motion_Picture_Details/Frame_Rate me NOSOURCECOLUMN',
   r'Aspect_Ratio r aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
