@@ -41,7 +41,7 @@ Billy Gilbert 1894-1971	b(illy)?\W+gilbert # there's another billy gilbert, so w
 Billy Quirk
 Billy Ruge
 Billy West
-Billy Whiskers #unmapped
+Billy Whiskers (Goat)	Billy Whiskers #tbd
 Blanche Cornwall
 Blanche Payson	b\W+payson
 Bobby Dunn	bobby\W*dunn\W*
@@ -80,6 +80,7 @@ David Kirkland
 Dell Henderson
 Del Lord
 Dick Lee #tbd
+Dippy-Doo-Dads (Animals)	(the )?dippy\W*doo\W*dads
 Dorothy Devore
 Dot Farley
 D. Ross Lederman
@@ -106,6 +107,7 @@ Erle C. Kenton
 Ernie Shields	Ernest Shields
 Ethelyn Gibson
 Eugenia Gilbert
+Fatima (Skunk)	Fatima
 Frederick A. Thomson	frederick?\W+(a\W+)?thomp?son
 Ferdinand Zecca
 Ferris Hartman
@@ -143,6 +145,7 @@ Gordon Griffith	gord\W+griffith
 Grover Jones # unmapped
 Gus Meins	gus\W+meins\W*our\W*gang\W*
 Hal Roach #nk
+Hal Roach's Rascals (Group)	Our Gang|Little Rascals|Hal Roach's Rascals
 Hal Mohr
 Hal Yates
 Hampton Del Ruth
@@ -200,7 +203,7 @@ Katherine Grant
 Kathryn Reed Altman	Kathryn Reed
 Kewpie Morgan	kewpie mor\.
 Kewpie Ross
-Keystone Kops
+Keystone Kops (Group)	(the )?keystone [ck]ops
 Lance Nicholson #tbd
 Larry Semon
 Larry Trimble	(larry|la[wu]rence) trimble
@@ -245,6 +248,7 @@ Maurice Schwartz
 Max Davidson	Max Dadidson
 Max Gold #tbd
 Max Linder
+McDougall Alley Gang (Group)	(the )?mcdougall alley gang|(the )?mcdougall kids
 Mel Brown #tbd
 Mickey Daniels	m\W+daniels
 Mickey Rooney
@@ -309,6 +313,7 @@ Stan Laurel	(stan|s)\W*laur?el
 Stanley Sandford	(t|tiny)\W+sandford # nk screen name is "Tiny"
 Stephen Roberts
 Stuart Erwin	Stu Erwin
+Sunkist Bathing Beauties (Group)	(the )?sunkist bathing beauties|(mack )?sen+et+'s bathing beauties
 Syd Chaplin
 Thelma Todd	t\W+todd
 Tom Buckingham
