@@ -454,9 +454,8 @@ for intsv in intsvlist:
             if len(n.strip()) == 0:
               isbadrow += badrow(f"empty name in line {lnum}",logh)
             elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
-              print(f"WARNING: unknown name \"{n}\" in line {lnum}")
-              #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}",logh)
-            print("NAME:",n)
+              #print(f"WARNING: unknown name \"{n}\" in line {lnum}")
+              isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}",logh)
 
     # sound normalization
     if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
