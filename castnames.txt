@@ -103,6 +103,7 @@ Eleuterio Rodolfi
 Elsa Lanchester
 Emmett Flynn	emmett\W+j\W+flynn
 Eric Campbell	e(ric)?\W+cam(pb|bp)ell
+Erich von Stroheim #nk
 Erle C. Kenton
 Ernie Shields	Ernest Shields
 Ethelyn Gibson
@@ -162,11 +163,13 @@ Harry L. Solter	Harry Solter
 Harry Sweet
 Harry Williams 1879-1922	Harry Williams
 Helen Carruthers	Helen Carr+uthers
+Helen Holmes #nk
 Henry Gambart	Henr[iy] Gambart
 Henry Lehrman
 Herbert Rice
 Herman Raymaker	herman\W*c\W*raymaker
 Hilliard Karr	hilli?ard karr
+Hobart Bosworth #nk
 Hugh Fay
 Hughey Mack	Hughie Mack
 Ivor Goldsmid Samuel Montagu	Ivor Montagu
