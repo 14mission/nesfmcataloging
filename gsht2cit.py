@@ -550,10 +550,14 @@ for intsv in intsvlist:
 
     # extract parenthetical notes from title
     for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name/Title']):
-      if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
-        outcolvals["General_Notes:General"] += "|"+parenexp.strip(" ()")
+      # various series names? prefix to title, with slash
+      if re.search(r'(?i)(our gang|little rascals|hal roach\'s rascals)', parenexp):
+        outcolvals['Name/Title'] = "Our Gang / "+outcolvals['Name/Title']
+      elif re.match(r'(?i)(ma?cdougal+ (kids|alley))', parenexp):
+        outcolvals['Name/Title'] = "McDougall Alley Gang / "+outcolvals['Name/Title']
+      # anything else is a note
       else:
-        outcolvals["General_Notes:General"] = parenexp.strip().strip(" ()")
+        addcolval(outcolvals,"General_Notes:General",parenexp.strip(" ()"),"|")
     # delte paren exprs from title.  also do whitespace norm
     outcolvals['Name/Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name/Title'])
     outcolvals['Name/Title'] = " ".join(outcolvals['Name/Title'].split())
