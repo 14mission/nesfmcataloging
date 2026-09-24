@@ -430,7 +430,7 @@ for intsv in intsvlist:
         # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
         while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
           uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
-          print(f"XASYMATCH: {outcolvals[namefield]}: pre={uptocomma}, actor={actor}, aswho={aswho}, post={commaetc}")
+          #print(f"XASYMATCH: {outcolvals[namefield]}: pre={uptocomma}, actor={actor}, aswho={aswho}, post={commaetc}")
           outcolvals[namefield] = uptocomma.strip() + actor.strip() + commaetc.strip()
           if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
             outcolvals["General_Notes:General"] += "|"+(actor+aswho).strip()
