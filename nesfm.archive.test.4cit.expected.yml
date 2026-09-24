@@ -342,6 +342,23 @@
  Acquisition/Accession/Source_or_Donor: UNKNOWN
  Tags: test
  linenum: 20
+1999.07.42:
+ Acquisition/Accession: 1999.07
+ Name/Title: Faded Color Film
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 088"}]
+ Location/Location: r42 s71c
+ Condition/Notes: PQ3; faded red
+ Motion_Picture_Details/Production_Date/Date: 1956
+ Motion_Picture_Details/Cast: Ford Sterling
+ Motion_Picture_Details/Director: John Ford
+ Motion_Picture_Details/Length: 400'
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: col.
+ Parts/Parts: 1 x 400'
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 21
 1999.07.38:
  Acquisition/Accession: 1999.07
  Name/Title: Interesting Film Stock
@@ -361,7 +378,7 @@
  Parts/Parts: 1 x 400'
  Acquisition/Accession/Source_or_Donor: UNKNOWN
  Tags: test
- linenum: 21
+ linenum: 22
 1999.07.39:
  Acquisition/Accession: 1999.07
  Name/Title: Released with New Title
@@ -379,7 +396,7 @@
  General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "originally: Original Release Title"}]
  Acquisition/Accession/Source_or_Donor: UNKNOWN
  Tags: test
- linenum: 22
+ linenum: 23
 1999.07.41:
  Acquisition/Accession: 1999.07
  Name/Title: Our Gang / Film in Series
@@ -396,4 +413,4 @@
  Parts/Parts: 1 x 400'
  Acquisition/Accession/Source_or_Donor: UNKNOWN
  Tags: test
- linenum: 23
+ linenum: 24
