@@ -72,7 +72,7 @@ for row in [
   r'Other_Names_and_Numbers/Other_Numbers:Old_Object_ID r NOSOURCECOLUMN',
   r'Location/Location u Film\sRack',
   r'Other_Names_and_Numbers/Other_Numbers:Series_Item em (comedy\s+)?Series',
-  r'Condition/Notes:PQ e p\s*q\b',
+  r'Condition/Notes e p\s*q\b',
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
   r'Motion_Picture_Details/Cast *uc star\W*s\W*',
@@ -90,7 +90,7 @@ for row in [
   r'Motion_Picture_Details/Sound/Film_Sound *e sound\strack',
   r'Motion_Picture_Details/Sound/Sound_Notes:Type r NOSOURCECOLUMN', # populated from "sound track"
   r'Motion_Picture_Details/Frame_Rate me NOSOURCECOLUMN',
-  r'Aspect_Ratio r aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
+  r'Aspect_Ratio re aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
   r'Motion_Picture_Details/Film_Gauge/Format r NOSOURCECOLUMN',
   r'Motion_Picture_Details/Color_Characteristics *e film\scolor',
   r'Parts/Parts - Film\sReels', # reels, revisit?
@@ -159,9 +159,7 @@ for ln in cnh:
   cols = ln.split("\t")
   castnames[cols[0].strip()] = True
   for othercol in cols[1:]:
-    print("OTHERCOL")
     pat = re.sub(r'\(',r'(?:',othercol.strip())
-    print(f"PAT: {pat}")
     castnamecorrections[pat] = cols[0]
 cnh.close()
 print("loaded "+str(len(castnames.keys()))+" names")
@@ -329,6 +327,10 @@ for intsv in intsvlist:
     if outcolvals[accnumcolname] == outcolvals[objidcolname]:
       raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
 
+    # PQ goes into Condition/Notes, which is just a free-format text field, so prefix "PQ"
+    if isfilled(outcolvals,"Condition/Notes") and re.match(r'^\d',outcolvals["Condition/Notes"]):
+      outcolvals["Condition/Notes"] = "PQ"+outcolvals["Condition/Notes"]
+
     # extract film gauge from title: can be like **35mm** or (35mm)
     Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
     if Aspect_Ratio_title_match != None:
@@ -340,8 +342,8 @@ for intsv in intsvlist:
       #  continue
       outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = titlefilmgauge
       outcolvals["Name/Title"] = coretitle
-      if outcolvals["Aspect_Ratio"] == None:
-        outcolvals["Aspect_Ratio"] = "UNKNOWN"
+      #if outcolvals["Aspect_Ratio"] == None:
+      #  outcolvals["Aspect_Ratio"] = "UNKNOWN"
       #print(" now title=\""+outcolvals["Name/Title"]+"\" gauge="+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" aspect ratio="+outcolvals["Aspect_Ratio"])
     elif "35mm" in outcolvals["Name/Title"]:
       print("WARNING: gauge REMAINING in title: \""+outcolvals["Name/Title"]+"\"")
@@ -454,8 +456,8 @@ for intsv in intsvlist:
             if len(n.strip()) == 0:
               isbadrow += badrow(f"empty name in line {lnum}",logh)
             elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
-              #print(f"WARNING: unknown name \"{n}\" in line {lnum}")
-              isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}",logh)
+              print(f"WARNING: unknown name \"{n}\" in line {lnum}")
+              #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}",logh)
 
     # sound normalization
     if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
@@ -600,6 +602,8 @@ for intsv in intsvlist:
           outcolvals["Location/Location"])
       elif re.match(r'(?i)^\W*missing\W*$',outcolvals["Location/Location"]):
         outcolvals["Location/Location"] = "MISSING"
+      elif re.match(r'(?i)^\W*storage\W*$',outcolvals["Location/Location"]):
+        outcolvals["Location/Location"] = "STORAGE"
       elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
         pass
       else:
@@ -623,7 +627,7 @@ for intsv in intsvlist:
     # reformat cols with multiple, pipe-delimited values, with json
     # some cols with complicated structures need this even for just one value
     for colname in outcolvals:
-      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers", "Condition/Notes"]):
+      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
         if colname == "General_Notes":
           vallist = []
           for note in outcolvals[colname].split("|"):
