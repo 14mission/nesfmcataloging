@@ -3,7 +3,7 @@
  Name/Title: This Movie
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM069"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Series Item", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Comedy-Series VI No. 5"}]
  Location/Location: r42 s67
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1917
  Made/Created/Notes: Re-Issue Year: 1938
  Motion_Picture_Details/Cast: Hobart Bosworth
@@ -28,7 +28,7 @@
  Name/Title: Has Name Abbreviations
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM070"}]
  Location/Location: r42 s67b
- Condition/Notes: ["PQ: 1"]
+ Condition/Notes: PQ1
  Motion_Picture_Details/Production_Date/Date: 1918
  Motion_Picture_Details/Cast: ["Charlie Chaplin", "Edna Purviance", "James Finlayson"]
  Motion_Picture_Details/Director: UNKNOWN
@@ -47,7 +47,7 @@
  Name/Title: Film With No Object ID
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM071"}]
  Location/Location: r42 s67c
- Condition/Notes: ["PQ: 3"]
+ Condition/Notes: PQ3
  Motion_Picture_Details/Production_Date/Date: 1926
  Motion_Picture_Details/Cast: Chester Conklin
  Motion_Picture_Details/Director: UNKNOWN
@@ -65,7 +65,7 @@
  Name/Title: Film With Unknown Object ID
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM072"}]
  Location/Location: r42 s67c
- Condition/Notes: ["PQ: 3"]
+ Condition/Notes: PQ3
  Motion_Picture_Details/Production_Date/Date: 1926
  Motion_Picture_Details/Cast: Mabel Normand
  Motion_Picture_Details/Director: UNKNOWN
@@ -83,7 +83,7 @@
  Name/Title: The EmGee Film
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm-073"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Old Object ID", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "MG666"}]
  Location/Location: r42 s67d
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1921
  Motion_Picture_Details/Cast: Eric Campbell
  Motion_Picture_Details/Director: UNKNOWN
@@ -100,7 +100,7 @@
  Name/Title: EmGee Film With Same Core Number
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM 073b"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Old Object ID", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "MG666-cs"}]
  Location/Location: r42 s69a
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1925
  Motion_Picture_Details/Cast: Buster Keaton
  Motion_Picture_Details/Director: UNKNOWN
@@ -117,7 +117,7 @@
  Name/Title: Film with Gauge in Parens
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM 073b"}]
  Location/Location: r42 s69b
- Condition/Notes: ["PQ: 1"]
+ Condition/Notes: PQ1
  Motion_Picture_Details/Production_Date/Date: 1925
  Motion_Picture_Details/Cast: Alice Howell
  Motion_Picture_Details/Director: UNKNOWN
@@ -136,7 +136,7 @@
  Name/Title: Film with Parenthetical Note in Title
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 074"}]
  Location/Location: r42 s70
- Condition/Notes: ["PQ: 3"]
+ Condition/Notes: PQ3
  Motion_Picture_Details/Production_Date/Date: 1918
  Motion_Picture_Details/Cast: Charley Chase
  Motion_Picture_Details/Director: UNKNOWN
@@ -154,7 +154,7 @@
  Name/Title: Looks like Gauge in Title but Isn’t
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 075"}]
  Location/Location: r42 s70e
- Condition/Notes: ["PQ: 3"]
+ Condition/Notes: PQ3
  Motion_Picture_Details/Production_Date/Date: 1918
  Motion_Picture_Details/Cast: Charlie Chaplin
  Motion_Picture_Details/Director: UNKNOWN
@@ -172,7 +172,7 @@
  Name/Title: Foreign-Titled Print
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "FLM 075b"}]
  Location/Location: r42 s70f
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1920
  Motion_Picture_Details/Cast: Helen Holmes
  Motion_Picture_Details/Director: UNKNOWN
@@ -190,7 +190,7 @@
  Name/Title: Actor Name with Alias
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "flm076"}]
  Location/Location: r42 s70f
- Condition/Notes: ["PQ: 1"]
+ Condition/Notes: PQ1
  Motion_Picture_Details/Production_Date/Date: 1917
  Motion_Picture_Details/Cast: Charley Chase
  Motion_Picture_Details/Director: Charley Chase
@@ -209,7 +209,7 @@
  Name/Title: Embedded Actor Name with Alias
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "flm077"}]
  Location/Location: r42 s71a
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1916
  Motion_Picture_Details/Cast: ["Ford Sterling", "Charley Chase", "Mabel Normand"]
  Motion_Picture_Details/Director: UNKNOWN
@@ -227,7 +227,7 @@
  Name/Title: Double Director
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 078"}]
  Location/Location: r42 s71b
- Condition/Notes: ["PQ: 3"]
+ Condition/Notes: PQ3
  Motion_Picture_Details/Production_Date/Date: 1918
  Motion_Picture_Details/Cast: ["Charlie Chaplin", "Edna Purviance", "Snub Pollard"]
  Motion_Picture_Details/Director: ["Charlie Chaplin", "Leo White"]
@@ -244,7 +244,7 @@
  Name/Title: Parenthetical Note in Cast
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 080"}]
  Location/Location: r42 s71b
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1919
  Motion_Picture_Details/Cast: ["Jack Cooper", "Minta Durfee"]
  Motion_Picture_Details/Director: UNKNOWN
@@ -262,7 +262,7 @@
  Name/Title: Actor in Animated Form
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 081"}]
  Location/Location: r42 s71b
- Condition/Notes: ["PQ: 3"]
+ Condition/Notes: PQ3
  Motion_Picture_Details/Production_Date/Date: 1917
  Motion_Picture_Details/Director: UNKNOWN
  Motion_Picture_Details/Length: 400'
@@ -279,7 +279,7 @@
  Name/Title: Multiple Actors in Animated Form
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 082"}]
  Location/Location: r42 s71b
- Condition/Notes: ["PQ: 3"]
+ Condition/Notes: PQ3
  Motion_Picture_Details/Production_Date/Date: 1920
  Motion_Picture_Details/Director: UNKNOWN
  Motion_Picture_Details/Length: 400'
@@ -296,7 +296,7 @@
  Name/Title: Film with Tinting
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 083"}]
  Location/Location: r42 s71c
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1919
  Motion_Picture_Details/Cast: Ford Sterling
  Motion_Picture_Details/Director: UNKNOWN
@@ -313,7 +313,7 @@
  Name/Title: Film with Toning
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 084"}]
  Location/Location: r42 s71c
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1919
  Motion_Picture_Details/Cast: Snub Pollard
  Motion_Picture_Details/Director: UNKNOWN
@@ -330,7 +330,7 @@
  Name/Title: Tinting and Toning
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 085"}]
  Location/Location: r42 s71c
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1919
  Motion_Picture_Details/Cast: Alice Howell
  Motion_Picture_Details/Director: UNKNOWN
@@ -347,7 +347,7 @@
  Name/Title: Interesting Film Stock
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 086"}]
  Location/Location: r42 s71d
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1919
  Motion_Picture_Details/Cast: Eric Campbell
  Motion_Picture_Details/Director: UNKNOWN
@@ -367,7 +367,7 @@
  Name/Title: Released with New Title
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 087"}]
  Location/Location: r42 s71e
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1919
  Motion_Picture_Details/Cast: Alice Howell
  Motion_Picture_Details/Director: UNKNOWN
@@ -385,7 +385,7 @@
  Name/Title: Our Gang / Film in Series
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 087"}]
  Location/Location: r42 s71e
- Condition/Notes: ["PQ: 2"]
+ Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1922
  Motion_Picture_Details/Cast: Our Gang Kids
  Motion_Picture_Details/Director: UNKNOWN
