@@ -482,7 +482,7 @@ for intsv in intsvlist:
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
       elif re.match(r'(?i)\s*(tint(ed|s|ing))\s*(and|\W+)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted and toned)"
-      elif re.match(r'(?i)\s*(b\W*w\W*c(olor|ol)|c(olor|ol)\W*b\W*w)\W*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      elif re.match(r'(?i)\s*(b\W*w\W*c(olor|ol|)|c(olor|ol|)\W*b\W*w)\W*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col. and b&w"
       elif re.match(r'(?i)\s*faded\W+red\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         addcolval(outcolvals,"Condition/Notes",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
@@ -500,8 +500,13 @@ for intsv in intsvlist:
 
     # aspect gauge normalization; remove word parts, put into a note
     if isfilled(outcolvals,"Aspect_Ratio"):
-      Aspect_Ratio_match = re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])
-      if Aspect_Ratio_match == None:
+      if re.match(r'(?i)^\s*(windowbox(ed)?)\s*$', outcolvals["Aspect_Ratio"]):
+        addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
+        outcolvals["Aspect_Ratio"] = None
+      elif re.match(r'(?i)^\s*R-\d.*R-\d', outcolvals["Aspect_Ratio"]):
+        addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
+        outcolvals["Aspect_Ratio"] = "mixed"
+      elif (Aspect_Ratio_match := re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])) == None:
         isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"],logh)
       else:
         outcolvals["Aspect_Ratio"] = Aspect_Ratio_match.group(2)
@@ -608,12 +613,8 @@ for intsv in intsvlist:
           r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
           lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
           outcolvals["Location/Location"])
-      elif re.match(r'(?i)^\W*missing\W*$',outcolvals["Location/Location"]):
-        outcolvals["Location/Location"] = "MISSING"
-      elif re.match(r'(?i)^\W*storage\W*$',outcolvals["Location/Location"]):
-        outcolvals["Location/Location"] = "STORAGE"
-      elif re.match(r'(?i)^\W*freezer\W*$',outcolvals["Location/Location"]):
-        outcolvals["Location/Location"] = "FREEZER"
+      elif re.match(r'(?i)^\W*(freezer|fridge|missing|storage|unknown)\W*$',outcolvals["Location/Location"]):
+        outcolvals["Location/Location"] = outcolvals["Location/Location"].strip().upper()
       elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
         pass
       else:

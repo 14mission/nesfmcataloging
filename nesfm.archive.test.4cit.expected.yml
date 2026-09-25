@@ -414,3 +414,25 @@
  Acquisition/Accession/Source_or_Donor: UNKNOWN
  Tags: test
  linenum: 24
+2010.3.84:
+ Acquisition/Accession: 2010.3
+ Name/Title: Seven Chances
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "#35BK-F06"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Series Item", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "35 Keaton Feature - F06"}]
+ Location/Location: r6 s7a
+ Condition/Notes: PQ1
+ Motion_Picture_Details/Production_Date/Date: 1925
+ Made/Created/Notes: Re-Issue Year: 1955
+ Motion_Picture_Details/Cast: Buster Keaton
+ Motion_Picture_Details/Director: Buster Keaton
+ Relationships/Related_Person_or_Organization/Notes: ["Original Distributor: Buster Keaton Productions", "Re-Issue Distributor: Metro Pictures Corporation"]
+ Relationships/Related_Places/Notes: Print Exhibition Country: United States
+ Motion_Picture_Details/Length: 7000'
+ Motion_Picture_Details/Sound/Film_Sound: MUSIC
+ Aspect_Ratio: mixed
+ Motion_Picture_Details/Film_Gauge/Format: 35 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 1 x 1000'. 3 x 2,000'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Intertitle Language", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "English"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "R-1 1.33:1 Full Silent R-2-4 1.37:1 Academy"}]
+ Acquisition/Accession/Source_or_Donor: Blackhawk
+ Tags: test
+ linenum: 25
