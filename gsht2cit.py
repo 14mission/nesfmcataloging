@@ -476,7 +476,7 @@ for intsv in intsvlist:
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
       elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-      elif re.match(r'(?i)\s*(tint(ed|s|ing)?)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      elif re.match(r'(?i)\s*(tint(ed|s|ing)?|w\/tints?)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted)"
       elif re.match(r'(?i)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
@@ -484,7 +484,7 @@ for intsv in intsvlist:
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted and toned)"
       elif re.match(r'(?i)\s*(b\W*w\W*c(olor|ol|)|c(olor|ol|)\W*b\W*w)\W*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col. and b&w"
-      elif re.match(r'(?i)\s*faded\W+red\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      elif re.match(r'(?i)\s*(faded\W+)?red\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         addcolval(outcolvals,"Condition/Notes",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
       elif re.match(r'(?i)\s*(cinecolor)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
