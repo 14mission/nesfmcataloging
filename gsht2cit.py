@@ -258,7 +258,7 @@ for intsv in intsvlist:
       if colname not in colmap or colmap[colname] == None:
         continue
       # various ways of being "empty"
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|20xx\.xx\.xx|no\W*credit|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
         # some cols allowed to be empty
         if colname in okemptycols:
           outcolvals[colname] = None
@@ -320,7 +320,7 @@ for intsv in intsvlist:
 
     # catch remaining noncanonical object id's
     if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
-      isbadrow += badrow("improper objecty id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip(),logh)
+      isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip(),logh)
 
     # trim object id to create accession number
     outcolvals[accnumcolname] = re.sub(r'\.[^\.]+$','',outcolvals[objidcolname])
@@ -482,8 +482,13 @@ for intsv in intsvlist:
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
       elif re.match(r'(?i)\s*(tint(ed|s|ing))\s*(and|\W+)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted and toned)"
+      elif re.match(r'(?i)\s*(b\W*w\W*c(olor|ol)|c(olor|ol)\W*b\W*w)\W*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col. and b&w"
       elif re.match(r'(?i)\s*faded\W+red\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
         addcolval(outcolvals,"Condition/Notes",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
+        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
+      elif re.match(r'(?i)\s*(cinecolor)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+        addcolval(outcolvals,"General_Notes:General",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
       else:
         isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"],logh)
@@ -607,6 +612,8 @@ for intsv in intsvlist:
         outcolvals["Location/Location"] = "MISSING"
       elif re.match(r'(?i)^\W*storage\W*$',outcolvals["Location/Location"]):
         outcolvals["Location/Location"] = "STORAGE"
+      elif re.match(r'(?i)^\W*freezer\W*$',outcolvals["Location/Location"]):
+        outcolvals["Location/Location"] = "FREEZER"
       elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
         pass
       else:
