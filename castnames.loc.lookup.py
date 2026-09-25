@@ -11,7 +11,7 @@ for ln in sys.stdin:
   revname = re.sub(r'^(.+?)\s+(\w+)\s*$',r'\2, \1',name)
   print(f"LOOKUP: {revname}")
 
-  suggestionlist = loc.suggest(revname)
+  suggestionlist = loc.suggest(revname,"names")
   for sugg in suggestionlist:
     print(" SUGGESTION")
     jsonstr = json.dumps(vars(sugg))
