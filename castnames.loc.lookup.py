@@ -21,6 +21,8 @@ for ln in sys.stdin:
       print("  uri="+sugg.uri)
       print("  label="+sugg.label)
       if "variantLabels" in moredata:
-        print("  variantlabels="+", ".join(moredata["variantLabels"]))
+        print("  variantlabels="+"|".join(moredata["variantLabels"]))
     elif "occupations"  in moredata: 
-      print("  NON-MOVIE-OCCUPATION: "+", ".join(moredata["occupations"]))
+      print("  NON-MOVIE-OCCUPATION: "+"|".join(moredata["occupations"]))
+    if "sources" in moredata:
+      print("  FIRSTSOURCE: "+str(moredata["sources"][0]))
