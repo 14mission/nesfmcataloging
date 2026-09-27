@@ -159,8 +159,9 @@ for ln in cnh:
   cols = ln.split("\t")
   castnames[cols[0].strip()] = True
   for othercol in cols[1:]:
-    pat = re.sub(r'\(',r'(?:',othercol.strip())
-    castnamecorrections[pat] = cols[0]
+    if len(othercol.strip()) > 0:
+      pat = re.sub(r'\(',r'(?:',othercol.strip())
+      castnamecorrections[pat] = cols[0]
 cnh.close()
 print("loaded "+str(len(castnames.keys()))+" names")
 
