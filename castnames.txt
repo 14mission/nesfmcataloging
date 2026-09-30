@@ -167,7 +167,7 @@ Helen Carruthers	Helen Carr+uthers	# Carruthers, Helen (1892-1925); http://viaf.
 Helen Holmes	#nk
 Henry Gambart	Henr[iy] Gambart	# Gambart, Henry, 1877-1935; http://viaf.org/viaf/185986757
 Henry Lehrman		# Lehrman, Henry, 1886-1946; https://lccn.loc.gov/n85138207
-Herbert Rice
+Herbert Rice		# https://www.wikidata.org/wiki/Q19629657
 Herman Raymaker	herman\W*c\W*raymaker	# Raymaker, Herman, 1893-1944; https://lccn.loc.gov/n87896345
 Hilliard Karr	hilli?ard karr	# Karr, Hilliard; http://viaf.org/viaf/107074547
 Hobart Bosworth	#nk
