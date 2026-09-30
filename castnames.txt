@@ -42,7 +42,7 @@ Billy Gilbert 1894-1971	b(illy)?\W+gilbert # there's another billy gilbert, so w
 Billy Quirk
 Billy Ruge
 Billy West
-Billy Whiskers (Goat)	Billy Whiskers #tbd
+# Billy Whiskers (Goat)	Billy Whiskers #tbd ; goat actor(s) never actually credited or treated as cast member
 Blanche Cornwall
 Blanche Payson	b\W+payson
 Bobby Dunn	bobby\W*dunn\W*
