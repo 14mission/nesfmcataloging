@@ -4,7 +4,7 @@ from loc_authorities.api import LocAPI
 
 loc = LocAPI()
 
-print("#name\tlabel\tvariants\tlinks\tsources\tothermatches")
+print("#name\tlabel\tlink\tfilm\tocc\tvariants\tsources")
 
 for ln in sys.stdin:
   ln = ln.strip()
@@ -12,38 +12,35 @@ for ln in sys.stdin:
   name = cols[0]
   revname = re.sub(r'^(.+?)\s+(\w+)\s*$',r'\2, \1',name)
 
-  matchedlabels = [] # hopefully just one!
-  matchlinks = [] # same, but same number as above anyway
-  variantlabels = [] # all variants from all matches, which again is hopefully just one
-  sources = [] # first source for each match (though there are likely >1 for each)
-  outofscopesuggestions = [] # other folks with the same name, log various things
-
-  #print(f"LOOKUP: {revname}")
-
   suggestionlist = loc.suggest(revname,"names")
-  for sugg in suggestionlist:
-    #print(" SUGGESTION")
-    jsonstr = json.dumps(vars(sugg))
-    moredata = sugg._data["more"]
-    # movie-related suggestion
-    if re.search(r'(?i)(motion.picture|actor|actress|director|film)',json.dumps(vars(sugg))):
-      #print("  MOTION_PICTURE_SUGGESTION")
-      #print("  uri="+sugg.uri)
-      #print("  label="+sugg.label)
-      matchedlabels.append(sugg.label)
-      matchlinks.append(sugg.uri)
+  if len(suggestionlist) == 0:
+    print("\t".join([name,"","","","","",""]))
+  else:
+    for sugg in suggestionlist:
+      label = sugg.label
+      link = sugg.uri
+      jsonstr = json.dumps(vars(sugg))
+      moviethemematch = re.search(r'(?i)(motion.picture|actor|actress|director|film)',jsonstr)
+      moviethemematchstr = None if moviethemematch == None else moviethemematch.group()
+      variants = []
+      sources = []
+      occupations = []
+      moredata = sugg._data["more"]
       if "variantLabels" in moredata:
         for varlbl in moredata["variantLabels"]:
-          variantlabels.append(varlbl)
-        #print("  variantlabels="+"|".join(moredata["variantLabels"]))
-      if "sources" in moredata and len(moredata["sources"]) > 0:
-        sources.append(re.sub(r'found\s*:\s*','',moredata["sources"][0]))
-    # other suggestions
-    else:
-      outofscopesuggestions.append("label="+sugg.label)
-      if "occupations" in moredata and len(moredata["occupations"]) > 0:
-        outofscopesuggestions[-1] += "; occ="+"/".join(moredata["occupations"])
-      if "sources" in moredata and len(moredata["sources"]) > 0:
-        outofscopesuggestions[-1] += "; src="+re.sub(r'found\s*:\s*','',moredata["sources"][0])
-  # add a row to the table
-  print("\t".join([name, "|".join(matchedlabels), "|".join(variantlabels), "|".join(matchlinks), "|".join(sources), "|".join(outofscopesuggestions)]))
+          variants.append(varlbl)
+      if "sources" in moredata:
+        for source in moredata["sources"]:
+          sources.append(re.sub(r'found\s*:\s*','',source))
+      if "occupations" in moredata:
+        for occ in moredata["occupations"]:
+          occupations.append(occ)
+      print("\t".join([
+        name,
+        str(label),
+        str(link),
+        str(moviethemematchstr),
+        "|".join(occupations),
+        "|".join(variants),
+        "|".join(sources)
+      ])) 
