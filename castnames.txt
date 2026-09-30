@@ -1,350 +1,350 @@
 # from comedy shorts
-Al Alt
+Al Alt		# Alt, Al, 1897-1992; https://lccn.loc.gov/n2019002163
 Al Nathan	#tbd
-Albert Austin
-Albert Capellani
-Albert Herman
-Albert Ray
-Al Christie
-Alfred Davis
-Alfred Goulding	alfred\W+j\W+goulding
-Alice Day
-Alice Guy	alice\s+(guy\W*blach[eé]|guy|blach[eé])	#nk
-Alice Howell
-Al St. John	al\W+st\W+john
-Alyce Ardell
-A. Massard	armand\W*massard
-André Deed
-Andy Clyde
-Anita Garvin
+Albert Austin		# Austin, Albert; https://lccn.loc.gov/n93083258
+Albert Capellani		# Capellani, Albert, 1870-1931; https://lccn.loc.gov/n95038836
+Albert Herman		# Herman, Albert, 1894-1958; https://lccn.loc.gov/n85273929
+Albert Ray		# Ray, Albert, 1883-1944; https://lccn.loc.gov/n87847793
+Al Christie		# Christie, Al, 1886-1951; https://lccn.loc.gov/n85085834
+Alfred Davis		# Davis, Alfred; https://lccn.loc.gov/no91024632
+Alfred Goulding	alfred\W+j\W+goulding	# Goulding, Alfred; https://lccn.loc.gov/no92009106
+Alice Day		# Day, Alice; https://lccn.loc.gov/n93047296
+Alice Guy	alice\s+(guy\W*blach[eé]|guy|blach[eé])	#nk; Guy, Alice, 1873-1968; https://lccn.loc.gov/n85282148
+Alice Howell		# Howell, Alice, -1961; https://lccn.loc.gov/nr98025523
+Al St. John	al\W+st\W+john	# St. John, Al, 1893-1963; https://lccn.loc.gov/n85138481
+Alyce Ardell		# Ardell, Alyce 1902-1996; http://viaf.org/viaf/33178603108900862087
+A. Massard	armand\W*massard	# Massard, A. (Armand), 1884-; https://lccn.loc.gov/no2004089565
+André Deed		# Deed, André, 1884-1938; https://lccn.loc.gov/no2002030256
+Andy Clyde		# Clyde, Andy, 1892-1967; https://lccn.loc.gov/n87847189
+Anita Garvin		# Garvin, Anita, 1907-1994; see row 20
 Joseph Belmont	#tbd
 Archie Burke	#tbd
-Arthur Hotaling
-Arthur Lake
+Arthur Hotaling		# Hotaling, Arthur, 1873-1938; https://lccn.loc.gov/no2018108492
+Arthur Lake		# Lake, Arthur, 1905-1987; https://lccn.loc.gov/n87896366
 Arthur Trimble	#tbd
-Arvid E. Gillstrom
-Babe London
+Arvid E. Gillstrom		# Gillstrom, Arvid E., 1889-1935; https://lccn.loc.gov/n2009018181
+Babe London		# London, Babe, 1901-1980; https://lccn.loc.gov/no2011186271
 Baptiste Léon Géraud	Baptiste L[eé]on G[ée]raud	#tbd
-Barney Oldfield	b\W+oldfield
-Barry Bernard
-Barry O'Neil
-Beatrice La Plante
-Bebe Daniels
-Ben Turpin	(b)\W+turpin
-Bert Williams
-Billie Rhodes
-Billy Armstrong	b\W+armstrong
-Billy Barty
-Billy Bevan
-Billy Dooley
-Billy Engle
+Barney Oldfield	b\W+oldfield	# Oldfield, Barney, 1909-; https://lccn.loc.gov/n80024554
+Barry Bernard		# Bernard, Barry, 1899-1978; https://lccn.loc.gov/no2011084536
+Barry O'Neil		# O'Neil, Barry; https://lccn.loc.gov/n85138350
+Beatrice La Plante		# ; https://catalog.afi.com/Person/18456-Beatrice-LaPlante
+Bebe Daniels		# Daniels, Bebe, 1901-1971; https://lccn.loc.gov/n87896486
+Ben Turpin	(b)\W+turpin	# Turpin, Ben, 1874-1940; https://lccn.loc.gov/n85342800
+Bert Williams		# Williams, Bert, 1874-1922; https://lccn.loc.gov/n82115395
+Billie Rhodes		# Rhodes, Billie, 1894-1988; https://lccn.loc.gov/n85138220
+Billy Armstrong	b\W+armstrong	# Armstrong, Billy, 1891-1924; https://lccn.loc.gov/n88226447
+Billy Barty		# Barty, Billy; https://lccn.loc.gov/n82219260
+Billy Bevan		# Bevan, Billy, 1887-1957; https://lccn.loc.gov/n87916724
+Billy Dooley		# Dooley, Billy, 1893-1938; https://lccn.loc.gov/n2024044752
+Billy Engle		# Engle, Billy 1889-1966; http://viaf.org/viaf/27162721070961091295
 Billy Gilbert 1894-1971	b(illy)?\W+gilbert	# there's another billy gilbert, so we need to look out for that
-Billy Quirk
-Billy Ruge
-Billy West
-# Billy Whiskers (Goat)	Billy Whiskers #tbd ; goat actor(s) never actually credited or treated as cast member
-Blanche Cornwall
-Blanche Payson	b\W+payson
-Bobby Dunn	bobby\W*dunn\W*
-Bobby Emmet
-Bobby Nelson
+Billy Quirk		# Quirk, Billy, 1873-1926; https://lccn.loc.gov/n97865965
+Billy Ruge		# Ruge, Billy 1885?-1955; http://viaf.org/viaf/107041478
+Billy West		# West, Billy, 1893-1975; https://lccn.loc.gov/n93106275
+# Billy Whiskers (Goat)	Billy Whiskers	# goat actor(s) never actually credited or treated as cast member
+Blanche Cornwall		# Cornwall, Blanche; https://lccn.loc.gov/n90641206
+Blanche Payson	b\W+payson	# Payson, Blanche; https://lccn.loc.gov/no2011170355
+Bobby Dunn	bobby\W*dunn\W*	# Dunn, Bobby, 1890-1937; https://lccn.loc.gov/n2011026862
+Bobby Emmet		# Emmet, Bobby; https://lccn.loc.gov/n94022605
+Bobby Nelson		# Nelson, Bobby; https://lccn.loc.gov/no91011497
 Bobby Ray 1899-1957	bobby\W+ray
-Bobby Vernon
-Bud Duncan
-Bud Jamison	b\W+jamison
+Bobby Vernon		# Vernon, Bobby, 1897-1939; https://lccn.loc.gov/no89015788
+Bud Duncan		# Duncan, Bud, 1883-1960; https://lccn.loc.gov/n96018923
+Bud Jamison	b\W+jamison	# Jamison, Bud, 1894-1944; https://lccn.loc.gov/n88226448
 Bud Shaw	#tbd
-Buster Keaton
-Camille de Morlhon
-Carole Lombard	Carole? Lombard
-Cecile Arnold
-Charles Avery
-Charles Hall	charl(ey|ie) hall
-Charles J. Bennett	charles\W+bennett
-Charles Lamont
-Charles-Lucien Lépine
-Charley Chase	(c|charles|chas|charl(ey|ie))\W+(chase|par+ot+)	# nb, billed as Parrott as dir, but norm to Chase
-Charlie Chaplin	(c|charles|chas)\W+chaplin
-Charlie Murray	charl(es|ie|ey)\W+murray
+Buster Keaton		# Keaton, Buster, 1895-1966; https://lccn.loc.gov/n79027006
+Camille de Morlhon		# Morlhon, Camille de, 1869-1952; https://lccn.loc.gov/n98008061
+Carole Lombard	Carole? Lombard	# Lombard, Carole, 1908-1942; https://lccn.loc.gov/n50039478
+Cecile Arnold		# Arnold, Cecile, -1931; https://lccn.loc.gov/n88226461
+Charles Avery		# Avery, Charles, 1873-1926; https://lccn.loc.gov/n2012038981
+Charles Hall	charl(ey|ie) hall	# Hall, Charles, 1899-1959; https://lccn.loc.gov/no95058050
+Charles J. Bennett	charles\W+bennett	# Bennett, Charles J., 1889-1943; see row 94
+Charles Lamont		# Lamont, Charles, 1895-1993; https://lccn.loc.gov/n85199105
+Charles-Lucien Lépine		# Lépine, Charles-Lucien 1859-1941; http://viaf.org/viaf/2601151837985220520003
+Charley Chase	(c|charles|chas|charl(ey|ie))\W+(chase|par+ot+)	# nb, billed as Parrott as dir, but norm to Chase; Chase, Charley, 1893-1940; see row 72
+Charlie Chaplin	(c|charles|chas)\W+chaplin	# Chaplin, Charlie, 1889-1977; see row 78
+Charlie Murray	charl(es|ie|ey)\W+murray	# Charlie Murray; see row 89
 Charlie Joy	#tbd
-Chester Conklin	c\W+conklin
-C. Jay Williams	c\W+j\W+williams
+Chester Conklin	c\W+conklin	# Conklin, Chester, 1888-1971; https://lccn.loc.gov/n85342799
+C. Jay Williams	c\W+j\W+williams	# Williams, C. Jay (Charles Jay); https://lccn.loc.gov/n88034608
 Claire Anderson	#tbd
-Clarence G. Badger
-Cliff Bowes
-Clyde Bruckman
-Clyde Cook
-Colleen Moore
-Constance Bennett	c\W+bennett
-Craig Hutchinson
-Daphne Pollard
-David Kirkland
-Dell Henderson
-Del Lord
+Clarence G. Badger		# Badger, Clarence G., 1880-1964; https://lccn.loc.gov/n88226159
+Cliff Bowes		# Bowes, Cliff, 1894-1929; https://lccn.loc.gov/no2020059453
+Clyde Bruckman		# Bruckman, Clyde, 1894-1955; https://lccn.loc.gov/n85138062
+Clyde Cook		# Cook, Clyde, 1890-1984; https://lccn.loc.gov/n85138497
+Colleen Moore		# Moore, Colleen, 1900-1988; https://lccn.loc.gov/no89010839
+Constance Bennett	c\W+bennett	# Constance Bennett; https://lccn.loc.gov/n86041205
+Craig Hutchinson		# Hutchinson, Craig; https://lccn.loc.gov/n96123435
+Daphne Pollard		# Pollard, Daphne, 1891-1978; https://lccn.loc.gov/no89001236
+David Kirkland		# Kirkland, David, 1878-1964; https://lccn.loc.gov/n2018014265
+Dell Henderson		# Henderson, Dell, 1877-1956; https://lccn.loc.gov/n85151845
+Del Lord		# Lord, Del, 1894-1970; https://lccn.loc.gov/n85378950
 Dick Lee	#tbd
 Dippy-Doo-Dads (Animals)	(the )?dippy\W*doo\W*dads
-Dorothy Devore
-Dot Farley
-D. Ross Lederman
-D. W. Griffith
-Earle Rodney
-Earl McCarthy
-Earl Mohan
-Earl Montgomery
+Dorothy Devore		# Devore, Dorothy, 1899-1976; https://lccn.loc.gov/nr98025570
+Dot Farley		# Farley, Dot, 1881-1971; https://lccn.loc.gov/n93099080
+D. Ross Lederman		# Lederman, D. Ross (David Ross), 1894-1972; https://lccn.loc.gov/n88051353
+D. W. Griffith		# Griffith, D. W. (David Wark), 1875-1948; https://lccn.loc.gov/n79083582
+Earle Rodney		# Rodney, Earle; https://lccn.loc.gov/n2004116055
+Earl McCarthy		# McCarthy, Earl, 1906-1933; https://lccn.loc.gov/n93106270
+Earl Mohan		# Mohan, Earl, 1889-1928; https://lccn.loc.gov/no2016121094
+Earl Montgomery		# ; https://www.wikidata.org/wiki/Q95045529
 Eddie Clayton	#tbd
-Eddie Lyons
-Eddie Quillan
-Edgar Kennedy	(e\W+|edgar)kennedy
-Edna Purviance	(e|edn+a)\W+purviance
-Edward Baker	eddie\W+baker
-Edward Cline	(e|eddie|edward)\W+(f\W+)?cline
-Edward Everett Horton
-Edward Ludwig
-Edwin Middleton
-Eleuterio Rodolfi
-Elsa Lanchester
-Emmett Flynn	emmett\W+j\W+flynn
-Eric Campbell	e(ric)?\W+cam(pb|bp)ell
+Eddie Lyons		# Lyons, Eddie, 1886-1926; https://lccn.loc.gov/n90641359
+Eddie Quillan		# Quillan, Eddie, 1907-1990; https://lccn.loc.gov/n85151570
+Edgar Kennedy	(e\W+|edgar)kennedy	# Kennedy, Edgar, 1890-1948; see row 109
+Edna Purviance	(e|edn+a)\W+purviance	# Purviance, Edna, 1896-1958; see row 112
+Edward Baker	eddie\W+baker	# Baker, Edward, 1897-1968; https://lccn.loc.gov/no2011031436
+Edward Cline	(e|eddie|edward)\W+(f\W+)?cline	# Cline, Edward, 1892-1961; https://lccn.loc.gov/n87896290
+Edward Everett Horton		# Horton, Edward Everett; https://lccn.loc.gov/n79068063
+Edward Ludwig		# Ludwig, Edward, 1899-1982; https://lccn.loc.gov/n87911842
+Edwin Middleton		# Middleton, Edwin; https://lccn.loc.gov/n85185276
+Eleuterio Rodolfi		# Rodolfi, Eleuterio, 1876-1933; https://lccn.loc.gov/no2018133613
+Elsa Lanchester		# Lanchester, Elsa, 1902-1986; https://lccn.loc.gov/n82144403
+Emmett Flynn	emmett\W+j\W+flynn	# Flynn, Emmett, 1892-1937; https://lccn.loc.gov/no90021480
+Eric Campbell	e(ric)?\W+cam(pb|bp)ell	# Campbell, Eric; https://lccn.loc.gov/n85138244
 Erich von Stroheim	#nk
-Erle C. Kenton
-Ernie Shields	Ernest Shields
-Ethelyn Gibson
-Eugenia Gilbert
+Erle C. Kenton		# Kenton, Erle C., 1896-1980; https://lccn.loc.gov/n87911725
+Ernie Shields	Ernest Shields	# Shields, Ernie; https://lccn.loc.gov/n85138059
+Ethelyn Gibson		# Gibson, Ethelyn, 1897-1972; https://viaf.org/en/viaf/215149717682010952767
+Eugenia Gilbert		# Gilbert, Eugenia, 1902-1978; https://lccn.loc.gov/no2019124470
 Fatima (Skunk)	Fatima
 Frederick A. Thomson	frederick?\W+(a\W+)?thomp?son
-Ferdinand Zecca
-Ferris Hartman
-Flora Finch
-Florence Lawrence
-Ford Sterling	(f|ford)\W+st(er|re)ling
-Frances Lee
-Francis X. Bushman	Francis\W*X\W*Bushman
-Frank Alexander
-Frank Butler
-Frank E. Powell	frank\W+(e\W+)?powell
-Frank Griffin
-Frank Terry
-Fraunie Fraunholz
-Fred Newmeyer	fred\W*c\W*newmeyer
-Fred Fishback	fred\W+(fishback|hibbard)
-Fred Guiol
-Fred Karno
-Fred Newmeyer
-Fred Windemere	Fritz Wintermeier
-Gaston Méliès
-Gaylord Lloyd
-George D. Baker
-George Jeske
-George Nichols
-Georges Monca
+Ferdinand Zecca		# Zecca, Ferdinand, 1864-1947; https://lccn.loc.gov/no2002027587
+Ferris Hartman		# ; https://www.wikidata.org/wiki/Q16028525
+Flora Finch		# Finch, Flora, 1869-1940; https://lccn.loc.gov/n91100538
+Florence Lawrence		# Lawrence, Florence, 1890-1938; https://lccn.loc.gov/n87914040
+Ford Sterling	(f|ford)\W+st(er|re)ling	# Sterling, Ford, 1882-1939; see row 134
+Frances Lee		# Lee, Frances, 1908-2000; https://lccn.loc.gov/nr2006011496
+Francis X. Bushman	Francis\W*X\W*Bushman	# Bushman, Francis X., 1883-1966; https://lccn.loc.gov/n85151982
+Frank Alexander		# Alexander, Frank, 1879-1937; https://lccn.loc.gov/n96095756
+Frank Butler		# Butler, Frank, 1890-1967; https://lccn.loc.gov/n87860228
+Frank E. Powell	frank\W+(e\W+)?powell	# Powell, Frank E., 1877-; https://lccn.loc.gov/n2012032291
+Frank Griffin		# Griffin, Frank, 1889-1953; https://lccn.loc.gov/no89018101
+Frank Terry		# Terry, Frank, 1870-1948; https://lccn.loc.gov/no2011124892
+Fraunie Fraunholz		# Fraunholz, Fraunie; https://lccn.loc.gov/n90641286
+Fred Newmeyer	fred\W*c\W*newmeyer	# Newmeyer, Fred; https://lccn.loc.gov/no00005213
+Fred Fishback	fred\W+(fishback|hibbard)	# Fishback, Fred; see row 145
+Fred Guiol		# Guiol, Fred, 1898-1964; https://lccn.loc.gov/no89005111
+Fred Karno		# Karno, Fred, 1866-1941; http://viaf.org/viaf/315945330
+Fred Newmeyer		# Newmeyer, Fred; https://lccn.loc.gov/no00005213
+Fred Windemere	Fritz Wintermeier	# ; https://www.wikidata.org/wiki/Q64006322
+Gaston Méliès		# Méliès, Gaston, 1852-1915; https://lccn.loc.gov/n87914047
+Gaylord Lloyd		# Lloyd, Gaylord, 1888-1943; https://lccn.loc.gov/no2011128707
+George D. Baker		# Baker, George D.; https://lccn.loc.gov/n91094401
+George Jeske		# Jeske, George, 1891-1951; https://lccn.loc.gov/no89014166
+George Nichols		# Nichols, George, 1864-1927; https://lccn.loc.gov/no2002084231
+Georges Monca		# Monca, Georges 1867-1939; http://viaf.org/viaf/1816173973176223810005
 Georgie Chapman	#tbd
-Gilbert M. Anderson	g\W+(m\W+|broncho\W+billy\W+)*anderson
-Gilbert W. Pratt	(gilbert|gil+) pratt	#is initial needed?
-Giovanni Pastrone	# unmapped
-Glen Cavender	gl[ea]n+\W+cavender
-Glenn Tyron	glen+\W*(tryon|tyron)
-Gloria Swanson
-Gordon Griffith	gord\W+griffith
-Grover Jones	# unmapped
-Gus Meins	gus\W+meins\W*our\W*gang\W*
-Hal Roach	#nk
+Gilbert M. Anderson	g\W+(m\W+|broncho\W+billy\W+)*anderson	# Anderson, Gilbert M., 1880-1971; https://lccn.loc.gov/n85138300
+Gilbert W. Pratt	(gilbert|gil+) pratt	#is initial needed?; Pratt, Gilbert W.; https://lccn.loc.gov/no89010443
+Giovanni Pastrone	# unmapped; Pastrone, Giovanni; https://lccn.loc.gov/n50050647
+Glen Cavender	gl[ea]n+\W+cavender	# Cavender, Glen, 1883-1962; https://lccn.loc.gov/n93076766
+Glenn Tyron	glen+\W*(tryon|tyron)	# Tryon, Glenn, 1899-1970; see row 163
+Gloria Swanson		# Swanson, Gloria, 1897-1983; https://lccn.loc.gov/n50011542
+Gordon Griffith	gord\W+griffith	# Griffith, Gordon, 1907-1958; https://lccn.loc.gov/n88226199
+Grover Jones	# unmapped; Jones, Grover, 1893-1940; https://lccn.loc.gov/n87847016
+Gus Meins	gus\W+meins\W*our\W*gang\W*	# Meins, Gus, 1893-1940; https://lccn.loc.gov/nr98025582
+Hal Roach	#nk; Roach, Hal, 1892-1992; https://lccn.loc.gov/n50051034
 Hal Roach's Rascals (Group)	Our Gang|Little Rascals|Hal Roach's Rascals
-Hal Mohr
-Hal Yates
-Hampton Del Ruth
-Hannah Washington
-Hank Mann	# cf hair and moustache in box in office
+Hal Mohr		# Mohr, Hal, 1894-1974; https://lccn.loc.gov/n87896227
+Hal Yates		# Yates, Hal; https://lccn.loc.gov/no2002037689
+Hampton Del Ruth		# Del Ruth, Hampton; https://lccn.loc.gov/no91011434
+Hannah Washington		# ; https://www.wikidata.org/wiki/Q28374237
+Hank Mann	# cf hair and moustache in box in office; Mann, Hank, 1887-1971; https://lccn.loc.gov/n85342797
 Harold Beaudine	#nk; tbd in eb's list
-Harold Lloyd
+Harold Lloyd		# Lloyd, Harold, 1893-1971; https://lccn.loc.gov/n50050609
 Harry C. Mathews	harry\W+matthews	#tbd
-Harry Depp
-Harry Edwards	#nk
-Harry Gribbon	harry gr?ibbon
-Harry Langdon
-Harry L. Solter	Harry Solter
-Harry Sweet
+Harry Depp		# Depp, Harry, 1883-1957; https://lccn.loc.gov/n85376840
+Harry Edwards	#nk; Edwards, Harry, 1888-1952; https://lccn.loc.gov/n93079671
+Harry Gribbon	harry gr?ibbon	# Gribbon, Harry, 1885-1961; https://lccn.loc.gov/n87896471
+Harry Langdon		# Langdon, Harry, 1884-1944; https://lccn.loc.gov/n81147548
+Harry L. Solter	Harry Solter	# Solter, Harry L., 1874-1920; https://lccn.loc.gov/no2003000555
+Harry Sweet		# Sweet, Harry; https://lccn.loc.gov/no2008123128
 Harry Williams 1879-1922	Harry Williams
-Helen Carruthers	Helen Carr+uthers
+Helen Carruthers	Helen Carr+uthers	# Carruthers, Helen (1892-1925); http://viaf.org/viaf/186794709
 Helen Holmes	#nk
-Henry Gambart	Henr[iy] Gambart
-Henry Lehrman
+Henry Gambart	Henr[iy] Gambart	# Gambart, Henry, 1877-1935; http://viaf.org/viaf/185986757
+Henry Lehrman		# Lehrman, Henry, 1886-1946; https://lccn.loc.gov/n85138207
 Herbert Rice
-Herman Raymaker	herman\W*c\W*raymaker
-Hilliard Karr	hilli?ard karr
+Herman Raymaker	herman\W*c\W*raymaker	# Raymaker, Herman, 1893-1944; https://lccn.loc.gov/n87896345
+Hilliard Karr	hilli?ard karr	# Karr, Hilliard; http://viaf.org/viaf/107074547
 Hobart Bosworth	#nk
-Hugh Fay
-Hughey Mack	Hughie Mack
-Ivor Goldsmid Samuel Montagu	Ivor Montagu
-Jay A. Howe	J\W*A\W*Howe
-Jack Cooper
-Jack Duffy	j\W+duffy
-Jackie Coogan
+Hugh Fay		# Fay, Hugh, 1882-1926; https://lccn.loc.gov/no2012025106
+Hughey Mack	Hughie Mack	# Mack, Hughey, 1884-1927; https://lccn.loc.gov/n91101197
+Ivor Goldsmid Samuel Montagu	Ivor Montagu	# Montagu, Ivor Goldsmid Samuel, 1904-1984; https://lccn.loc.gov/n79021161
+Jay A. Howe	J\W*A\W*Howe	# Howe, Jay A.; https://lccn.loc.gov/no2004078089
+Jack Cooper		# Cooper, Jack 1890-1970; http://viaf.org/viaf/103242022
+Jack Duffy	j\W+duffy	# Duffy, Jack, 1882-1939; https://lccn.loc.gov/no90006702
+Jackie Coogan		# Coogan, Jackie, 1914-1984; https://lccn.loc.gov/n88100818
 Jackie Dailey	Jackie\s*\/Jack\s+Dailey	#tbd
-James Aubrey	jimmy\W+aubrey
+James Aubrey	jimmy\W+aubrey	# Aubrey, James; https://lccn.loc.gov/no91024700
 James D. Davis	james\W+(d\W+)?davis	#tbd
-James Finlayson	(j)\W+finlayson
-James Parrott	(paul|jim|jimmy) par+ot+
-James Stuart Blackton	j\W*stuart\W*blackton
-James W. Horne	#nk
-Jay Belasco
-Jean Harlow
-Jess Robbins
-Jimmie Adams
+James Finlayson	(j)\W+finlayson	# Finlayson, James, 1887-1953; https://lccn.loc.gov/n87847852
+James Parrott	(paul|jim|jimmy) par+ot+	# Parrott, James, 1898-1939 ; https://lccn.loc.gov/n87847847
+James Stuart Blackton	j\W*stuart\W*blackton	# Blackton, James Stuart, 1875-1941; https://lccn.loc.gov/n84165053
+James W. Horne	#nk; Horne, James W., 1880-1942; https://lccn.loc.gov/n87847843
+Jay Belasco		# Belasco, Jay; https://lccn.loc.gov/n93101272
+Jean Harlow		# Harlow, Jean, 1911-1937; https://lccn.loc.gov/n85151803
+Jess Robbins		# Robbins, Jess, 1886-1973; https://lccn.loc.gov/no2003000579
+Jimmie Adams		# Adams, Jimmie, 1888-1933; https://lccn.loc.gov/no2011135063
 Jimmy Rosen	#tbd
-Joe Keaton
-Joe Murphy
-Joe Rock
-Joe Weber
-John Bunny
+Joe Keaton		# Keaton, Joe, 1867-1946; https://lccn.loc.gov/no98101436
+Joe Murphy		# Murphy, Joe, 1876-1961; https://lccn.loc.gov/no2011168508
+Joe Rock		# Rock, Joe, 1893-1984; https://lccn.loc.gov/n91010135
+Joe Weber		# Weber, Joe, 1867-1942; https://lccn.loc.gov/n87847838
+John Bunny		# Bunny, John, 1863-1915; https://lccn.loc.gov/nr97043346
 John Lancaster	#tbd
-Johnny Arthur
-John T. Dillon	john\W+dillon
-John Tansey
+Johnny Arthur		# Arthur, Johnny, 1883-1951; https://lccn.loc.gov/no2008034910
+John T. Dillon	john\W+dillon	# Dillon, John T., 1876-1937; https://lccn.loc.gov/no2009036680
+John Tansey		# Tansey, John; https://lccn.loc.gov/n94022602
 Joseph Burke	#tbd
-Joseph Henabery
-Joseph Maddern
-Kate Price
-Katherine Grant
-Kathryn Reed Altman	Kathryn Reed
-Kewpie Morgan	kewpie mor\.
-Kewpie Ross
+Joseph Henabery		# Henabery, Joseph, 1887-1976; https://lccn.loc.gov/n93121498
+Joseph Maddern		# Maddern, Joseph; https://lccn.loc.gov/no2011038431
+Kate Price		# Price, Kate, 1872-1943; https://lccn.loc.gov/n91100467
+Katherine Grant		# Grant, Katherine, 1904-1937; https://lccn.loc.gov/no2013021192
+Kathryn Reed Altman	Kathryn Reed	# Altman, Kathryn Reed; https://lccn.loc.gov/no2015057902
+Kewpie Morgan	kewpie mor\.	# Morgan, Kewpie; https://lccn.loc.gov/n96094011
+Kewpie Ross		# Ross, Kewpie; http://viaf.org/viaf/107074568
 Keystone Kops (Group)	(the )?keystone [ck]ops
 Lance Nicholson	#tbd
-Larry Semon
-Larry Trimble	(larry|la[wu]rence) trimble
-Lee Beggs
-Lee Moran
-Len Powers
-Leo McCarey	#nk
-Leo White
-Leslie Goodwins
-Lew Fields
-Lewis R. Foster	#nk
-Lewis Seiler
-Lige Conley	lie?ge\W+conle?y
-Lloyd Bacon
-Lloyd French
-Lloyd Hamilton	l\W+hamilton
-Lola Maxam	Louella Maxam
-Louise Fazenda	(louis\W+|,\W*)fazenda	fazenda
-Louis J. Gasnier	louis\W*gasnier
+Larry Semon		# Semon, Larry, 1889-1928; https://lccn.loc.gov/n88063287
+Larry Trimble	(larry|la[wu]rence) trimble	# Trimble, Larry, 1885-1954; https://lccn.loc.gov/n85138399
+Lee Beggs		# Beggs, Lee, 1871-1943; https://lccn.loc.gov/no2004041668
+Lee Moran		# Moran, Lee, 1880-1961; https://lccn.loc.gov/n90641276
+Len Powers		# Powers, Len; https://lccn.loc.gov/no96067267
+Leo McCarey	#nk; McCarey, Leo; https://lccn.loc.gov/n80015724
+Leo White		# White, Leo, 1882-1948; https://lccn.loc.gov/n87914420
+Leslie Goodwins		# Goodwins, Leslie, 1899-1969; https://lccn.loc.gov/n93099070
+Lew Fields		# Fields, Lew, 1867-1941; https://lccn.loc.gov/n87847839
+Lewis R. Foster	#nk; Foster, Lewis R., 1898-1974; https://lccn.loc.gov/no89009018
+Lewis Seiler		# Seiler, Lewis, 1891-1964; https://lccn.loc.gov/n87860298
+Lige Conley	lie?ge\W+conle?y	# Conley, Lige 1897-1937; see row 243
+Lloyd Bacon		# Bacon, Lloyd, 1890-1955; https://lccn.loc.gov/n86138541
+Lloyd French		# French, Lloyd; https://lccn.loc.gov/no91026386
+Lloyd Hamilton	l\W+hamilton	# Hamilton, Lloyd; https://lccn.loc.gov/n96018832
+Lola Maxam	Louella Maxam	# Maxam, Lola, 1896-1970; https://lccn.loc.gov/n92039287
+Louise Fazenda	(louis\W+|,\W*)fazenda	fazenda	# Fazenda, Louise, 1895-1962; https://lccn.loc.gov/n86075609
+Louis J. Gasnier	louis\W*gasnier	# Gasnier, Louis J., 1875-1963; https://lccn.loc.gov/n87911703
 Louis Moret	#tbd
-Lucien Nonguet
-Lucille McVey
-Lupino Lane
-Mabel Normand	(m|mable)\W+normand
+Lucien Nonguet		# Nonguet, Lucien; https://lccn.loc.gov/n97052263
+Lucille McVey		# Lucille McVey; https://id.oclc.org/worldcat/entity/E39PBJy4b4QKQ8rGCmdHvKpHG3
+Lupino Lane		# Lane, Lupino, 1892-1959; https://lccn.loc.gov/no94032019
+Mabel Normand	(m|mable)\W+normand	# Normand, Mabel, 1894-1930; see row 255
 Mabel Nicholson	#tbd
-Mack Sennett	m\W+sennett
-Mack Swain	(m|mack)\W+s(wa|aw)in
-Madeline Hurlock	mad\W+hurlock
-Madge Kirby
-Mae Busch	m\W+busch
-Mae Laurel
-Malcolm St. Clair	malcom st\W*clair
-Marcel Perez	((marcel|fern[áa]ndez)\W*)+per[ée]z|Marcel Fabre|Michel Fabre|Robinet
+Mack Sennett	m\W+sennett	# Sennett, Mack, 1880-1960; https://lccn.loc.gov/n85164243
+Mack Swain	(m|mack)\W+s(wa|aw)in	# Swain, Mack, 1876-1935; https://lccn.loc.gov/n85138341
+Madeline Hurlock	mad\W+hurlock	# Hurlock, Madeline, 1899-1989; https://lccn.loc.gov/n92106159
+Madge Kirby		# Kirby, Madge; https://lccn.loc.gov/n94094150
+Mae Busch	m\W+busch	# Busch, Mae; https://lccn.loc.gov/n88132359
+Mae Laurel		# Laurel, Mae, 1888-1969; http://viaf.org/viaf/98149717542310951234
+Malcolm St. Clair	malcom st\W*clair	# St. Clair, Malcolm, 1897-1952; https://lccn.loc.gov/n87896455
+Marcel Perez	((marcel|fern[áa]ndez)\W*)+per[ée]z|Marcel Fabre|Michel Fabre|Robinet	# Perez, Marcel, -1929; https://lccn.loc.gov/no2014001926
 Margaret Templeton	#tbd
 Margery Meadows	#tbd
-Marie Dressler
-Marie Mosquini
+Marie Dressler		# Dressler, Marie, 1869-1934; https://lccn.loc.gov/n85151802
+Marie Mosquini		# Mosquini, Marie, 1899-1983; https://lccn.loc.gov/n85199241
 Mark Sandrich 1900-1945	Mark Sandrich
-Marshall A. Neilan	marshall\W*neilan
-Matty Kemp
-Maurice Schwartz
-Max Davidson	Max Dadidson
+Marshall A. Neilan	marshall\W*neilan	# Neilan, Marshall A., 1891-1958; https://lccn.loc.gov/n85376737
+Matty Kemp		# Kemp, Matty, 1907-1999; https://lccn.loc.gov/no2008017799
+Maurice Schwartz		# Schwartz, Maurice, 1890-1960; https://lccn.loc.gov/nr2005009657
+Max Davidson	Max Dadidson	# Davidson, Max, 1875-1950; see row 275
 Max Gold	#tbd
-Max Linder
+Max Linder		# Linder, Max, 1883-1925; https://lccn.loc.gov/n92103507
 McDougall Alley Gang (Group)	(the )?mcdougall alley gang|(the )?mcdougall kids
 Mel Brown	#tbd
-Mickey Daniels	m\W+daniels
-Mickey Rooney
-Mignon Anderson
-Mildred Davis
-Mildred Harris	milded harris
-Mildred June
+Mickey Daniels	m\W+daniels	# Daniels, Mickey, 1914-1970; https://lccn.loc.gov/n86105795
+Mickey Rooney		# Rooney, Mickey; https://lccn.loc.gov/n85176691
+Mignon Anderson		# Anderson, Mignon, -1983; https://lccn.loc.gov/n93107422
+Mildred Davis		# Davis, Mildred, 1900?-1969 ; https://lccn.loc.gov/nr98016397
+Mildred Harris	milded harris	# Harris, Mildred, 1901-1944; https://lccn.loc.gov/n88226167
+Mildred June		# June, Mildred, 1906-1940; https://lccn.loc.gov/n93057236
 Minerva Courtney	#nk
-Minnie Devereaux	Minnie Prevost
-Minta Durfee	(minta|m|martha|araminta)\W*dur?fr?ee(\W*arbuckle)?
-Monty Banks	mont(e|y) banks
+Minnie Devereaux	Minnie Prevost	# Devereaux, Minnie, 1891-1984; https://lccn.loc.gov/no2003000459
+Minta Durfee	(minta|m|martha|araminta)\W*dur?fr?ee(\W*arbuckle)?	# Durfee, Minta, -1975; https://lccn.loc.gov/n85138205
+Monty Banks	mont(e|y) banks	# Banks, Monte, 1897-1950; https://lccn.loc.gov/n87914414
 Monty Banks Jr	mont(e|y) banks\W+(jr|junior)
 Monte Collins	#tbd
-Neal Burns
-Nicholas T. Barrows	n\W*t\W*barrows
-Nita Cavalier
+Neal Burns		# Burns, Neal, 1890-1969; https://lccn.loc.gov/n85138217
+Nicholas T. Barrows	n\W*t\W*barrows	# Barrows, Nicholas T.; https://lccn.loc.gov/no90021254
+Nita Cavalier		# Nita Cavalier; https://www.wikidata.org/wiki/Q19879000
 Noah Reynolds	#tbd
-Noel Smith	noel\W*m\W*smith
-Norman Taurog	#nk
-Norval MacGregor
-Oliver Hardy	o\W+hardy
-Ora Carew
-Otto Messmer	#nk
-Paddy McGuire
-Pat Sullivan	#nk
-Pauline Curley
-Peter Lang
-Pete the Pup (Dog)	pete the pup
-Phil Whitman
-Phyllis Allen
-Polidor	Ferdinand Guillaume
-Polly Moran
-Priscilla Dean
-Ralph Ceder	ralph ced[ea]r	#nk
-Ray Grey	Ray Gr[ea]y
-Raymond Griffith
-Reggie Morris
-René Leprince
-Richard Jones	(f(rank)?\W+)?richard jones
+Noel Smith	noel\W*m\W*smith	# Smith, Noel, 1895-1955; https://lccn.loc.gov/n85138336
+Norman Taurog	#nk; Taurog, Norman, 1899-1981; https://lccn.loc.gov/n85376781
+Norval MacGregor		# MacGregor, Norval; https://lccn.loc.gov/n92099623
+Oliver Hardy	o\W+hardy	# Hardy, Oliver, 1892-1957; https://lccn.loc.gov/n79088947
+Ora Carew		# Carew, Ora, 1893-1955; https://lccn.loc.gov/no2014055191
+Otto Messmer	#nk; Messmer, Otto, 1892-1983; https://lccn.loc.gov/n81086385
+Paddy McGuire		# McGuire, Paddy; http://viaf.org/viaf/3291153411831741700004
+Pat Sullivan	#nk; Sullivan, Pat, 1885-1933; https://lccn.loc.gov/n85031301
+Pauline Curley		# Curley, Pauline, 1903-2000; https://lccn.loc.gov/no2019124687
+Peter Lang		# Lang, Peter, 1867-1932; https://lccn.loc.gov/n85138125
+Pete the Pup (Dog)	pete the pup	# ; https://www.wikidata.org/wiki/Q7172369
+Phil Whitman		# Whitman, Phil; https://lccn.loc.gov/no2011131350
+Phyllis Allen		# Allen, Phyllis, 1861-1938; https://lccn.loc.gov/n93095277
+Polidor	Ferdinand Guillaume	# Polidor, 1887-1977; https://lccn.loc.gov/no2017159014
+Polly Moran		# Moran, Polly, 1883-1952; https://lccn.loc.gov/n86075612
+Priscilla Dean		# Dean, Priscilla, 1896-1987; https://lccn.loc.gov/n89129709
+Ralph Ceder	ralph ced[ea]r	#nk; Ceder, Ralph; https://lccn.loc.gov/no00038715
+Ray Grey	Ray Gr[ea]y	# Grey, Ray, 1890-1925; https://lccn.loc.gov/n2018072484
+Raymond Griffith		# Griffith, Raymond, -1957; https://lccn.loc.gov/n86105780
+Reggie Morris		# Morris, Reggie, 1886-1928; https://lccn.loc.gov/n2014050166
+René Leprince		# Leprince, René, 1876-1929; https://lccn.loc.gov/no2013090753
+Richard Jones	(f(rank)?\W+)?richard jones	# Jones, Richard, 1893-1930; see row 127
 Richard Wallace	#tbd
-Rob Wagner
-Robert Bolder
-Robert McGowan	robert\W*(f\W*)?mcgowan
-Robert P. Kerr	robert\W*p\W*kerr
+Rob Wagner		# Wagner, Rob, 1872-1942; https://lccn.loc.gov/n85048292
+Robert Bolder		# Bolder, Robert, 1859-1937; https://lccn.loc.gov/n93046150
+Robert McGowan	robert\W*(f\W*)?mcgowan	# McGowan, Robert, 1901-1955; https://lccn.loc.gov/n87911843
+Robert P. Kerr	robert\W*p\W*kerr	# Kerr, Robert P. 1892-1960; http://viaf.org/viaf/86515159
 Robin Williamson	#tbd
-Roland H. Totheroh	roland\W*(h\W*)?totheroh
-Roy Clements
-Roy Del Ruth
-Roscoe Arbuckle	(r)\W+arbuckle|roscoe\W*fatty\W*arbuckle
-Sally Phipps
-Sam Newfield
-Sammy Morrison	(ernest|sammy)\W+morrison|sunshine sammy( morrison)?
-Scott Pembroke	percy scott pembroke
-Scott Sidney
-Sidney Drew
-Siegmund Lubin
-Slim Summerville	(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)
-Snooky (Chimpanzee)	Snooky the Humanzee
-Snub Pollard	(snub|s)\W*Pollard
+Roland H. Totheroh	roland\W*(h\W*)?totheroh	# Totheroh, Roland H., 1890-1967; https://lccn.loc.gov/n85138245
+Roy Clements		# Clements, Roy, 1877-1948; https://lccn.loc.gov/nr00038090
+Roy Del Ruth		# Del Ruth, Roy, 1893-1961; https://lccn.loc.gov/n87916727
+Roscoe Arbuckle	(r)\W+arbuckle|roscoe\W*fatty\W*arbuckle	# Arbuckle, Roscoe, 1887-1933; https://lccn.loc.gov/n85138204
+Sally Phipps		# Phipps, Sally, 1911-1978; https://lccn.loc.gov/no2015077887
+Sam Newfield		# Newfield, Sam, 1899-1964; https://lccn.loc.gov/n87896233
+Sammy Morrison	(ernest|sammy)\W+morrison|sunshine sammy( morrison)?	# Morrison, Sammy, 1912-1989; https://lccn.loc.gov/no2013030683
+Scott Pembroke	percy scott pembroke	# Pembroke, Scott, 1889-1951; https://lccn.loc.gov/no2004078097
+Scott Sidney		# Sidney, Scott, 1872-1928; https://lccn.loc.gov/no98097339
+Sidney Drew		# Drew, Sidney, 1864-1919; https://lccn.loc.gov/n85138423
+Siegmund Lubin		# Lubin, Siegmund, -1923; https://lccn.loc.gov/n84034340
+Slim Summerville	(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)	# Summerville, Slim, 1892-1946; see row 343
+Snooky (Chimpanzee)	Snooky the Humanzee	# ; 
+Snub Pollard	(snub|s)\W*Pollard	# Pollard, Snub, 1889-1962; https://lccn.loc.gov/n85274000
 Stan De Lay	#tbd
-Stan Laurel	(stan|s)\W*laur?el
-Stanley Sandford	(t|tiny)\W+sandford	# nk screen name is "Tiny"
-Stephen Roberts
-Stuart Erwin	Stu Erwin
+Stan Laurel	(stan|s)\W*laur?el	# Laurel, Stan; see row 350
+Stanley Sandford	(t|tiny)\W+sandford	# nk screen name is "Tiny"; Sandford, Stanley, 1894-1961; https://lccn.loc.gov/no00102905
+Stephen Roberts		# Roberts, Stephen, 1895-1936; https://lccn.loc.gov/no89001235
+Stuart Erwin	Stu Erwin	# Erwin, Stuart, 1903-1967; https://lccn.loc.gov/n86105735
 Sunkist Bathing Beauties (Group)	(the )?sunkist bathing beauties|(mack )?sen+et+'s bathing beauties
-Syd Chaplin
-Thelma Todd	t\W+todd
-Tom Buckingham
-Tom Kennedy	tom kendy
+Syd Chaplin		# Chaplin, Syd, 1885-1965 ; https://lccn.loc.gov/n85138483
+Thelma Todd	t\W+todd	# Todd, Thelma, 1905-1935; https://lccn.loc.gov/n88159021
+Tom Buckingham		# Buckingham, Tom, 1895-1934; https://lccn.loc.gov/no89009646
+Tom Kennedy	tom kendy	# Kennedy, Tom, 1885-1965; https://lccn.loc.gov/n85378849
 Thomas La Rose	#tbd
-Vera Steadman
-Vernon Dent
-Victor Heerman
-Victor Potel
+Vera Steadman		# Steadman, Vera 1900-1966; http://viaf.org/viaf/103672793
+Vernon Dent		# Dent, Vernon, 1895-1963; https://lccn.loc.gov/no89016904
+Victor Heerman		# Heerman, Victor, 1893-1977; https://lccn.loc.gov/n86138587
+Victor Potel		# Potel, Victor, 1889-1947; https://lccn.loc.gov/n87914262
 Vincent Brownell	#tbd
-Vincent Bryan
-Virginia Fox
-Virginia Pearson
-Vivien Oakland	vi+vi[ea]n\W*oakland
-Wallace Beery
-Wallace Lupino
-Walter Wright	#nk
-Ward Hayes
-W. C. Fields	w\W*c\W+fields
+Vincent Bryan		# Bryan, Vincent, 1883-1937; https://lccn.loc.gov/nr2006005335
+Virginia Fox		# Fox, Virginia, 1902-1982; https://lccn.loc.gov/no00051333
+Virginia Pearson		# Pearson, Virginia, 1886-1958; https://lccn.loc.gov/no2001096565
+Vivien Oakland	vi+vi[ea]n\W*oakland	# Oakland, Vivien, 1895-1958; https://lccn.loc.gov/n86140065
+Wallace Beery		# Beery, Wallace; https://lccn.loc.gov/n80016853
+Wallace Lupino		# Lupino, Wallace; https://lccn.loc.gov/no2010056610
+Walter Wright	#nk; Wright, Walter, 1885-1958; https://lccn.loc.gov/n2011028809
+Ward Hayes		# Hayes, Ward, 1894-1925; http://viaf.org/viaf/197863913
+W. C. Fields	w\W*c\W+fields	# Fields, W. C. (William Claude), 1880-1946; https://lccn.loc.gov/n79092617
 W. W. Kelly	#nk: one-off
-Wilfred Lucas	Wildred Lucas
-Wilfrid North
-Willard Louis	Will Louis
-William Beaudine
-William Franey	(Billy|William) Franey
-William Garwood
+Wilfred Lucas	Wildred Lucas	# Lucas, Wilfred, 1871-1940; https://lccn.loc.gov/n87896267
+Wilfrid North		# North, Wilfrid, 1863-1935; https://lccn.loc.gov/n2012040706
+Willard Louis	Will Louis	# Louis, Willard, 1886-1926; https://lccn.loc.gov/no94043487
+William Beaudine		# Beaudine, William, 1892-1970; https://lccn.loc.gov/n89129671
+William Franey	(Billy|William) Franey	# Franey, William, 1885-1940; https://lccn.loc.gov/n88226164
+William Garwood		# Garwood, William, 1884-1950; https://lccn.loc.gov/nr00009795
 William Holland	#tbd
-William S. Campbell	william\W*campbell
+William S. Campbell	william\W*campbell	# Campbell, William S., 1884-1972; https://lccn.loc.gov/no2013109998
 William Watson	#tbd
-Will Rogers
+Will Rogers		# Rogers, Will, 1879-1935; https://lccn.loc.gov/n79022274
