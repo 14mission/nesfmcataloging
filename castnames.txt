@@ -348,3 +348,4 @@ William Holland	#tbd
 William S. Campbell	william\W*campbell	# Campbell, William S., 1884-1972; https://lccn.loc.gov/no2013109998
 William Watson	#tbd
 Will Rogers		# Rogers, Will, 1879-1935; https://lccn.loc.gov/n79022274
+# adds from features
