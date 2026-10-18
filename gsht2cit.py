@@ -11,11 +11,14 @@ def badrow(msg):
 # handy funcs for dealing with records
 def isfilled(record,colname):
   return colname in record and record[colname] != None and len(record[colname].strip()) > 0
-def addcolval(record,colname,newval,delim=","):
+def addcolval(record,colname,newval,delim=",",addfirst=False):
   if newval == None or len(newval.strip()) == 0:
     return
   elif isfilled(record,colname):
-    record[colname] += delim + newval
+    if addfirst:
+      record[colname] = newval + delim + record[colname]
+    else:
+      record[colname] += delim + newval
   else:
     record[colname] = newval
 
@@ -70,7 +73,7 @@ for row in [
   r'Other_Names_and_Numbers/Other_Numbers:Shelving u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
   r'Other_Names_and_Numbers/Other_Numbers:Old_Object_ID r NOSOURCECOLUMN',
   r'Location/Location u Film\sRack',
-  r'Other_Names_and_Numbers/Other_Numbers:Series_Item em (comedy\s+)?Series',
+  r'Other_Names_and_Numbers/Other_Numbers:Series_Item em (comedy\s+)?Series|Filed\sby.*\sor',
   r'Condition/Notes e p\s*q\b',
   r'Motion_Picture_Details/Production_Date/Date u prod.*year',
   r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
@@ -276,6 +279,22 @@ for intsv in intsvlist:
 
     # special rules:
 
+    # in features data, special rules for handling column called: Filed by Director or Star "Silent" = filed by title
+    if re.search(r'feature',intsv) or re.search(r'<feature>',outcolvals["Name/Title"]) and isfilled(outcolvals,"Other_Names_and_Numbers/Other_Numbers:Series_Item"):
+      # if it has "dir(ector)" in parens, the field contains the director, but the director col is already filled, so ignore
+      if re.search(r'\(d',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
+        outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
+      # if it contains "feature" or "silent", leave it for this weird "series item" field
+      elif re.search(r'(?i)(feature|silent|master\s*fs)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
+        pass
+      # anything else, we assume is the star. chop off hyphenated suffixes though. also prefix "35"
+      else:
+        starname = re.sub(r'^35\s*|©|(\s*\.\s*)?\(.*?\)|\.?\s*-.*$|CCF|\.\s*$','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"])
+        starname = " ".join(starname.split())
+        #print("FOUNDSTAR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" -> "+starname)
+        addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
+        outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
+
     # handling of MG object ID's
     # chop off leading MG prefix and any suffix to get numerical part
     # there may be collisions so suffix 0, 1, etc
@@ -434,6 +453,7 @@ for intsv in intsvlist:
         # apply name normalization rules form castnames file
         for pat in castnamecorrections:
           outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*('+pat+r')\s*($|,)',r'\1'+castnamecorrections[pat]+r'\3',outcolvals[namefield])
+
         # check for problematic names 
         #for name in outcolvals[namefield].split(","):
         #  if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
@@ -631,7 +651,7 @@ for intsv in intsvlist:
     # reformat cols with multiple, pipe-delimited values, with json
     # some cols with complicated structures need this even for just one value
     for colname in outcolvals:
-      if outcolvals[colname] != None and len(outcolvals[colname]) > 0 and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
+      if isfilled(outcolvals,colname) and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
         if colname == "General_Notes":
           vallist = []
           for note in outcolvals[colname].split("|"):
@@ -651,7 +671,12 @@ for intsv in intsvlist:
               "http://www.catalogit.me/rdf/ontologies/core/common#hasType": numtype.strip(),
               "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": number.strip()})
         else:
-          vallist = [s.strip() for s in outcolvals[colname].split("|")]
+          vallist = []
+          sawbefore = {}
+          for val in [s.strip() for s in outcolvals[colname].split("|")]:
+            if val not in sawbefore:
+              vallist.append(val)
+              sawbefore[val] = True
         outcolvals[colname] = json.dumps(vallist)
 
     # print columns
