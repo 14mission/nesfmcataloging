@@ -4,8 +4,7 @@ import json
 import csv
 
 # later we will make this a fatal error
-def badrow(msg,logf):
-  print("BAD ROW: "+msg,file=logf)
+def badrow(msg):
   print("BAD ROW: "+msg)
   return 1
 
@@ -188,12 +187,6 @@ for intsv in intsvlist:
   hdrcols.append("linenum")
   outh.writerow(hdrcols)
 
-  # log file
-  logfn = re.sub(r'\.\w+$','',intsv)
-  logfn += ".4cit.log"
-  print(f"write logs to {logfn}")
-  logh = open(logfn,"w")
-
   # short name of file to put in output
   source = intsv
   source = re.sub(r'^.*- *','',source)
@@ -226,7 +219,7 @@ for intsv in intsvlist:
           else:
             raise Exception("no \""+field+"\" col found in \""+intsv+"\": HDRCOLS="+",".join(lncols))
         else:
-          print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]], file=logh)
+          print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
       # check that nothing was mapped unexpectedly
       unexpectedoutputcols = [colname for colname in colmap.keys() if colname not in outcols]
       if len(unexpectedoutputcols) > 0:
@@ -241,13 +234,13 @@ for intsv in intsvlist:
 
     # film not actually in archive?
     if re.search(r'(?i)NO prints in Archive',ln) != None:
-      print(f"skip line: {lnum}: "+ln.strip(), file=logh)
+      print(f"skip line: {lnum}: "+ln.strip())
       continue
 
     # section divider line? print it but then ignore
     # other ignorable types too
     if len([col for col in lncols if col != None and len(col.strip())>0]) <= 2 or re.search(r'(?i)(HATS OFF IS A LOST FILM|no prints in archive|NO film prints.+DVD)',ln):
-      print(f"skip line: {lnum}: "+ln.strip(), file=logh)
+      print(f"skip line: {lnum}: "+ln.strip())
       continue
 
     # regular line. make sure all required fields filled
@@ -265,7 +258,7 @@ for intsv in intsvlist:
           outcolvals[colname] = None
         # for some cols, we just specify UNKNOWN
         elif colname in okunkcols:
-          print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip(), file=logh)
+          print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip())
           outcolvals[colname] = "UNKNOWN"
         # if col is empty and is to be filled by a rule, put it on list of cols to check for later
         elif colname in rulefillcols:
@@ -273,8 +266,7 @@ for intsv in intsvlist:
           colstoberulefilled[colname] = True
         # for others, an empty value is a fatal error
         else:
-          print(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(), file=logh)
-          isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip(),logh)
+          isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip())
       # pipe char will cause problems later
       elif "|" in lncols[colmap[colname]]:
         raise Exception(f"pipe char in line {lnum}: "+ln.strip())
@@ -321,7 +313,7 @@ for intsv in intsvlist:
 
     # catch remaining noncanonical object id's
     if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
-      isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip(),logh)
+      isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip())
 
     # trim object id to create accession number
     outcolvals[accnumcolname] = re.sub(r'\.[^\.]+$','',outcolvals[objidcolname])
@@ -339,7 +331,7 @@ for intsv in intsvlist:
       coretitle = " ".join((Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3)).split())
       titlefilmgauge = Aspect_Ratio_title_match.group(2) + " mm." # per LOC spec
       #if outcolvals["Aspect_Ratio"] != None and re.search(r'\d+\s*mm', outcolvals["Aspect_Ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["Aspect_Ratio"].lower()) == None:
-      #  badrow("inconsistent film gauge: title=\""+outcolvals["Name/Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"",logh)
+      #  badrow("inconsistent film gauge: title=\""+outcolvals["Name/Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"")
       #  continue
       outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = titlefilmgauge
       outcolvals["Name/Title"] = coretitle
@@ -363,12 +355,12 @@ for intsv in intsvlist:
         outcolvals["Aspect_Ratio"] = apect_ratio_and_Film_Gauge_match.group(1) + apect_ratio_and_Film_Gauge_match.group(3).strip()
         extracted_gauge = apect_ratio_and_Film_Gauge_match.group(2) + " mm."
         if "Motion_Picture_Details/Film_Gauge/Format" in outcolvals and outcolvals["Motion_Picture_Details/Film_Gauge/Format"] != None and extracted_gauge != outcolvals["Motion_Picture_Details/Film_Gauge/Format"]:
-          isbadrow += badrow(f"inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge,logh)
+          isbadrow += badrow(f"inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge)
         outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = extracted_gauge
 
     # if film gauge still not filled, that's a problem
     if not isfilled(outcolvals,"Motion_Picture_Details/Film_Gauge/Format"):
-      isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip(),logh)
+      isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip())
 
     # film length
     if isfilled(outcolvals,"Motion_Picture_Details/Length"):
@@ -445,7 +437,7 @@ for intsv in intsvlist:
         # check for problematic names 
         #for name in outcolvals[namefield].split(","):
         #  if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
-        #    isbadrow += badrow(f"suspect name in line {lnum}: "+name,logh)
+        #    isbadrow += badrow(f"suspect name in line {lnum}: "+name)
         newval = outcolvals[namefield]
         #if newval != oldval:
         #  print(f"NAMEFIX: {oldval} -> {newval}")
@@ -455,10 +447,10 @@ for intsv in intsvlist:
         if len(newval.strip()) > 0:
           for n in newval.split(","):
             if len(n.strip()) == 0:
-              isbadrow += badrow(f"empty name in line {lnum}",logh)
+              isbadrow += badrow(f"empty name in line {lnum}")
             elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
               print(f"WARNING: unknown name \"{n}\" in line {lnum}")
-              #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}",logh)
+              #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}")
 
     # sound normalization
     if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
@@ -492,7 +484,7 @@ for intsv in intsvlist:
         addcolval(outcolvals,"General_Notes:General",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
         outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
       else:
-        isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"],logh)
+        isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"])
 
     # TBD: handle serieses
     # if series col, and filled, prefix to title
@@ -508,7 +500,7 @@ for intsv in intsvlist:
         addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
         outcolvals["Aspect_Ratio"] = "mixed"
       elif (Aspect_Ratio_match := re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])) == None:
-        isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"],logh)
+        isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"])
       else:
         outcolvals["Aspect_Ratio"] = Aspect_Ratio_match.group(2)
         ratiolabel = Aspect_Ratio_match.group(1) + " " + Aspect_Ratio_match.group(3)
@@ -528,7 +520,7 @@ for intsv in intsvlist:
             outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "standard "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
           # any other random verbiage is an error
           else:
-            isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel,logh)
+            isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel)
 
     # film stock normalization
     if isfilled(outcolvals,"Motion_Picture_Details/Film_Stock"):
@@ -543,7 +535,7 @@ for intsv in intsvlist:
       outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'\b(\d{4})\s*(\&|and|-)\s*(\d{4})',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
       for yearmatch in re.findall(r'(\b\d\d\d\d|\'\d\d)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
         if isfilled(outcolvals,"Motion_Picture_Details/Date_Code"):
-          isbadrow += badrow(f"multiple date specs in line {lnum}",logh)
+          isbadrow += badrow(f"multiple date specs in line {lnum}")
         yearmatch = re.sub(r'^\'','19',yearmatch)
         outcolvals["Motion_Picture_Details/Date_Code"] = yearmatch
       outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(\b\d\d\d\d|\'\d\d)\b',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
@@ -588,16 +580,16 @@ for intsv in intsvlist:
     for colname in colstoberulefilled:
       print(f"TOBERULEFILLED: {colname}")
       if not isfilled(outcolvals,colname):
-        isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip(),logh)
+        isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip())
 
     # check for dup objid and dup shelving code
     record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]
     if outcolvals[objidcolname] in objid_seen:
-      isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary,logh)
+      isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary)
     else:
       objid_seen[outcolvals[objidcolname]] = record_summary
     if outcolvals[objidcolname].lower() in objid_incit:
-      isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname],logh)
+      isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname])
     if "Other_Names_and_Numbers/Other_Numbers:Shelving" in outcolvals:
       normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]).lower()
       if normedshelvingcode == "missing":
@@ -619,7 +611,7 @@ for intsv in intsvlist:
       elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
         pass
       else:
-        isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"],logh)
+        isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"])
 
     # for all commasplit cols, replace comma with pipe.
     for colname in outcolvals:
