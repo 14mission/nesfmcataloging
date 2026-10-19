@@ -436,3 +436,26 @@
  Acquisition/Accession/Source_or_Donor: Blackhawk
  Tags: test
  linenum: 25
+2011.11.294:
+ Acquisition/Accession: 2011.11
+ Name/Title: Hell's Hinges <feature>
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 088"}]
+ Location/Location: r6 s7b
+ Condition/Notes: PQ2
+ Motion_Picture_Details/Production_Date/Date: 1916
+ Made/Created/Notes: Re-Issue Year: 1923
+ Motion_Picture_Details/Cast: ["William S. Hart", "Clara Williams"]
+ Motion_Picture_Details/Director: William S. Hart
+ Relationships/Related_Person_or_Organization/Notes: ["Original Distributor: New York Motion Picture-T. Ince", "Re-Issue Distributor: Triangle Distributing /Kay-Bee Pictures"]
+ Relationships/Related_Places/Notes: Print Exhibition Country: United States
+ Made/Created/Place: Tri-Stone Pictures (1923)
+ Motion_Picture_Details/Film_Stock: b & w
+ Motion_Picture_Details/Length: 7000'
+ Motion_Picture_Details/Sound/Film_Sound: English
+ Aspect_Ratio: Silent
+ Motion_Picture_Details/Color_Characteristics: 1.33:1  16mm
+ Parts/Parts: 3 x 2000'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Intertitle Language", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "U.S.A."}]
+ Acquisition/Accession/Source_or_Donor: Blackhawk
+ Tags: test
+ linenum: 26
