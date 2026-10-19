@@ -414,11 +414,11 @@
  Acquisition/Accession/Source_or_Donor: UNKNOWN
  Tags: test
  linenum: 24
-2010.3.84:
- Acquisition/Accession: 2010.3
+2011.11.294:
+ Acquisition/Accession: 2011.11
  Name/Title: Seven Chances
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "#35BK-F06"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Series Item", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "35 Keaton Feature - F06"}]
- Location/Location: r6 s7a
+ Location/Location: r6 s7b
  Condition/Notes: PQ1
  Motion_Picture_Details/Production_Date/Date: 1925
  Made/Created/Notes: Re-Issue Year: 1955
@@ -431,16 +431,16 @@
  Aspect_Ratio: mixed
  Motion_Picture_Details/Film_Gauge/Format: 35 mm.
  Motion_Picture_Details/Color_Characteristics: b&w
- Parts/Parts: 1 x 1000'. 3 x 2,000'
+ Parts/Parts: 3 x 2000'
  General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Intertitle Language", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "English"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "R-1 1.33:1 Full Silent R-2-4 1.37:1 Academy"}]
  Acquisition/Accession/Source_or_Donor: Blackhawk
  Tags: test
  linenum: 25
-2011.11.294:
- Acquisition/Accession: 2011.11
+2026.67.2002:
+ Acquisition/Accession: 2026.67
  Name/Title: Hell's Hinges <feature>
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Flm 088"}]
- Location/Location: r6 s7b
+ Location/Location: r4 s6
  Condition/Notes: PQ2
  Motion_Picture_Details/Production_Date/Date: 1916
  Made/Created/Notes: Re-Issue Year: 1923
@@ -449,13 +449,33 @@
  Relationships/Related_Person_or_Organization/Notes: ["Original Distributor: New York Motion Picture-T. Ince", "Re-Issue Distributor: Triangle Distributing /Kay-Bee Pictures"]
  Relationships/Related_Places/Notes: Print Exhibition Country: United States
  Made/Created/Place: Tri-Stone Pictures (1923)
- Motion_Picture_Details/Film_Stock: b & w
  Motion_Picture_Details/Length: 7000'
- Motion_Picture_Details/Sound/Film_Sound: English
- Aspect_Ratio: Silent
- Motion_Picture_Details/Color_Characteristics: 1.33:1  16mm
+ Motion_Picture_Details/Sound/Film_Sound: Silent
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
  Parts/Parts: 3 x 2000'
- General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Intertitle Language", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "U.S.A."}]
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Intertitle Language", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "English"}]
  Acquisition/Accession/Source_or_Donor: Blackhawk
  Tags: test
  linenum: 26
+2026.67.2003:
+ Acquisition/Accession: 2026.67
+ Name/Title: City Girl ORIGINAL 90 minute SILENT version!
+ Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Mur-Cit"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Series Item", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "F.W. Murnau"}]
+ Location/Location: r4 s6
+ Motion_Picture_Details/Production_Date/Date: 1930
+ Motion_Picture_Details/Cast: Charles Farrell
+ Motion_Picture_Details/Director: F. W. Murnau
+ Relationships/Related_Person_or_Organization/Notes: ["Original Distributor: F.W. Murnau Production", "Re-Issue Distributor: Fox Film Corporation"]
+ Relationships/Related_Places/Notes: Print Exhibition Country: United States
+ Motion_Picture_Details/Length: 2000'
+ Motion_Picture_Details/Sound/Film_Sound: Silent
+ Aspect_Ratio: 1.33:1
+ Motion_Picture_Details/Film_Gauge/Format: 16 mm.
+ Motion_Picture_Details/Color_Characteristics: b&w
+ Parts/Parts: 2000'
+ General_Notes: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "Intertitle Language", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "English"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": "General", "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": "1930"}]
+ Acquisition/Accession/Source_or_Donor: UNKNOWN
+ Tags: test
+ linenum: 27
