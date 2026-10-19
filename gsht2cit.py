@@ -282,18 +282,24 @@ for intsv in intsvlist:
     # in features data, special rules for handling column called: Filed by Director or Star "Silent" = filed by title
     if re.search(r'feature',intsv) or re.search(r'<feature>',outcolvals["Name/Title"]) and isfilled(outcolvals,"Other_Names_and_Numbers/Other_Numbers:Series_Item"):
       # if it has "dir(ector)" in parens, the field contains the director, but the director col is already filled, so ignore
-      if re.search(r'\(d',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
+      if re.search(r'\((d|super)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
+        print("FILEBY-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
         outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
       # if it contains "feature" or "silent", leave it for this weird "series item" field
       elif re.search(r'(?i)(feature|silent|master\s*fs)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
+        print("FILEBY-IGNORE: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (cast="+str(outcolvals["Motion_Picture_Details/Cast"])+"): "+outcolvals["Name/Title"])
         pass
       # anything else, we assume is the star. chop off hyphenated suffixes though. also prefix "35"
       else:
         starname = re.sub(r'^35\s*|©|(\s*\.\s*)?\(.*?\)|\.?\s*-.*$|CCF|\.\s*$','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"])
         starname = " ".join(starname.split())
-        #print("FOUNDSTAR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" -> "+starname)
-        addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
-        outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
+        if re.match(r'(?i)(f\W*w\W*murnau|fritz\s+lang(\sw)?|paul leni)',starname):
+          print("FILEBY-UNFLAGGED-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+          pass
+        else:
+          print("FILEBY-STAR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" -> "+starname+ " ; (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+          addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
+          outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
 
     # handling of MG object ID's
     # chop off leading MG prefix and any suffix to get numerical part
