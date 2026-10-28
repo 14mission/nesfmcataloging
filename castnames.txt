@@ -353,3 +353,4 @@ A. Edward Sutherland	# Sutherland, A. Edward (Albert Edward), 1897-1973; http://
 Abel Gance	# http://id.loc.gov/authorities/names/n82080740
 Abram Matveevich Room	Abram Room # Room, Abram Matveevich, 1894-1976; http://id.loc.gov/authorities/names/nr90025556
 Adolphe Menjou		# http://id.loc.gov/authorities/names/n86138591
+Alan Crosland		# Crosland, Alan, 1894-1936; http://id.loc.gov/authorities/names/n85151910
