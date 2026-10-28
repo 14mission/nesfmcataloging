@@ -351,4 +351,4 @@ Will Rogers		# Rogers, Will, 1879-1935; https://lccn.loc.gov/n79022274
 # adds from features
 A. Edward Sutherland	# Sutherland, A. Edward (Albert Edward), 1897-1973; http://id.loc.gov/authorities/names/n87911910
 Abel Gance	# http://id.loc.gov/authorities/names/n82080740
-Abram Room	# Room, Abram Matveevich, 1894-1976; http://id.loc.gov/authorities/names/nr90025556																				
+Abram Matveevich Room	Abram Room # Room, Abram Matveevich, 1894-1976; http://id.loc.gov/authorities/names/nr90025556
