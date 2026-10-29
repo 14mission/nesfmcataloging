@@ -554,4 +554,19 @@ Georg Reimers		# Reimers, Georg, 1860-1936 http://id.loc.gov/authorities/names/n
 Georg Wilhelm Pabst	G\W+W\W+Pabst # Pabst, G. W. (Georg Wilhelm), 1885-1967	; http://id.loc.gov/authorities/names/n82233228	
 George B. Seitz	George Seitz	# Seitz, George B., 1888-1944 ; nb Seitz, George B., 1915-2002 "Jr", TV director
 George Fawcett		# https://en.wikipedia.org/wiki/George_Fawcett
-
+George Loane Tucker		 # Tucker, George Loane, 1872-1921 n88034571
+George Melford		 # Melford, George, -1961 n93011141
+George O'Brien		 # O'Brien, George, 1899-1985 no2014006926
+George Terwilliger		 # Terwilliger, George, 1882-1970 n91042819
+George Walsh		 # Walsh, George, 1892-1981 no97008163
+#George Vaultier		 # Vaultier, George https://viaf.org/en/viaf/311646516
+Geraldine Farrar		 # Farrar, Geraldine, 1882-1967 n81090616
+Germaine Dermoz		 # Dermoz, Germaine, 1888-1966 nr2003034537
+Germaine Dulac		 # Dulac, Germaine, 1882-1942 n96018624
+Gertrud Arnold		 # Arnold, Gertrud, 1873-1931 no2004041739
+Géza von Bolváry		 # Bolváry, Géza von, 1897-1961	n85262669
+Gianna Terribilli-Gonzales		 # Terribili-Gonzales, Gianna n87914233
+Gilbert M. Anderson		 # Anderson, Gilbert M., 1880-1971 n85138300
+Giovanni Enrico Vidali		 # Vidali, Giovanni Enrico, 1869-1937 no2010085624
+Gladys Hulette		 # Hulette, Gladys n87914022
+Gladys Walton		 # Gladys Walton https://www.wikidata.org/wiki/Q5566471
