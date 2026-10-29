@@ -549,3 +549,9 @@ Fritz Lang		# Lang, Fritz, 1890-1976 ; http://id.loc.gov/authorities/names/n7904
 G. B. Samuelson		# G. B. Samuelson (1889-1947)	
 George C. Stoney		# Stoney, George C. ; http://id.loc.gov/authorities/names/n85305580
 Gary Cooper		# Cooper, Gary, 1901-1961 ; http://id.loc.gov/authorities/names/n79116412
+Gaylord Carter		# composer/accompanist ; https://www.wikidata.org/wiki/Q5528842
+Georg Reimers		# Reimers, Georg, 1860-1936 http://id.loc.gov/authorities/names/nr96032637
+Georg Wilhelm Pabst	G\W+W\W+Pabst # Pabst, G. W. (Georg Wilhelm), 1885-1967	; http://id.loc.gov/authorities/names/n82233228	
+George B. Seitz	George Seitz	# Seitz, George B., 1888-1944 ; nb Seitz, George B., 1915-2002 "Jr", TV director
+George Fawcett		# https://en.wikipedia.org/wiki/George_Fawcett
+
