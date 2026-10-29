@@ -163,6 +163,11 @@ for ln in cnh:
   for othercol in cols[1:]:
     if len(othercol.strip()) > 0:
       pat = re.sub(r'\(',r'(?:',othercol.strip())
+      try:
+        re.match(pat,"foo")
+      except Exception as e:
+        print("invalid regex in: "+ln)
+        raise e
       castnamecorrections[pat] = cols[0]
 cnh.close()
 print("loaded "+str(len(castnames.keys()))+" names")
