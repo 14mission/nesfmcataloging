@@ -170,7 +170,7 @@ Henry Lehrman		# Lehrman, Henry, 1886-1946; https://lccn.loc.gov/n85138207
 Herbert Rice		# https://www.wikidata.org/wiki/Q19629657
 Herman Raymaker	herman\W*c\W*raymaker	# Raymaker, Herman, 1893-1944; https://lccn.loc.gov/n87896345
 Hilliard Karr	hilli?ard karr	# Karr, Hilliard; http://viaf.org/viaf/107074547
-Hobart Bosworth	#nk
+Hobart Bosworth	hobar?t\sbosworth	# nk
 Hugh Fay		# Fay, Hugh, 1882-1926; https://lccn.loc.gov/no2012025106
 Hughey Mack	Hughie Mack	# Mack, Hughey, 1884-1927; https://lccn.loc.gov/n91101197
 Ivor Goldsmid Samuel Montagu	Ivor Montagu	# Montagu, Ivor Goldsmid Samuel, 1904-1984; https://lccn.loc.gov/n79021161
@@ -554,19 +554,61 @@ Georg Reimers		# Reimers, Georg, 1860-1936 http://id.loc.gov/authorities/names/n
 Georg Wilhelm Pabst	G\W+W\W+Pabst # Pabst, G. W. (Georg Wilhelm), 1885-1967	; http://id.loc.gov/authorities/names/n82233228	
 George B. Seitz	George Seitz	# Seitz, George B., 1888-1944 ; nb Seitz, George B., 1915-2002 "Jr", TV director
 George Fawcett		# https://en.wikipedia.org/wiki/George_Fawcett
-George Loane Tucker		 # Tucker, George Loane, 1872-1921 n88034571
-George Melford		 # Melford, George, -1961 n93011141
-George O'Brien		 # O'Brien, George, 1899-1985 no2014006926
-George Terwilliger		 # Terwilliger, George, 1882-1970 n91042819
-George Walsh		 # Walsh, George, 1892-1981 no97008163
-#George Vaultier		 # Vaultier, George https://viaf.org/en/viaf/311646516
-Geraldine Farrar		 # Farrar, Geraldine, 1882-1967 n81090616
-Germaine Dermoz		 # Dermoz, Germaine, 1888-1966 nr2003034537
-Germaine Dulac		 # Dulac, Germaine, 1882-1942 n96018624
-Gertrud Arnold		 # Arnold, Gertrud, 1873-1931 no2004041739
-Géza von Bolváry		 # Bolváry, Géza von, 1897-1961	n85262669
-Gianna Terribilli-Gonzales		 # Terribili-Gonzales, Gianna n87914233
-Gilbert M. Anderson		 # Anderson, Gilbert M., 1880-1971 n85138300
-Giovanni Enrico Vidali		 # Vidali, Giovanni Enrico, 1869-1937 no2010085624
-Gladys Hulette		 # Hulette, Gladys n87914022
-Gladys Walton		 # Gladys Walton https://www.wikidata.org/wiki/Q5566471
+George Loane Tucker		# Tucker, George Loane, 1872-1921 n88034571
+George Melford		# Melford, George, -1961 n93011141
+George O'Brien		# O'Brien, George, 1899-1985 no2014006926
+George Terwilliger		# Terwilliger, George, 1882-1970 n91042819
+George Walsh		# Walsh, George, 1892-1981 no97008163
+#George Vaultier		# Vaultier, George https://viaf.org/en/viaf/311646516
+Geraldine Farrar		# Farrar, Geraldine, 1882-1967 n81090616
+Germaine Dermoz		# Dermoz, Germaine, 1888-1966 nr2003034537
+Germaine Dulac		# Dulac, Germaine, 1882-1942 n96018624
+Gertrud Arnold		# Arnold, Gertrud, 1873-1931 no2004041739
+Géza von Bolváry		# Bolváry, Géza von, 1897-1961	n85262669
+Gianna Terribilli-Gonzales		# Terribili-Gonzales, Gianna n87914233
+Gilbert M. Anderson		# Anderson, Gilbert M., 1880-1971 n85138300
+Giovanni Enrico Vidali		# Vidali, Giovanni Enrico, 1869-1937 no2010085624
+Gladys Hulette		# Hulette, Gladys n87914022
+Gladys Walton		# Gladys Walton https://www.wikidata.org/wiki/Q5566471
+Gösta Ekman	g[öo]sta\sekman	# Ekman, Gösta, 1890-1938; https://en.wikipedia.org/wiki/G%C3%B6sta_Ekman_(senior)
+Gregory La Cava		# La Cava, Gregory, 1892-1952; http://id.loc.gov/authorities/names/n85262661
+Greta Garbo		# Garbo, Greta, 1905-1990; http://id.loc.gov/authorities/names/n79040098
+Gunnar Sommerfeldt	# Sommerfeldt, Gunnar 1890-1947	
+Gustav Fröhlich		# Fröhlich, Gustav; http://id.loc.gov/authorities/names/n84208492
+H. B. Warner	h\W+b\W+warner	# Warner, H. B. (Henry Byron), 1876-1958; http://id.loc.gov/authorities/names/n85376597
+Hanns Schwarz		# Schwarz, Hanns, 1888-1945; http://id.loc.gov/authorities/names/no2003077152
+Harley Knoles		# Knoles, Harley, 1880-1936; http://id.loc.gov/authorities/names/n85183845
+Harrison Ford 1984-1957	Harrison Ford	# Ford, Harrison, 1894-1957; http://id.loc.gov/authorities/names/n88226370
+H. B. Parkinson	Harry B. Parkinson	# Parkinson, H. B. (Harry B.), 1884-1970; http://id.loc.gov/authorities/names/nr2007007954
+Harry Beaumont		# Beaumont, Harry, 1888-1966; http://id.loc.gov/authorities/names/n85138161
+Harry D'Abbadie D'Arrast		# D'Arrast, Harry D'Abbadie n92072008  http://id.loc.gov/authorities/names/n92072008
+Harry Garson		# Garson, Harry 1882-1938  https://viaf.org/en/viaf/66728419  used Viaf as alt source
+Harry Henderson		# Henderson, Harry http://id.loc.gov/authorities/names/n93012447
+HArry Houdini		# Houdini, Harry, 1874-1926 http://id.loc.gov/authorities/names/n79096862
+Harry O. Hoyt		# Hoyt, Harry O., 1880-1961 http://id.loc.gov/authorities/names/n85173985
+Harry Todd		# Todd, Harry, 1865-1935 http://id.loc.gov/authorities/names/n87914302
+Helen Foster		# Foster, Helen, 1906-1962 http://id.loc.gov/authorities/names/no91006805
+Helen Gardner		# Gardner, Helen, 1884-1968 http://id.loc.gov/authorities/names/no2018137611
+Helen Jerome Eddy		# Eddy, Helen Jerome, 1897-1990 http://id.loc.gov/authorities/names/n85376759
+Henny Porten		# Porten, Henny, 1890-1960  http://id.loc.gov/authorities/names/n86112892
+Henri Desfontaines		# Desfontaines, Henri, 1876-1931 http://id.loc.gov/authorities/names/n85138429
+Henry B. Walthall		# Walthall, Henry B. (Henry Brazeale), 1878-1936 http://id.loc.gov/authorities/names/n85185122
+Henry King		# King, Henry, 1886-1982 http://id.loc.gov/authorities/names/n85372825
+Henry MacRae		# MacRae, Henry, 1876-1944 http://id.loc.gov/authorities/names/n89129702
+Herbert Blaché		# Blaché, Herbert, 1882-1953 http://id.loc.gov/authorities/names/no00088449
+Herbert Brenon		# Brenon, Herbert, 1880-1958 http://id.loc.gov/authorities/names/n88093958
+Hilda Borgström		# Borgström, Hilda, 1871-1953 http://id.loc.gov/authorities/names/no2011146707
+Hoot Gibson		# Gibson, Hoot, 1892-1962 http://id.loc.gov/authorities/names/n90641292
+Hope Hampton		# Hampton, Hope http://id.loc.gov/authorities/names/n2003125405
+House Peters		# Peters, House, 1880-1967 http://id.loc.gov/authorities/names/n88226230
+Howard Bretherton		# Bretherton, Howard, 1890-1969 http://id.loc.gov/authorities/names/n88051335
+Howard Hickman		# Hickman, Howard, 1880-1949 http://id.loc.gov/authorities/names/n85151831
+Howard Higgin		# Higgin, Howard, 1893-1938 http://id.loc.gov/authorities/names/no90008919
+Mitchell Howard	Howard M. Mitchell	# Mitchell, Howard, 1883-1958 http://id.loc.gov/authorities/names/n2014036981
+Ira M. Lowry		# Ira M. Lowry  https://www.wikidata.org/wiki/Q114899327  used wikidata as alt source
+Irvin Willat		# Willat, Irvin, 1890-1976 http://id.loc.gov/authorities/names/nr2003000692
+Irving Cummings		# Cummings, Irving, 1888-1959 http://id.loc.gov/authorities/names/n87914295
+Isabel Jeans		# Jeans, Isabel, 1891-1985 http://id.loc.gov/authorities/names/n88100651
+Ivan Ilʹich Mozzhukhin	Ivan Mozzhukhin	# Mozzhukhin, Ivan Ilʹich, 1889-1939 http://id.loc.gov/authorities/names/nr97045597
+James B. Brown	j\W+b\W+Brown	# James B. Brown  https://www.wikidata.org/wiki/Q121143779  used wikidata as alt source
+J. B. Warner	j\W+b\W+warner	# Warner, J. B. 1895-1924  http://viaf.org/viaf/103249905  used VIAF as alt source
