@@ -463,7 +463,7 @@ for intsv in intsvlist:
             outcolvals["General_Notes:General"] = (actor+aswho).strip()
         # apply name normalization rules form castnames file
         for pat in castnamecorrections:
-          outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*('+pat+r')\s*($|,)',r'\1'+castnamecorrections[pat]+r'\3',outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)(^|,|\|)\s*('+pat+r')\s*(?=$|,|\|)',r'\1'+castnamecorrections[pat],outcolvals[namefield])
 
         # check for problematic names 
         #for name in outcolvals[namefield].split(","):
