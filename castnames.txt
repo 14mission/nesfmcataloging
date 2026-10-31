@@ -612,3 +612,6 @@ Isabel Jeans		# Jeans, Isabel, 1891-1985 http://id.loc.gov/authorities/names/n88
 Ivan Ilʹich Mozzhukhin	Ivan Mozzhukhin	# Mozzhukhin, Ivan Ilʹich, 1889-1939 http://id.loc.gov/authorities/names/nr97045597
 James B. Brown	j\W+b\W+Brown	# James B. Brown  https://www.wikidata.org/wiki/Q121143779  used wikidata as alt source
 J. B. Warner	j\W+b\W+warner	# Warner, J. B. 1895-1924  http://viaf.org/viaf/103249905  used VIAF as alt source
+Sydney Franklin 1870-1931       # not in our listings: Franklin, Sydney, 1870-1931;  http://id.loc.gov/authorities/names/no2011163553
+Sidney A. Franklin 1893-1972	Sidney (a\W+)?Franklin # Franklin, Sidney A., 1893-1972;  http://id.loc.gov/authorities/names/n85376764
+ZaSu Pitts		# ZaSu Pitts, 1898-1963; http://id.loc.gov/authorities/names/n87860264
