@@ -137,7 +137,7 @@ George Jeske		# Jeske, George, 1891-1951; https://lccn.loc.gov/no89014166
 George Nichols		# Nichols, George, 1864-1927; https://lccn.loc.gov/no2002084231
 Georges Monca		# Monca, Georges 1867-1939; http://viaf.org/viaf/1816173973176223810005
 Georgie Chapman	#tbd
-Gilbert M. Anderson	g\W+(m\W+|broncho\W+billy\W+)*anderson	# Anderson, Gilbert M., 1880-1971; https://lccn.loc.gov/n85138300
+Gilbert M. Anderson	g(ilbert)?\W+(m\W+|broncho\W+billy\W+)*anderson	# Anderson, Gilbert M., 1880-1971; https://lccn.loc.gov/n85138300
 Gilbert W. Pratt	(gilbert|gil+) pratt	#is initial needed?; Pratt, Gilbert W.; https://lccn.loc.gov/no89010443
 Giovanni Pastrone	# unmapped; Pastrone, Giovanni; https://lccn.loc.gov/n50050647
 Glen Cavender	gl[ea]n+\W+cavender	# Cavender, Glen, 1883-1962; https://lccn.loc.gov/n93076766
@@ -614,8 +614,7 @@ James B. Brown	j\W+b\W+Brown	# James B. Brown  https://www.wikidata.org/wiki/Q12
 J. B. Warner	j\W+b\W+warner	# Warner, J. B. 1895-1924  http://viaf.org/viaf/103249905  used VIAF as alt source
 Sydney Franklin 1870-1931       # not in our listings: Franklin, Sydney, 1870-1931;  http://id.loc.gov/authorities/names/no2011163553
 Sidney A. Franklin 1893-1972	Sidney (a\W+)?Franklin # Franklin, Sidney A., 1893-1972;  http://id.loc.gov/authorities/names/n85376764
-ZaSu Pitts		# ZaSu Pitts, 1898-1963; http://id.loc.gov/authorities/names/n87860264
-
+ZaSu Pitts	zasu pitts	# ZaSu Pitts, 1898-1963; http://id.loc.gov/authorities/names/n87860264
 Natalie Ross	Nat Ross	# Natalie Ross; http://id.loc.gov/authorities/names/n2010000405
 Neva Gerber		# Neva Gerber, 1891-1974 no2019124863  http://id.loc.gov/authorities/names/no2019124863
 Nigel De Brulier		# Nigel De Brulier, 1878-1948 no90019258  http://id.loc.gov/authorities/names/no90019258
