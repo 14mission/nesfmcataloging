@@ -465,7 +465,7 @@
  Other_Names_and_Numbers/Other_Numbers: [{"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Shelving", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "Mur-Cit"}, {"http://www.catalogit.me/rdf/ontologies/core/common#hasType": "Series Item", "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": "F.W. Murnau"}]
  Location/Location: r4 s6
  Motion_Picture_Details/Production_Date/Date: 1930
- Motion_Picture_Details/Cast: Charles Farrell
+ Motion_Picture_Details/Cast: Charles Farrell, 1900-1990
  Motion_Picture_Details/Director: F. W. Murnau
  Relationships/Related_Person_or_Organization/Notes: ["Original Distributor: F.W. Murnau Production", "Re-Issue Distributor: Fox Film Corporation"]
  Relationships/Related_Places/Notes: Print Exhibition Country: United States
