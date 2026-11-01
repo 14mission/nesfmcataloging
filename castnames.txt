@@ -657,7 +657,7 @@ Reginald Denny		# Reginald Denny, 1891-1967; http://id.loc.gov/authorities/names
 Renaud Hoffman		# Renaud Hoffman, 1895-1952 no90014894  http://id.loc.gov/authorities/names/no90014894
 René Clair		# René Clair, 1898-1981; http://id.loc.gov/authorities/names/n79139714
 Rex (Horse)	Rex the Wonder Horse	# Rex  https://www.wikidata.org/wiki/Q7319120  used wikidata as alternative source
-Rex Ingram, 1892-1950	Rex Ingram	# Ingram, Rex, 1892-1950; http://id.loc.gov/authorities/names/n80089283
+Rex Ingram 1892-1950	Rex Ingram	# Ingram, Rex, 1892-1950; http://id.loc.gov/authorities/names/n80089283
 Richard Barthelmess		# Richard Barthelmess, 1895-1963; http://id.loc.gov/authorities/names/n86138431
 Richard Dix		# Richard Dix, 1893-1949; http://id.loc.gov/authorities/names/n86138399
 Richard Talmadge		# Richard Talmadge no96012132  http://id.loc.gov/authorities/names/no96012132
