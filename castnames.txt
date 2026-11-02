@@ -79,6 +79,7 @@ Daphne Pollard		# Pollard, Daphne, 1891-1978; https://lccn.loc.gov/no89001236
 David Kirkland		# Kirkland, David, 1878-1964; https://lccn.loc.gov/n2018014265
 Dell Henderson		# Henderson, Dell, 1877-1956; https://lccn.loc.gov/n85151845
 Del Lord		# Lord, Del, 1894-1970; https://lccn.loc.gov/n85378950
+Diana Serra Cary		# aka Baby Peggy; https://id.loc.gov/authorities/names/n93118649.html
 Dick Lee	#tbd
 Dippy-Doo-Dads (Animals)	(the )?dippy\W*doo\W*dads
 Dorothy Devore		# Devore, Dorothy, 1899-1976; https://lccn.loc.gov/nr98025570
@@ -151,7 +152,7 @@ Hal Roach's Rascals (Group)	Our Gang|Little Rascals|Hal Roach's Rascals
 Hal Yates		# Yates, Hal; https://lccn.loc.gov/no2002037689
 Hampton Del Ruth		# Del Ruth, Hampton; https://lccn.loc.gov/no91011434
 Hank Mann	# cf hair and moustache in box in office; Mann, Hank, 1887-1971; https://lccn.loc.gov/n85342797
-Hannah Washington		# ; https://www.wikidata.org/wiki/Q28374237
+Hannah Washington		# aka Oatmeal; https://www.wikidata.org/wiki/Q28374237
 Harold Beaudine	#nk; tbd in eb's list
 Harold Lloyd		# Lloyd, Harold, 1893-1971; https://lccn.loc.gov/n50050609
 Harry C. Mathews	harry\W+matthews	#tbd
@@ -208,6 +209,7 @@ Kathryn Reed Altman	Kathryn Reed	# Altman, Kathryn Reed; https://lccn.loc.gov/no
 Kewpie Morgan	kewpie mor\.	# Morgan, Kewpie; https://lccn.loc.gov/n96094011
 Kewpie Ross		# Ross, Kewpie; http://viaf.org/viaf/107074568
 Keystone Kops (Group)	(the )?keystone [ck]ops
+King Vidor		# Vidor, King, 1894-1982; http://id.loc.gov/authorities/names/n50019663
 Lance Nicholson	#tbd
 Larry Semon		# Semon, Larry, 1889-1928; https://lccn.loc.gov/n88063287
 Larry Trimble	(larry|la[wu]rence) trimble	# Trimble, Larry, 1885-1954; https://lccn.loc.gov/n85138399
@@ -225,6 +227,8 @@ Lloyd Bacon		# Bacon, Lloyd, 1890-1955; https://lccn.loc.gov/n86138541
 Lloyd French		# French, Lloyd; https://lccn.loc.gov/no91026386
 Lloyd Hamilton	l\W+hamilton	# Hamilton, Lloyd; https://lccn.loc.gov/n96018832
 Lola Maxam	Louella Maxam	# Maxam, Lola, 1896-1970; https://lccn.loc.gov/n92039287
+Lon Chaney		# Chaney, Lon, 1883-1930
+Lon Chaney Jr.		# Chaney, Lon, Jr., 1906-1973
 Louise Fazenda	(louis\W+|,\W*)fazenda	fazenda	# Fazenda, Louise, 1895-1962; https://lccn.loc.gov/n86075609
 Louis J. Gasnier	louis\W*gasnier	# Gasnier, Louis J., 1875-1963; https://lccn.loc.gov/n87911703
 Louis Moret	#tbd
@@ -717,6 +721,7 @@ Paul Powell		# Paul Powell, 1881-1944; http://id.loc.gov/authorities/names/n8537
 Paul Sloane		# Sloane, Paul, 1893-1963; http://id.loc.gov/authorities/names/n85151938
 Paul Wegener		# Paul Wegener, 1874-1948; http://id.loc.gov/authorities/names/n81003588
 Philip Hubbard		# Philip Hubbard, 1873-1931 no2019140745  http://id.loc.gov/authorities/names/no2019140745
+Mary Pickford		# Pickford, Mary, 1892-1979; http://id.loc.gov/authorities/names/n50019725
 Piel Jutzi	Phil Jutzi	# Piel Jutzi, 1896-1946 no99063423  http://id.loc.gov/authorities/names/no99063423
 Pierre Couderc		# Pierre Couderc, 1896-1966; http://id.loc.gov/authorities/names/n2012023276
 Pierre Magnier		# Pierre Magnier no99065565  http://id.loc.gov/authorities/names/no99065565

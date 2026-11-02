@@ -159,6 +159,8 @@ for ln in cnh:
   ln = re.sub(r'\s*#.*$','',ln)
   if len(ln) == 0: continue
   cols = ln.split("\t")
+  if re.match(r',',cols[0]):
+    raise Exception("comma in name: "+cols[0])
   castnames[cols[0].strip()] = True
   for othercol in cols[1:]:
     if len(othercol.strip()) > 0:
@@ -171,6 +173,20 @@ for ln in cnh:
       castnamecorrections[pat] = cols[0]
 cnh.close()
 print("loaded "+str(len(castnames.keys()))+" names")
+
+# load cast aliases
+partaliases = {}
+pafn = "castnames.partalias.txt"
+print(f"get cast name/part aliases from {pafn}")
+pah = open(pafn)
+for ln in pah:
+  ln = ln.strip()
+  ln = re.sub(r'\s*#.*$','',ln)
+  if len(ln) == 0: continue
+  knownas, realname = [ln.strip() for ln in ln.split("\t")]
+  partaliases[knownas] = realname
+pah.close()
+print("loaded "+str(len(partaliases.keys()))+" aliases")
 
 # process all input files specified on the command line
 for intsv in intsvlist:
@@ -452,6 +468,9 @@ for intsv in intsvlist:
           outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
         # change ampersand to comma; also slash, pipe, and w/
         outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/',outcolvals[namefield]))
+        # find aliases, for now replace with ACTORNAME as PARTNAME
+        for aliasname in partaliases:
+          outcolvals[namefield] = re.sub(r'(?i)(^|,|\|)\s*('+aliasname+r')\s*(?=$|,|\|)',r'\1'+partaliases[aliasname]+" as "+aliasname,outcolvals[namefield])
         # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
         while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
           uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
@@ -464,7 +483,6 @@ for intsv in intsvlist:
         # apply name normalization rules form castnames file
         for pat in castnamecorrections:
           outcolvals[namefield] = re.sub(r'(?i)(^|,|\|)\s*('+pat+r')\s*(?=$|,|\|)',r'\1'+castnamecorrections[pat],outcolvals[namefield])
-
         # check for problematic names 
         #for name in outcolvals[namefield].split(","):
         #  if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names

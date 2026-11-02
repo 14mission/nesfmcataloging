@@ -1,0 +1,5 @@
+#these folks are often listed under their part names
+#we will handle it as though the entry was "NAME as PART"
+#known as	real name
+Baby Peggy	Diana Serra Cary
+Oatmeal	Hannah Washington
