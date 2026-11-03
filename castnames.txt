@@ -283,6 +283,7 @@ Otto Messmer	#nk; Messmer, Otto, 1892-1983; https://lccn.loc.gov/n81086385
 Paddy McGuire		# McGuire, Paddy; http://viaf.org/viaf/3291153411831741700004
 Pat Sullivan	#nk; Sullivan, Pat, 1885-1933; https://lccn.loc.gov/n85031301
 Pauline Curley		# Curley, Pauline, 1903-2000; https://lccn.loc.gov/no2019124687
+Peggy O'Day		# https://en.wikipedia.org/wiki/Peggy_O%27Day; https://www.findagrave.com/memorial/6079690/peggy-o'day
 Peter Lang		# Lang, Peter, 1867-1932; https://lccn.loc.gov/n85138125
 Pete the Pup (Dog)	pete the pup	# ; https://www.wikidata.org/wiki/Q7172369
 Phil Whitman		# Whitman, Phil; https://lccn.loc.gov/no2011131350
@@ -323,6 +324,7 @@ Stephen Roberts		# Roberts, Stephen, 1895-1936; https://lccn.loc.gov/no89001235
 Stuart Erwin	Stu Erwin	# Erwin, Stuart, 1903-1967; https://lccn.loc.gov/n86105735
 Sunkist Bathing Beauties (Group)	(the )?sunkist bathing beauties|(mack )?sen+et+'s bathing beauties
 Syd Chaplin		# Chaplin, Syd, 1885-1965 ; https://lccn.loc.gov/n85138483
+Ta'avale		# https://en.wikipedia.org/wiki/Moana_(1926_film); Samoan actress; single name is probably correct, and we're unlikely to find more info
 Thelma Todd	t\W+todd	# Todd, Thelma, 1905-1935; https://lccn.loc.gov/n88159021
 Thomas La Rose	#tbd
 Tom Buckingham		# Buckingham, Tom, 1895-1934; https://lccn.loc.gov/no89009646
@@ -639,22 +641,34 @@ Jacques Feyder		# Feyder, Jacques
 Jacques Jaccard		# Jaccard, Jacques, 1886-1960  
 James B. Brown	j\W+b\W+Brown	# James B. Brown  https://www.wikidata.org/wiki/Q121143779  used wikidata as alt source
 James Cruze		# Cruze, James, 1884-1942  
+James Gleason	Jimmy Gleason	# http://id.loc.gov/authorities/names/n78073873; but nb, birth year probably 1882
 James L. Young	James Young	# Young, James L., 1878-1948 n90715420 
 James P. Hogan		# Hogan, James P., 1890-1943  
+Jean Gabin		# Gabin, Jean, 1904-1976; http://id.loc.gov/authorities/names/n83142897; https://en.wikipedia.org/wiki/Jean_Gabin
 Jane Gail		# Gail, Jane, 1890-1963  
 Jane Grey		# Grey, Jane, 1883-1944  
 Jane Novak		# Novak, Jane|Novak, Jane, 1896-1990|Novak, Janet M., 1965- n88276567 
 Jane R. Mercer	Jane Mercer	# Mercer, Jane R.|Mercer, Janet n85386712 
-J. B. Warner	j\W+b\W+warner	# Warner, J. B. 1895-1924  http://viaf.org/viaf/103249905  used VIAF as alt source
+Janet Gaynor		# Gaynor, Janet 1906-1984; http://id.loc.gov/authorities/names/n80016844
+J. B. Warner	j\W+b\W+warner	# Warner, J. B. 1895-1924; http://viaf.org/viaf/103249905  used VIAF as alt source
 Jeanne Helbling		# Helbling, Jeanne, 1903-1985  http://viaf.org/viaf/56873617
+Jean Debucourt		# Debucourt, Jean, 1894-1958; http://id.loc.gov/authorities/names/no97077076
+Jean Epstein		# Epstein, Jean, 1897-1953; http://id.loc.gov/authorities/names/n99030067
+Jean Renoir		# Renoir, Jean, 1894-1979; http://id.loc.gov/authorities/names/n79018203
 Jean Tedesco	Jean Tédesco	# Tedesco, Jean 1895-1958  http://viaf.org/viaf/7590648
+Jean Vigo		# Vigo, Jean, 1905-1934; http://id.loc.gov/authorities/names/n80014990
 Jerome V. Storm	Jerome Storm	# Storm, Jerome V. 1890-1958  http://viaf.org/viaf/312567910
+Jewel Carmen		# Carmen, Jewel, 1897-1984; http://id.loc.gov/authorities/names/n85183881
 J. Farrell MacDonald		# MacDonald, J. Farrell, 1875-1952  
 J. Frank Burke		# Burke, J. Frank (John Franklin), 1867-1918  
 J. Frank Glendon		# Glendon, J. Frank (Jonathan Frank), 1885-1937  
 Jim Thorpe		# Thorpe, Jim, 1887-1953 n79117906 
+Joan Crawford		# Crawford, Joan, 1908-1977; http://id.loc.gov/authorities/names/n80008750
+Johannes Meyer 1884-1972	Johannes Meyer	# 1884-1972; Danish actor; https://en.wikipedia.org/wiki/Johannes_Meyer_(actor) (in our collection)
+Johannes Meyer 1888-1976		# German screenwriter/director; https://en.wikipedia.org/wiki/Johannes_Meyer_(director); (not in our collection)
 John Blystone	John G. Blystone	# Blystone, John, 1892-1938 n85378894 
 John B. O'Brien		# O'Brien, John B. n88034813 
+John Ford		# https://en.wikipedia.org/wiki/John_Ford
 John Francis Dillon		# Dillon, John Francis no91009580 
 J. Warren Kerrigan 	J. Warren Kerrigan	# Kerrigan, J. Warren (Jack Warren), 1879-1947  
 Knute Erickson		# Knute Erickson  https://www.wikidata.org/wiki/Q124814590
@@ -679,6 +693,7 @@ Max Fleischer		# Max Fleischer, 1883-1972 n85248141
 Maxine Audley		# Maxine Audley n87922189 
 Max Schreck		# Max Schreck, 1879-1936 no99027039 
 May McAvoy		# May McAvoy, 1899-1984 n87934419 
+Merian C. Cooper		# 1893-1973; https://www.wikidata.org/wiki/Q446427
 Michael Curtiz		# Michael Curtiz, 1886-1962 n82005652 
 Mikhail Abramovich Kaufman	Mikhail Kaufman	# Mikhail Abramovich Kaufman, 1897-1980 no98109997 
 Mikhail Kalatozov		# Mikhail Kalatozov, 1903-1973 no98076769 
