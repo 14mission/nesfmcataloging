@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-import sys, re
+import sys, re, json
+from loc_authorities.api import LocAPI
+
 
 #usage: tsv file exported from spreadsheets as single arg, stdin names to investigate
 if len(sys.argv) != 2:
@@ -44,6 +46,34 @@ if True:
            if name not in name2filmtitles:
              name2filmtitles[name] = []
            name2filmtitles[name].append(title)
-for name in sorted(name2filmtitles):
-  print(name+": "+",".join(name2filmtitles[name]))
+#for name in sorted(name2filmtitles):
+#  print(name+": "+",".join(name2filmtitles[name]))
 
+loc = LocAPI()
+
+for ln in sys.stdin:
+  ln = ln.strip()
+  cols = ln.split("\t")
+  name = cols[0]
+
+  # look up in loc
+  revname = re.sub(r'^(.+?)\s+(\w+)\s*$',r'\2, \1',name)
+  suggestionlist = loc.suggest(revname,"names")
+
+  # find likely film-related people
+  locfilmmatches = []
+  for sugg in suggestionlist:
+    label = sugg.label
+    link = sugg.uri
+    jsonstr = json.dumps(vars(sugg))
+    if re.search(r'(?i)(motion.picture|actor|actress|director|film)',jsonstr):
+      #print(jsonstr)
+      suggdata = { "label": sugg.label, "uri": sugg.uri }
+      datematch = re.search(r'\b((?:18|19)\d\d-19\d\d)\b', suggdata["label"])
+      suggdata["dates"] = (datematch.group(1) if datematch else None)
+      locfilmmatches.append(suggdata)
+
+  print(name+"\n"
+    + " ourfilms="+(",".join(name2filmtitles[name] if name in name2filmtitles else "None"))+"\n"
+    + " locmatches="+(",".join([str(m) for m in locfilmmatches]) if len(locfilmmatches) else "None")
+  )
