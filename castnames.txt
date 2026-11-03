@@ -670,10 +670,11 @@ John Blystone	John G. Blystone	# Blystone, John, 1892-1938 n85378894
 John B. O'Brien		# O'Brien, John B. n88034813 
 John Ford		# https://en.wikipedia.org/wiki/John_Ford
 John Francis Dillon		# Dillon, John Francis no91009580 
+Julian West		# West, Julian, 1904-1981; https://en.wikipedia.org/wiki/Nicolas_de_Gunzburg; http://id.loc.gov/authorities/names/no2007055086
 J. Warren Kerrigan 	J. Warren Kerrigan	# Kerrigan, J. Warren (Jack Warren), 1879-1947  
 Knute Erickson		# Knute Erickson  https://www.wikidata.org/wiki/Q124814590
 Lawrence B. McGill		# McGill, Lawrence B.  http://viaf.org/viaf/52148933617654301715
-Leopold Jessner		# Jessner, Leopold, 1878-1945 nr97034730 
+Leander De Cordova	l(eander)\W+de\s*cordova	# De Cordova, Leander 1887-1969 http://id.loc.gov/authorities/names/no2014024961
 Leopold Jessner		# Jessner, Leopold, 1878-1945 nr97034730 
 Lillian Gish	Lil+ian Gish	# Gish, Lillian, 1893-1993 n50033290 
 Louis Bennison		# Louis Bennison  https://www.wikidata.org/wiki/Q28751359
