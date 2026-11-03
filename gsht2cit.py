@@ -610,7 +610,7 @@ for intsv in intsvlist:
       # various series names? prefix to title, with slash
       if re.search(r'(?i)(our gang|little rascals|hal roach\'s rascals)', parenexp):
         outcolvals['Name/Title'] = "Our Gang / "+outcolvals['Name/Title']
-      elif re.match(r'(?i)(ma?cdougal+ (kids|alley))', parenexp):
+      elif re.search(r'(?i)(ma?cdougal+ (kids|alley))', parenexp):
         outcolvals['Name/Title'] = "McDougall Alley Gang / "+outcolvals['Name/Title']
       # anything else is a note
       else:
