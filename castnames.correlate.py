@@ -12,6 +12,7 @@ print(f"get name/film mappings from {filmtsvfn}")
 filmtsvh = open(filmtsvfn)
 namecolnums = []
 titlecolnum = None
+maxcolneeded = 0
 for ln in filmtsvh:
   ln = ln.strip()
   cols = ln.split("\t")
@@ -21,12 +22,13 @@ for ln in filmtsvh:
       if re.search(r'(?i)(filed.*dir.*star|writer|director|stars|cast)',colname):
         print(f"namecol: {colname}")
         namecolnums.append(colnum)
+        if colnum >= ma
       elif re.search(r'(?i)(^title)',colname):
         print(f"titlecol: {colname}")
         titlecolnum = colnum
     if titlecolnum == None: raise Exception("no title col found")
     if len(namecolnums) < 2: raise Exception("too few name cols")
-  elif len(cols)
+  elif len(cols) >= maxcolneeded:
     for colnum in namecolnums:
       for name in cols[colnum].split(","):
         name = name.strip()
