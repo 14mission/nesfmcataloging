@@ -174,20 +174,6 @@ for ln in cnh:
 cnh.close()
 print("loaded "+str(len(castnames.keys()))+" names")
 
-# load cast aliases
-partaliases = {}
-pafn = "castnames.partalias.txt"
-print(f"get cast name/part aliases from {pafn}")
-pah = open(pafn)
-for ln in pah:
-  ln = ln.strip()
-  ln = re.sub(r'\s*#.*$','',ln)
-  if len(ln) == 0: continue
-  knownas, realname = [ln.strip() for ln in ln.split("\t")]
-  partaliases[knownas] = realname
-pah.close()
-print("loaded "+str(len(partaliases.keys()))+" aliases")
-
 # process all input files specified on the command line
 for intsv in intsvlist:
 
@@ -468,9 +454,6 @@ for intsv in intsvlist:
           outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
         # change ampersand to comma; also slash, pipe, and w/
         outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/',outcolvals[namefield]))
-        # find aliases, for now replace with ACTORNAME as PARTNAME
-        for aliasname in partaliases:
-          outcolvals[namefield] = re.sub(r'(?i)(^|,|\|)\s*('+aliasname+r')\s*(?=$|,|\|)',r'\1'+partaliases[aliasname]+" as "+aliasname,outcolvals[namefield])
         # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
         while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
           uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
