@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import sys, re, json
 from loc_authorities.api import LocAPI
-
+import pywikibot
+import wikipediaapi
 
 #usage: tsv file exported from spreadsheets as single arg, stdin names to investigate
 if len(sys.argv) != 2:
@@ -17,12 +18,11 @@ maxcolneeded = 0
 if True:
  filmtsvh = open(filmtsvfn)
  for ln in filmtsvh:
-   ln = ln.strip()
    cols = ln.split("\t")
    if titlecolnum == None:
      for colnum, colname in enumerate(cols):
        #print(f"col {colname}")
-       if re.search(r'(?i)(filed.*dir.*star|writer|director|stars|cast)',colname):
+       if re.search(r'(?i)(filed.*dir.*star|writer|director|^star|cast)',colname):
          print(f"namecol: {colname}")
          namecolnums.append(colnum)
          if colnum >= maxcolneeded:
@@ -42,14 +42,27 @@ if True:
      title = " ".join(title.split())
      for colnum in namecolnums:
        for name in cols[colnum].split(","):
+         name = " ".join(name.split())
          if len(name) > 0:
            if name not in name2filmtitles:
              name2filmtitles[name] = []
            name2filmtitles[name].append(title)
+         #print(f"map: {name} -> "+cols[titlecolnum])
+#print("mappings:")
 #for name in sorted(name2filmtitles):
 #  print(name+": "+",".join(name2filmtitles[name]))
 
+# set up LOC interface
 loc = LocAPI()
+
+# and wikidata interface
+wikidata = pywikibot.Site("en","wikipedia")
+
+# wikipedia
+wikip = wikipediaapi.Wikipedia(
+  language="en",
+  user_agent="Niles Essanay Silent Film Museum",
+)
 
 for ln in sys.stdin:
   ln = ln.strip()
@@ -60,7 +73,7 @@ for ln in sys.stdin:
   revname = re.sub(r'^(.+?)\s+(\w+)\s*$',r'\2, \1',name)
   suggestionlist = loc.suggest(revname,"names")
 
-  # find likely film-related people
+  # find likely film-related people in loc
   locfilmmatches = []
   for sugg in suggestionlist:
     label = sugg.label
@@ -73,7 +86,18 @@ for ln in sys.stdin:
       suggdata["dates"] = (datematch.group(1) if datematch else None)
       locfilmmatches.append(suggdata)
 
+  # and wikidata
+  wikidpage = pywikibot.Page(wikidata, name)
+  wikiditem = pywikibot.ItemPage.fromPage(wikidpage)
+  wikiddesc = wikiditem.descriptions.get("en")
+
+  # wikipedia
+  wikippage = wikip.page(name)
+  wikipsummary = wikippage.summary
+
   print(name+"\n"
     + " ourfilms="+(",".join(name2filmtitles[name] if name in name2filmtitles else "None"))+"\n"
-    + " locmatches="+(",".join([str(m) for m in locfilmmatches]) if len(locfilmmatches) else "None")
+    + " locmatches="+(",".join([str(m) for m in locfilmmatches]) if len(locfilmmatches) else "None")+"\n"
+    + " wikidata="+wikiddesc+"\n"
+    + " wikipedia="+wikipsummary
   )
