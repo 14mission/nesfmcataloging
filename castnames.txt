@@ -79,7 +79,7 @@ Daphne Pollard		# Pollard, Daphne, 1891-1978; https://lccn.loc.gov/no89001236
 David Kirkland		# Kirkland, David, 1878-1964; https://lccn.loc.gov/n2018014265
 Dell Henderson		# Henderson, Dell, 1877-1956; https://lccn.loc.gov/n85151845
 Del Lord		# Lord, Del, 1894-1970; https://lccn.loc.gov/n85378950
-Diana Serra Cary		# aka Baby Peggy; https://id.loc.gov/authorities/names/n93118649.html
+Diana Serra Cary	baby peggy	# aka Baby Peggy; https://id.loc.gov/authorities/names/n93118649.html
 Dick Lee	#tbd
 Dippy-Doo-Dads (Animals)	(the )?dippy\W*doo\W*dads
 Dorothy Devore		# Devore, Dorothy, 1899-1976; https://lccn.loc.gov/nr98025570
