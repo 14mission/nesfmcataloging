@@ -169,6 +169,7 @@ Henry Gambart	Henr[iy] Gambart	# Gambart, Henry, 1877-1935; http://viaf.org/viaf
 Henry Lehrman		# Lehrman, Henry, 1886-1946; https://lccn.loc.gov/n85138207
 Herbert Rice		# https://www.wikidata.org/wiki/Q19629657
 Herman Raymaker	herman\W*c\W*raymaker	# Raymaker, Herman, 1893-1944; https://lccn.loc.gov/n87896345
+Hermann Böttcher		# Boettcher, Hermann 1866-1935; https://viaf.org/en/viaf/59830652
 Hilliard Karr	hilli?ard karr	# Karr, Hilliard; http://viaf.org/viaf/107074547
 Hobart Bosworth	hobar?t\sbosworth	# nk
 Hughey Mack	Hughie Mack	# Mack, Hughey, 1884-1927; https://lccn.loc.gov/n91101197
@@ -194,6 +195,7 @@ Joe Keaton		# Keaton, Joe, 1867-1946; https://lccn.loc.gov/no98101436
 Joe Murphy		# Murphy, Joe, 1876-1961; https://lccn.loc.gov/no2011168508
 Joe Rock		# Rock, Joe, 1893-1984; https://lccn.loc.gov/n91010135
 Joe Weber		# Weber, Joe, 1867-1942; https://lccn.loc.gov/n87847838
+John Barrymore		# Barrymore, John, 1882-1942; http://id.loc.gov/authorities/names/n80017002
 John Bunny		# Bunny, John, 1863-1915; https://lccn.loc.gov/nr97043346
 John Lancaster	#tbd
 Johnny Arthur		# Arthur, Johnny, 1883-1951; https://lccn.loc.gov/no2008034910
@@ -901,6 +903,7 @@ Vola Vale		# Vola Vale, 1897-1970 http://id.loc.gov/authorities/names/nr20060283
 Vsevolod Illarionovich Pudovkin	Vsevolod Pudovkin	# Vsevolod Illarionovich Pudovkin, 1893-1953; http://id.loc.gov/authorities/names/n50072856
 Wallace MacDonald		# Wallace MacDonald, 1891-1978; http://id.loc.gov/authorities/names/n85168511
 Wallace Worsley		# Wallace Worsley, 1878-1944 no97003742  http://id.loc.gov/authorities/names/no97003742
+Wallace Reid		# Reid, Wallace, 1891-1923; https://en.wikipedia.org/wiki/Wallace_Reid; http://id.loc.gov/authorities/names/n89129666
 Walter Huston		# Walter Huston (Tony Huston), 1884-1950; http://id.loc.gov/authorities/names/n85151615
 Walter Lang		# Walter Lang, 1898-1972; http://id.loc.gov/authorities/names/n87911812
 Walter Long		# Walter Long, 1879-1952; http://id.loc.gov/authorities/names/n85201983
