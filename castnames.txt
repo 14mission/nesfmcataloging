@@ -66,7 +66,7 @@ Charlie Chaplin	(c|charles|chas)\W+chaplin	# Chaplin, Charlie, 1889-1977; see ro
 Charlie Joy	#tbd
 Charlie Murray	charl(es|ie|ey)\W+murray	# Charlie Murray; see row 89
 Chester Conklin	c\W+conklin	# Conklin, Chester, 1888-1971; https://lccn.loc.gov/n85342799
-Chester M. Franklin	c(hester)\W*m\W*franklin	# Franklin, Chester M., 1890-1954; https://en.wikipedia.org/wiki/Chester_M._Franklin; http://id.loc.gov/authorities/names/nr99029522
+Chester M. Franklin	c(hester)\W*(m\W*)?franklin	# Franklin, Chester M., 1890-1954; https://en.wikipedia.org/wiki/Chester_M._Franklin; http://id.loc.gov/authorities/names/nr99029522
 C. Jay Williams	c\W+j\W+williams	# Williams, C. Jay (Charles Jay); https://lccn.loc.gov/n88034608
 Claire Anderson	#tbd
 Clarence G. Badger	clarence\W*(g\W*)?badger	# Badger, Clarence G., 1880-1964; https://lccn.loc.gov/n88226159
@@ -317,7 +317,7 @@ Scott Pembroke	percy scott pembroke	# Pembroke, Scott, 1889-1951; https://lccn.l
 Scott Sidney		# Sidney, Scott, 1872-1928; https://lccn.loc.gov/no98097339
 Sidney Drew		# Drew, Sidney, 1864-1919; https://lccn.loc.gov/n85138423
 Sydney Franklin 1870-1931		# Franklin, Sydney, 1870-1931; http://id.loc.gov/authorities/names/no2011163553
-Sidney A. Franklin 1893-1972	sidney\W*a\W*franklin	# Franklin, Sidney A., 1893-1972; http://id.loc.gov/authorities/names/n85376764
+Sidney A. Franklin 1893-1972	sidney\W*a\W*franklin(\W*1893-1972)?|sidney\W*franklin\W*1893-1972	# Franklin, Sidney A., 1893-1972; http://id.loc.gov/authorities/names/n85376764
 Siegmund Lubin		# Lubin, Siegmund, -1923; https://lccn.loc.gov/n84034340
 Slim Summerville	(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)	# Summerville, Slim, 1892-1946; see row 343
 Snooky (Chimpanzee)	Snooky the Humanzee	# ; 
@@ -548,7 +548,7 @@ Florence Vidor		# Vidor, Florence ; http://id.loc.gov/authorities/names/n9302419
 Francis Carpenter		# Carpenter, Francis, 1911-1973 ; http://id.loc.gov/authorities/names/nr2001039975
 Francis Carpenter		# Carpenter, Francis, 1911-1973; http://id.loc.gov/authorities/names/nr2001039975
 Francis Ford		# Ford, Francis, 1882-1953 ; http://id.loc.gov/authorities/names/n88034600
-Francis Hubbard Flaherty	Francis Flaherty	# Flaherty, Frances Hubbard; http://id.loc.gov/authorities/names/n84151592
+Frances Hubbard Flaherty	Franc[ei]s Flaherty	# Flaherty, Frances Hubbard; http://id.loc.gov/authorities/names/n84151592
 Frank Borzage		# Borzage, Frank ; http://id.loc.gov/authorities/names/n80165117
 Frank Brownlee		# Brownlee, Frank, 1874-1948 ; http://id.loc.gov/authorities/names/n85183884
 Frank Lloyd		# Lloyd, Frank, 1887-1960 ; http://id.loc.gov/authorities/names/n85151571
