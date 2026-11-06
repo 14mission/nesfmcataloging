@@ -666,6 +666,7 @@ Jewel Carmen		# Carmen, Jewel, 1897-1984; http://id.loc.gov/authorities/names/n8
 J. Farrell MacDonald		# MacDonald, J. Farrell, 1875-1952  
 J. Frank Burke		# Burke, J. Frank (John Franklin), 1867-1918  
 J. Frank Glendon		# Glendon, J. Frank (Jonathan Frank), 1885-1937  
+J. P. McGowan	j(ohn)?\W*p\W*mcgowan	# McGowan, J. P. (John P.), 1880-1952; http://id.loc.gov/authorities/names/n87914377
 Jim Thorpe		# Thorpe, Jim, 1887-1953 n79117906 
 Joan Crawford		# Crawford, Joan, 1908-1977; http://id.loc.gov/authorities/names/n80008750
 Johannes Meyer 1884-1972	Johannes Meyer	# 1884-1972; Danish actor; https://en.wikipedia.org/wiki/Johannes_Meyer_(actor) (in our collection)
