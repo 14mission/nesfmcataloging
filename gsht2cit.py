@@ -454,6 +454,7 @@ for intsv in intsvlist:
         outcolvals[namefield] = re.sub(r'(?i)\bkarr\W*[\&,]\W*alexander\b', 'Hillard Karr,Frank Alexander', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bM.BuschT.Todd\b','Mae Busch,Thelma Todd', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bfranc[ie]s\s*\&\s*robert\sflaherty\b','Frances Flaherty,Robert Flaherty', outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'(?i)\bLeopold +\& +Theodore +Wharton\b','Leopold Wharton,Theodore Wharton', outcolvals[namefield])
         outcolvals[namefield] = re.sub(r'(?i)\bmr\W+(and|\&)\s+mrs\W+sidney drew\b', 'Sidney Drew,Lucille McVey', outcolvals[namefield]) # other mrs drew for films up thru 1913, but we don't have any
         outcolvals[namefield] = re.sub(r'(?i)jackie\s*\/jack\W+dailey','Jackie Dailey', outcolvals[namefield])
         # space inits

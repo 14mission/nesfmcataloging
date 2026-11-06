@@ -221,6 +221,7 @@ Lee Moran		# Moran, Lee, 1880-1961; https://lccn.loc.gov/n90641276
 Len Powers		# Powers, Len; https://lccn.loc.gov/no96067267
 Leo McCarey	#nk; McCarey, Leo; https://lccn.loc.gov/n80015724
 Leo White		# White, Leo, 1882-1948; https://lccn.loc.gov/n87914420
+Leopold Wharton		# Wharton, Leopold, 1870-1927; https://en.wikipedia.org/wiki/Leopold_Wharton; http://id.loc.gov/authorities/names/no2018121657
 Leslie Goodwins		# Goodwins, Leslie, 1899-1969; https://lccn.loc.gov/n93099070
 Lew Fields		# Fields, Lew, 1867-1941; https://lccn.loc.gov/n87847839
 Lewis R. Foster	#nk; Foster, Lewis R., 1898-1974; https://lccn.loc.gov/no89009018
