@@ -22,6 +22,10 @@ def addcolval(record,colname,newval,delim=",",addfirst=False):
   else:
     record[colname] = newval
 
+# strip extraneous whitespace
+def wsnorm(s):
+  return " ".join([w for w in s.split() if w != None and w != ''])
+
 # for importing spreadsheets into catalogit
 # see notes in doc "Mapping NESFM Silent Film Archive spreadsheet to catalog it"
 
@@ -161,7 +165,8 @@ for ln in cnh:
   cols = ln.split("\t")
   if re.match(r',',cols[0]):
     raise Exception("comma in name: "+cols[0])
-  castnames[cols[0].strip()] = True
+  cols[0] = wsnorm(cols[0])
+  castnames[cols[0]] = True
   for othercol in cols[1:]:
     if len(othercol.strip()) > 0:
       pat = re.sub(r'\(',r'(?:',othercol.strip())
@@ -262,7 +267,7 @@ for intsv in intsvlist:
       if colname not in colmap or colmap[colname] == None:
         continue
       # various ways of being "empty"
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|none\W*credited|doesn\'t\W*apply|no stars\W*travelog(ue)?|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
         # some cols allowed to be empty
         if colname in okemptycols:
           outcolvals[colname] = None
@@ -293,13 +298,13 @@ for intsv in intsvlist:
         print("FILEBY-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
         outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
       # if it contains "feature" or "silent", leave it for this weird "series item" field
-      elif re.search(r'(?i)(feature|silent|master\s*fs)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
+      elif re.search(r'(?i)(feature|silent|master\s*fs|television)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
         print("FILEBY-IGNORE: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (cast="+str(outcolvals["Motion_Picture_Details/Cast"])+"): "+outcolvals["Name/Title"])
         pass
       # anything else, we assume is the star. chop off hyphenated suffixes though. also prefix "35"
       else:
         starname = re.sub(r'^35\s*|©|(\s*\.\s*)?\(.*?\)|\.?\s*-.*$|CCF|\.\s*$','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"])
-        starname = " ".join(starname.split())
+        starname = wsnorm(starname)
         if re.match(r'(?i)(f\W*w\W*murnau|fritz\s+lang(\sw)?|paul leni)',starname):
           print("FILEBY-UNFLAGGED-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
           pass
@@ -360,7 +365,7 @@ for intsv in intsvlist:
     Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
     if Aspect_Ratio_title_match != None:
       #print("gauge in title: \""+outcolvals["Name/Title"]+"\"")
-      coretitle = " ".join((Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3)).split())
+      coretitle = wsnorm(Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3))
       titlefilmgauge = Aspect_Ratio_title_match.group(2) + " mm." # per LOC spec
       #if outcolvals["Aspect_Ratio"] != None and re.search(r'\d+\s*mm', outcolvals["Aspect_Ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["Aspect_Ratio"].lower()) == None:
       #  badrow("inconsistent film gauge: title=\""+outcolvals["Name/Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"")
@@ -412,12 +417,15 @@ for intsv in intsvlist:
         outcolvals[countryfield] = re.sub(r'^U\W*S\W*(,|$)',r'United States\1',outcolvals[countryfield])
         outcolvals[countryfield] = re.sub(r'^U\W*K\W*','United Kingdom',outcolvals[countryfield])
         outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
-        outcolvals[countryfield] = " ".join(outcolvals[countryfield].split())
+        outcolvals[countryfield] = wsnorm(outcolvals[countryfield])
         outcolvals[countryfield] = outcolvals[countryfield].title()
 
     # actor/director name normalization
     for namefield in personnamecols:
       if isfilled(outcolvals,namefield):
+        # trim extra spaces
+        outcolvals[namefield] = wsnorm(outcolvals[namefield])
+        outcolvals[namefield] = re.sub(r'\s*(,|\|)\s*', r'\1', outcolvals[namefield])
         # slightly normalized original value for logging changes
         oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
         # treat "in animated form" as a note, not an actor
@@ -600,7 +608,7 @@ for intsv in intsvlist:
         addcolval(outcolvals,"General_Notes:General",parenexp.strip(" ()"),"|")
     # delte paren exprs from title.  also do whitespace norm
     outcolvals['Name/Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name/Title'])
-    outcolvals['Name/Title'] = " ".join(outcolvals['Name/Title'].split())
+    outcolvals['Name/Title'] = wsnorm(outcolvals['Name/Title'])
 
     # title fixes
     # clobber final period
