@@ -68,7 +68,7 @@ Charlie Murray	charl(es|ie|ey)\W+murray	# Charlie Murray; see row 89
 Chester Conklin	c\W+conklin	# Conklin, Chester, 1888-1971; https://lccn.loc.gov/n85342799
 C. Jay Williams	c\W+j\W+williams	# Williams, C. Jay (Charles Jay); https://lccn.loc.gov/n88034608
 Claire Anderson	#tbd
-Clarence G. Badger		# Badger, Clarence G., 1880-1964; https://lccn.loc.gov/n88226159
+Clarence G. Badger	clarence\W*(g\W*)?badger	# Badger, Clarence G., 1880-1964; https://lccn.loc.gov/n88226159
 Cliff Bowes		# Bowes, Cliff, 1894-1929; https://lccn.loc.gov/no2020059453
 Clyde Bruckman		# Bruckman, Clyde, 1894-1955; https://lccn.loc.gov/n85138062
 Clyde Cook		# Cook, Clyde, 1890-1984; https://lccn.loc.gov/n85138497
@@ -362,11 +362,12 @@ A. Edward Sutherland	# Sutherland, A. Edward (Albert Edward), 1897-1973; http://
 Alan Crosland		# Crosland, Alan, 1894-1936; http://id.loc.gov/authorities/names/n85151910
 Alan Hale 1892-1950	alan hale	# Hale, Alan, 1892-1950 ; http://id.loc.gov/authorities/names/n85342735
 Albert Dieudonné		# Dieudonné, Albert ; http://id.loc.gov/authorities/names/n86041321
+Albert J. Kelley	Albert H. Kelley	# Kelley, Albert J. (Albert Jerome); http://id.loc.gov/authorities/names/n93012827 this one is a wild case but yes it's Albert J. Kelley
 Albert Parker		# Parker, Albert, 1885-1974 ; http://id.loc.gov/authorities/names/n88226453
 Albert Rogell	Albert S\W+Rogell	# Rogell, Albert, 1901-1988 ; http://id.loc.gov/authorities/names/n87911847
-Aleksander Chistyakov		# Chistyakov, Alexander ; http://id.loc.gov/authorities/names/no2016045504
+Aleksander Chistyakov	Aleksande?r Chistyakov	# Chistyakov, Alexander; http://id.loc.gov/authorities/names/no2016045504
 Aleksandr Pavlovich Antonov	Aleksande?r Antonov	# Antonov, Aleksandr Pavlovich, 1898-1962 ; http://id.loc.gov/authorities/names/nr98029745
-Aleksandr Volkov	Alexand(re|er|re) Volko(ff|v)	# Volkov, Aleksandr, 1885-1942 ; http://id.loc.gov/authorities/names/nr97045588
+Aleksandr Volkov	(Alexand(re|er|r)\s+)?Volko(ff|v)	# Volkov, Aleksandr, 1885-1942; http://id.loc.gov/authorities/names/nr97045588
 Alexander Carr		# Carr, Alexander, 1878-1946 ; http://id.loc.gov/authorities/names/no2002013431
 Alexandra Schmitt		# Schmitt, Alexandra 1861-1938
 Alex Bernard		# Bernard, Alex ; http://id.loc.gov/authorities/names/no2001067793
@@ -512,6 +513,7 @@ Edmund Mortimer	E\W+Mortimer	# Mortimer, Edmund, 1874-1944; http://id.loc.gov/au
 Edward Gribbon	Eddie Gribbon	# Gribbon, Edward ; http://id.loc.gov/authorities/names/no90021474
 Edward Sedgwick		# Sedgwick, Edward, 1892-1953 ; http://id.loc.gov/authorities/names/n85138061
 Edward Sloman		# Sloman, Edward, 1883-1972 ; http://id.loc.gov/authorities/names/n88051320
+Edwin R. Phillips		# Edwin R. Phillips ; https://www.wikidata.org/wiki/Q18417525  used Wikidata as alt source
 Eileen Percy		# Percy, Eileen ; http://id.loc.gov/authorities/names/nr2001039303
 Eleanor Boardman		# Boardman, Eleanor, 1898-1991 ; http://id.loc.gov/authorities/names/n85151834
 Elmer Clifton		# Clifton, Elmer, 1890-1949 ; http://id.loc.gov/authorities/names/n87847812
@@ -539,14 +541,15 @@ F. A. Turner		# Turner, F. A. (Fred A.), 1858-1923 ; http://id.loc.gov/authoriti
 Fay Wray		# Wray, Fay, 1907-2004 ; http://id.loc.gov/authorities/names/n86041342
 Florence Vidor		# Vidor, Florence ; http://id.loc.gov/authorities/names/n93024191
 Francis Carpenter		# Carpenter, Francis, 1911-1973 ; http://id.loc.gov/authorities/names/nr2001039975
+Francis Carpenter		# Carpenter, Francis, 1911-1973; http://id.loc.gov/authorities/names/nr2001039975
 Francis Ford		# Ford, Francis, 1882-1953 ; http://id.loc.gov/authorities/names/n88034600
-Francis Hubbard Flaherty		# Flaherty, Frances Hubbard ; http://id.loc.gov/authorities/names/n84151592
+Francis Hubbard Flaherty	Francis Flaherty	# Flaherty, Frances Hubbard; http://id.loc.gov/authorities/names/n84151592
 Frank Borzage		# Borzage, Frank ; http://id.loc.gov/authorities/names/n80165117
 Frank Brownlee		# Brownlee, Frank, 1874-1948 ; http://id.loc.gov/authorities/names/n85183884
 Frank Lloyd		# Lloyd, Frank, 1887-1960 ; http://id.loc.gov/authorities/names/n85151571
 Frank Merrill		# Merrill, Frank, -1966 ; http://id.loc.gov/authorities/names/n93084351
 Frank O'Connor		# note: there's another actor with the same name, but seems to have only had uncredited bit parts
-Frank Perugini		# Perugini, Frank ; http://id.loc.gov/authorities/names/n93011181
+Frank Perugini	Frank Per[eu]gini	# Perugini, Frank; http://id.loc.gov/authorities/names/n93011181
 Frank S. Mattison		# Mattison, Frank S. 1890-1967
 Frank Urson		# Urson, Frank ; http://id.loc.gov/authorities/names/no2010162538
 Frederick B. Warde	Frederick Warde	# Warde, Frederick B., 1851-1935 ; http://id.loc.gov/authorities/names/n88226435
@@ -570,8 +573,8 @@ George Irving		# Irving, George, 1874-1961 n87896208
 George Loane Tucker		# Tucker, George Loane, 1872-1921 n88034571
 George Melford		# Melford, George, -1961 n93011141
 George O'Brien		# O'Brien, George, 1899-1985 no2014006926
-George Terwilliger		# Terwilliger, George, 1882-1970 n91042819
 Georges Vaultier	Georges? Vaultier	# Vaultier, George  https://viaf.org/en/viaf/311646516 or http://viaf.org/viaf/173487830
+George Terwilliger		# Terwilliger, George, 1882-1970 n91042819
 George Walsh		# Walsh, George, 1892-1981 no97008163
 Georg Reimers		# Reimers, Georg, 1860-1936 http://id.loc.gov/authorities/names/nr96032637
 Georg Wilhelm Pabst	G\W+W\W+Pabst # Pabst, G. W. (Georg Wilhelm), 1885-1967	; http://id.loc.gov/authorities/names/n82233228
@@ -624,13 +627,14 @@ House Peters		# Peters, House, 1880-1967 http://id.loc.gov/authorities/names/n88
 Howard Bretherton		# Bretherton, Howard, 1890-1969 http://id.loc.gov/authorities/names/n88051335
 Howard Hickman		# Hickman, Howard, 1880-1949 http://id.loc.gov/authorities/names/n85151831
 Howard Higgin		# Higgin, Howard, 1893-1938 http://id.loc.gov/authorities/names/no90008919
+Iakov Aleksandrovich Protazanov	(Yakov\s+)?Protazanov	# I︠A︡kov Aleksandrovich Protazanov, 1881-1945; http://id.loc.gov/authorities/names/no91026746
 Ira M. Lowry		# Ira M. Lowry  https://www.wikidata.org/wiki/Q114899327  used wikidata as alt source
 Irving Cummings		# Cummings, Irving, 1888-1959 http://id.loc.gov/authorities/names/n87914295
 Irvin Willat		# Willat, Irvin, 1890-1976 http://id.loc.gov/authorities/names/nr2003000692
 Isabel Jeans		# Jeans, Isabel, 1891-1985 http://id.loc.gov/authorities/names/n88100651
 Ivan Ilʹich Mozzhukhin	Ivan Mozzhukhin	# Mozzhukhin, Ivan Ilʹich, 1889-1939 http://id.loc.gov/authorities/names/nr97045597
 Ivor Novello		# Novello, Ivor, 1893-1951 n81005106 
-Jack Conway 	Jack Conway	# Conway, Jack, 1887-1952  
+Jack Conway 	Jack Conway	# Conway, Jack, 1887-1952; http://id.loc.gov/authorities/names/n86041388
 Jack Holt		# Holt, Jack, 1888-1951  
 Jack Hoxie		# Hoxie, Jack, approximately 1885-1965 n93012024 
 Jack Nelson		# Nelson, Jack, 1882-1948  
@@ -644,16 +648,16 @@ James Cruze		# Cruze, James, 1884-1942
 James Gleason	Jimmy Gleason	# http://id.loc.gov/authorities/names/n78073873; but nb, birth year probably 1882
 James L. Young	James Young	# Young, James L., 1878-1948 n90715420 
 James P. Hogan		# Hogan, James P., 1890-1943  
-Jean Gabin		# Gabin, Jean, 1904-1976; http://id.loc.gov/authorities/names/n83142897; https://en.wikipedia.org/wiki/Jean_Gabin
 Jane Gail		# Gail, Jane, 1890-1963  
 Jane Grey		# Grey, Jane, 1883-1944  
 Jane Novak		# Novak, Jane|Novak, Jane, 1896-1990|Novak, Janet M., 1965- n88276567 
 Jane R. Mercer	Jane Mercer	# Mercer, Jane R.|Mercer, Janet n85386712 
 Janet Gaynor		# Gaynor, Janet 1906-1984; http://id.loc.gov/authorities/names/n80016844
 J. B. Warner	j\W+b\W+warner	# Warner, J. B. 1895-1924; http://viaf.org/viaf/103249905  used VIAF as alt source
-Jeanne Helbling		# Helbling, Jeanne, 1903-1985  http://viaf.org/viaf/56873617
 Jean Debucourt		# Debucourt, Jean, 1894-1958; http://id.loc.gov/authorities/names/no97077076
 Jean Epstein		# Epstein, Jean, 1897-1953; http://id.loc.gov/authorities/names/n99030067
+Jean Gabin		# Gabin, Jean, 1904-1976; http://id.loc.gov/authorities/names/n83142897; https://en.wikipedia.org/wiki/Jean_Gabin
+Jeanne Helbling		# Helbling, Jeanne, 1903-1985  http://viaf.org/viaf/56873617
 Jean Renoir		# Renoir, Jean, 1894-1979; http://id.loc.gov/authorities/names/n79018203
 Jean Tedesco	Jean Tédesco	# Tedesco, Jean 1895-1958  http://viaf.org/viaf/7590648
 Jean Vigo		# Vigo, Jean, 1905-1934; http://id.loc.gov/authorities/names/n80014990
@@ -668,27 +672,85 @@ Johannes Meyer 1884-1972	Johannes Meyer	# 1884-1972; Danish actor; https://en.wi
 Johannes Meyer 1888-1976		# German screenwriter/director; https://en.wikipedia.org/wiki/Johannes_Meyer_(director); (not in our collection)
 John Blystone	John G. Blystone	# Blystone, John, 1892-1938 n85378894 
 John B. O'Brien		# O'Brien, John B. n88034813 
+John Bowers		# Bowers, John, 1885-1936; http://id.loc.gov/authorities/names/n85376863
+John Emerson		# Emerson, John, 1874-1956; http://id.loc.gov/authorities/names/n85138001
 John Ford		# https://en.wikipedia.org/wiki/John_Ford
-John Francis Dillon		# Dillon, John Francis no91009580 
+John Francis Dillon		# Dillon, John Francis; http://id.loc.gov/authorities/names/no91009580
+John Gilbert		# Gilbert, John, 1897-1936; http://id.loc.gov/authorities/names/n84172422
+John Grierson		# Grierson, John, 1898-1972; http://id.loc.gov/authorities/names/n50031629
+John Griffith Wray		# Wray, John Griffith, -1929; http://id.loc.gov/authorities/names/n99020691
+Johnny Hines		# Hines, Johnny, 1894-1970; http://id.loc.gov/authorities/names/no91000290
+John S. Robertson		# Robertson, John S., 1878-1964; http://id.loc.gov/authorities/names/n87860266
+John Waters		# Waters, John, 1893-1965 nr97038045 use dates to prevent confusion with the currently living waters?; http://id.loc.gov/authorities/names/nr97038045
+Josef Swickard		# Swickard, Josef, 1866-1940; http://id.loc.gov/authorities/names/n93062342
+Josef Von Sternberg	Josef\s*von\s*Sternberg	# Von Sternberg, Josef, 1894-1969; http://id.loc.gov/authorities/names/n79117186
+Joseph De Grasse		# De Grasse, Joseph, 1873-1940; http://id.loc.gov/authorities/names/n90641390
+Joseph Depew		# Depew, Joseph, 1910-1988; http://id.loc.gov/authorities/names/n93054915
+Joseph Schildkraut		# Schildkraut, Joseph, 1895-1964; http://id.loc.gov/authorities/names/n85138152
 Julian West		# West, Julian, 1904-1981; https://en.wikipedia.org/wiki/Nicolas_de_Gunzburg; http://id.loc.gov/authorities/names/no2007055086
-J. Warren Kerrigan 	J. Warren Kerrigan	# Kerrigan, J. Warren (Jack Warren), 1879-1947  
+J. Warren Kerrigan	j(ack)?\W*warren\W*kerrigan	# Kerrigan, J. Warren (Jack Warren), 1879-1947; http://id.loc.gov/authorities/names/n88226400
+Karel Lamac		# Lamač, Karel, 1898-1952; http://id.loc.gov/authorities/names/no2006041049
+Karlheinz Martin	Karl Heinz Martin	# Martin, Karlheinz, 1886-1948; http://id.loc.gov/authorities/names/no2011080137
+King Baggott	King Baggot+	# Baggott, King, 1879-1948; http://id.loc.gov/authorities/names/no89006224
 Knute Erickson		# Knute Erickson  https://www.wikidata.org/wiki/Q124814590
+Lambert Hillyer		# Hillyer, Lambert, 1893-1969; http://id.loc.gov/authorities/names/no89001229
+Lars Hanson		# Hanson, Lars, 1887-1965; http://id.loc.gov/authorities/names/n85151529
+Laura La Plante		# La Plante, Laura, 1904-1996; http://id.loc.gov/authorities/names/no90019269
 Lawrence B. McGill		# McGill, Lawrence B.  http://viaf.org/viaf/52148933617654301715
-Leander De Cordova	l(eander)\W+de\s*cordova	# De Cordova, Leander 1887-1969 http://id.loc.gov/authorities/names/no2014024961
-Leopold Jessner		# Jessner, Leopold, 1878-1945 nr97034730 
+Lawrence Marston		# Marston, Lawrence; http://id.loc.gov/authorities/names/n2011078845
+Leander De Cordova	l(eander)?\W+de\s*cordova	# De Cordova, Leander 1887-1969 http://id.loc.gov/authorities/names/no2014024961
+Leni Riefenstahl		# Riefenstahl, Leni; http://id.loc.gov/authorities/names/n78083380
+Leopold Jessner		# Jessner, Leopold, 1878-1945; http://id.loc.gov/authorities/names/nr97034730
+Lewis Milestone		# Milestone, Lewis, 1895-1980; http://id.loc.gov/authorities/names/n81032812
+Lewis Stone		# Stone, Lewis, 1879-1953; http://id.loc.gov/authorities/names/n85199146
+Lila Lee		# Lee, Lila; http://id.loc.gov/authorities/names/n94007117
+Lil Dagover		# Dagover, Lil; http://id.loc.gov/authorities/names/nr00008652
 Lillian Gish	Lil+ian Gish	# Gish, Lillian, 1893-1993 n50033290 
+Lionel Barrymore		# Barrymore, Lionel, 1878-1954; http://id.loc.gov/authorities/names/n85151804
+Lloyd Hughes		# Hughes, Lloyd, 1897-1958; http://id.loc.gov/authorities/names/no89009033
+Lloyd Ingraham		# Ingraham, Lloyd, 1874-1956; http://id.loc.gov/authorities/names/n85185284
+Lois Weber		# Weber, Lois, 1879-1939; http://id.loc.gov/authorities/names/n85376836
+Lois Wilson		# Wilson, Lois, 1894-1988; http://id.loc.gov/authorities/names/n87896260
+Lorimer Johnston		# Johnston, Lorimer; http://id.loc.gov/authorities/names/n93062446
+Lotte Reiniger		# Reiniger, Lotte; http://id.loc.gov/authorities/names/n80051717
 Louis Bennison		# Louis Bennison  https://www.wikidata.org/wiki/Q28751359
+Louise Brooks		# Brooks, Louise, 1906-1985; http://id.loc.gov/authorities/names/n81119097
+Louise Dresser		# Dresser, Louise, 1878-1965; http://id.loc.gov/authorities/names/n88051197
+Louise Glaum		# Glaum, Louise; http://id.loc.gov/authorities/names/n93020564
+Louise Huff		# Huff, Louise, 1896-1973; http://id.loc.gov/authorities/names/n85173987
+Louis Mercanton		# Mercanton, Louis, 1879-1932; http://id.loc.gov/authorities/names/no2011035367
+L. V. Kuleshov	Lev Kuleshov	# Kuleshov, L. V. (Lev Vladimirovich); http://id.loc.gov/authorities/names/n82056423
+Lynn Reynolds		# Reynolds, Lynn, 1889-1927; http://id.loc.gov/authorities/names/n89129721
 Mabel Van Buren		# Van Buren, Mabel, 1878-1947 n2007025747 
+Madge Bellamy		# Madge Bellamy, 1899-1990; http://id.loc.gov/authorities/names/n88219053
+Mae Marsh		# Mae Marsh, 1895-1968; http://id.loc.gov/authorities/names/n86075567
+Mae Murray		# Murray, Mae, 1885-1965; http://id.loc.gov/authorities/names/n85151633
+Maksim Shtraukh		# Maksim Shtraukh, 1900-1974; http://id.loc.gov/authorities/names/no2002093212
 Marcel L'Herbier		# L'Herbier, Marcel, 1888-1979 n82116384 
+Marfa Lapkina		# Marfa Lapkina; http://id.loc.gov/authorities/names/no2002092579
+Margarete Schoen	Margarete Schön	# Margarete Schoen, 1895-1985; http://id.loc.gov/authorities/names/no2003054872
+Margery Wilson		# Margery Wilson, 1896-1986; http://id.loc.gov/authorities/names/no2003089466
+Marguerite Courtot		# Marguerite Courtot, 1897-1986; http://id.loc.gov/authorities/names/n88226338
+Marguerite De La Motte		# Marguerite De La Motte, 1902-1950; http://id.loc.gov/authorities/names/n91100588
 Marguerite Gale		# Marguerite Gale  https://www.wikidata.org/wiki/Q18275240
+Marian Marsh		# Marian Marsh, 1913-2006; http://id.loc.gov/authorities/names/n85376569
+Marian Nixon		# Marian Nixon, 1904-1983; http://id.loc.gov/authorities/names/n85262642
+Marie Prevost		# Prevost, Marie, 1898-1937; http://id.loc.gov/authorities/names/n85342798
 Mario Guaita-Ausonia		# Guaita-Ausonia, Mario 1881-1957  http://viaf.org/viaf/18151594361305350710
+Marion Davies		# Marion Davies, 1897-1961; http://id.loc.gov/authorities/names/n83213601
+Marjorie Daw		# Marjorie Daw, 1902-1979; http://id.loc.gov/authorities/names/n93069594
+Martha Raye		# Martha Raye; http://id.loc.gov/authorities/names/n79064369
+Mary Astor		# Mary Astor, 1906-1987; http://id.loc.gov/authorities/names/n86034206
+Mary McIvor		# Mary McIvor, 1900-1941; http://id.loc.gov/authorities/names/n2012018461
+Mary Philbin		# Mary Philbin, 1902-1993; http://id.loc.gov/authorities/names/n94036721
+Mary Pickford		# Pickford, Mary, 1892-1979; http://id.loc.gov/authorities/names/n50019725
 Mary Thurman		# Thurman, Mary, 1894-1925 n93001814 
 Masao Inoue	Masuo Inoue	# Masao Inoue, 1881-1950 no2019018487 
 Matahi		# Matahi no2009050171 
 Maude George		# Maude George, 1888-1963 n88226402 
 Maurice de Féraudy		# Féraudy, Maurice de, 1859-1932 n85017296 
 Maurice Elvey		# Maurice Elvey, 1887-1967 no90021292 
-Maurice Tourneur		# Maurice Tourneur, 1876-1961 n86041209 
+Maurice Tourneur	(m|maurice)\W+tourneur	# Maurice Tourneur, 1876-1961 n86041209 
 Mauritz Stiller		# Mauritz Stiller, 1883-1928 n80063110 
 Max Fleischer		# Max Fleischer, 1883-1972 n85248141 
 Maxine Audley		# Maxine Audley n87922189 
@@ -718,7 +780,7 @@ Norma Shearer		# Norma Shearer, 1902-1983; http://id.loc.gov/authorities/names/n
 Norma Talmadge		# Norma Talmadge, 1894-1957; http://id.loc.gov/authorities/names/n90722167
 Norton S. Parker		# Norton S. Parker no00048766  http://id.loc.gov/authorities/names/no00048766 data copied from LOC
 Olaf Fønss		# Olaf Fønss, 1882-1949 no00084884  http://id.loc.gov/authorities/names/no00084884
-#Oleksandr Petrovych Dovz︠h︡enko		# Dovz︠h︡enko, Oleksandr Petrovych, 1894-1956 ; http://id.loc.gov/authorities/names/n50041169
+Oleksandr Petrovych Dovzhenko	Aleksandr Dovzhenko	# Dovz︠h︡enko, Oleksandr Petrovych, 1894-1956; http://id.loc.gov/authorities/names/n50041169
 Olga Tschechowa		# Olga Tschechowa, 1897-1980; http://id.loc.gov/authorities/names/n85273906
 Orrin Johnson		# Orrin Johnson, 1865-1943 no2025139688  http://id.loc.gov/authorities/names/no2025139688
 Oscar Apfel		# Oscar Apfel, 1879-1938; http://id.loc.gov/authorities/names/n85378997
@@ -737,7 +799,6 @@ Paul Powell		# Paul Powell, 1881-1944; http://id.loc.gov/authorities/names/n8537
 Paul Sloane		# Sloane, Paul, 1893-1963; http://id.loc.gov/authorities/names/n85151938
 Paul Wegener		# Paul Wegener, 1874-1948; http://id.loc.gov/authorities/names/n81003588
 Philip Hubbard		# Philip Hubbard, 1873-1931 no2019140745  http://id.loc.gov/authorities/names/no2019140745
-Mary Pickford		# Pickford, Mary, 1892-1979; http://id.loc.gov/authorities/names/n50019725
 Piel Jutzi	Phil Jutzi	# Piel Jutzi, 1896-1946 no99063423  http://id.loc.gov/authorities/names/no99063423
 Pierre Couderc		# Pierre Couderc, 1896-1966; http://id.loc.gov/authorities/names/n2012023276
 Pierre Magnier		# Pierre Magnier no99065565  http://id.loc.gov/authorities/names/no99065565
@@ -754,6 +815,7 @@ Reginald Barker		# Reginald Barker, 1886-1945; http://id.loc.gov/authorities/nam
 Reginald Denny		# Reginald Denny, 1891-1967; http://id.loc.gov/authorities/names/n85151526
 Renaud Hoffman		# Renaud Hoffman, 1895-1952 no90014894  http://id.loc.gov/authorities/names/no90014894
 René Clair		# René Clair, 1898-1981; http://id.loc.gov/authorities/names/n79139714
+Renée Falconetti	Maria Falconetti	# Renée Falconetti, 1892-1946; http://id.loc.gov/authorities/names/n88646024
 Rex (Horse)	Rex the Wonder Horse	# Rex  https://www.wikidata.org/wiki/Q7319120  used wikidata as alternative source
 Rex Ingram 1892-1950	Rex Ingram	# Ingram, Rex, 1892-1950; http://id.loc.gov/authorities/names/n80089283
 Richard Barthelmess		# Richard Barthelmess, 1895-1963; http://id.loc.gov/authorities/names/n86138431
@@ -765,7 +827,7 @@ Robert Frazer		# Robert Frazer, 1889-1944 no90002420  http://id.loc.gov/authorit
 Robert G. Vignola		# Robert G. Vignola, 1882-1953; http://id.loc.gov/authorities/names/n93056318
 Robert Henderson-Bland	R. Henderson Bland	# Robert Henderson-Bland, -1941 http://id.loc.gov/authorities/names/nr2003026924
 Robert Hill	Robert F. Hill	# Robert Hill, 1886-1966; http://id.loc.gov/authorities/names/n88051199
-# Robert Joseph Flaherty – or just Robert J.?	Robert (J\W+)?Flaherty	# Robert Joseph Flaherty, 1884-1951; http://id.loc.gov/authorities/names/n50003066
+Robert Joseph Flaherty	Robert (j\W+)?Flaherty	# Robert Joseph Flaherty, 1884-1951; http://id.loc.gov/authorities/names/n50003066
 Robert Lowery		# Robert Lowery, 1916-1971 no90010578  http://id.loc.gov/authorities/names/no90010578
 Robert N. Bradbury		# Robert N. Bradbury (Robert North), 1886-1949; http://id.loc.gov/authorities/names/n87847721
 Robert Tansey	Robert Emmett Tansey	# Robert Tansey, 1899-1951; http://id.loc.gov/authorities/names/n93094690
@@ -783,7 +845,7 @@ Rudolf Klein-Rogge		# Rudolf Klein-Rogge, 1888-1955 no94036119  http://id.loc.go
 Rudolph Christians		# Rudolph Christians, 1869-1921 no2002015043  http://id.loc.gov/authorities/names/no2002015043
 Rudolph Schildkraut		# Rudolph Schildkraut, 1862-1930; http://id.loc.gov/authorities/names/n95006269
 Rudolph Valentino		# Rudolph Valentino, 1895-1926; http://id.loc.gov/authorities/names/n50046664
-Rupert Julian		# Rupert Julian, 1879-1943; http://id.loc.gov/authorities/names/n91100451
+Rupert Julian	Rupert Julian(\s*\+\s* more)?	# Rupert Julian, 1879-1943; http://id.loc.gov/authorities/names/n91100451
 Russell Mack		# Russell Mack, 1892-1972 http://id.loc.gov/authorities/names/nr2001029081
 Sam De Grasse		# Sam De Grasse, 1875-1953; http://id.loc.gov/authorities/names/n85376772
 Sam Taylor		# Sam Taylor, 1895-1958; http://id.loc.gov/authorities/names/n86075569
@@ -811,7 +873,7 @@ Theda Bara		# Theda Bara, 1885-1955; http://id.loc.gov/authorities/names/n880848
 Theodore Reed		# Theodore Reed, 1887-1959 no90004657  http://id.loc.gov/authorities/names/no90004657
 Theodore Wharton		# Theodore Wharton, 1875-1931 no2008014617  http://id.loc.gov/authorities/names/no2008014617
 Thomas Bentley		# Thomas Bentley, 1880-1950 no2009132529  http://id.loc.gov/authorities/names/no2009132529
-Thomas H. Ince	T\W+H\W+Ince	# Ince, Thomas H.; http://id.loc.gov/authorities/names/n85221652
+Thomas H. Ince	t(homas)?\W*h\W*ince	# Ince, Thomas H.; http://id.loc.gov/authorities/names/n85221652
 Thomas Jefferson		# Thomas Jefferson, 1732-1807 no2009020036  http://id.loc.gov/authorities/names/no2009020036
 Thomas Meighan		# Thomas Meighan, 1879-1936; http://id.loc.gov/authorities/names/n85376743
 Tod Browning		# Tod Browning, 1880-1962; http://id.loc.gov/authorities/names/n82234652
