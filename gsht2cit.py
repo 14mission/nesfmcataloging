@@ -267,7 +267,7 @@ for intsv in intsvlist:
       if colname not in colmap or colmap[colname] == None:
         continue
       # various ways of being "empty"
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|none\W*credited|doesn\'t\W*apply|no stars\W*travelog(ue)?|var?ious|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
+      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|none\W*credited|doesn\'t\W*apply|no stars\W*travelog(ue)?|var?ious|docum[ea]ntary|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
         # some cols allowed to be empty
         if colname in okemptycols:
           outcolvals[colname] = None
@@ -463,7 +463,7 @@ for intsv in intsvlist:
         if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
           outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
         # change ampersand to comma; also slash, pipe, and w/
-        outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/',outcolvals[namefield]))
+        outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/|\s-+\s*',outcolvals[namefield]))
         # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
         while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
           uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
