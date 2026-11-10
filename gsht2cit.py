@@ -31,20 +31,11 @@ def wsnorm(s):
 
 # rename exported spreadsheets like this: ls NESFM\ Silent\ Film\ Achive\ -\ *tsv | perl -ne 's/\s+$//gs; my $origfn = $_; my $newfn = $origfn; $newfn =~ s/.* - /nesfm.archive./; $newfn =~ s/ /_/g; $newfn =~ s/&/and/g; $newfn = lc $newfn; print "mv \"$origfn\" $newfn\n"' | sh
 
-intsvlist = []
-av = sys.argv[1:]
-ac = 0
-while ac < len(av):
-  if av[ac] == "-h": print("usage: "+sys.argv[0]+" -h(elp) inputfiles*tsv -o outputfile.tsv")
-  elif av[ac][0] == "-": raise Exeption("unkflag: "+av[ac])
-  else: intsvlist.append(av[ac])
-  ac += 1
-
 # use header line to figure out what columns map to whate fields in following data lines
 personnamecols = [ "Motion_Picture_Details/Cast", "Motion_Picture_Details/Director" ]
 objidcolname = r'Entry/Object_ID'
 accnumcolname = r'Acquisition/Accession'
-def buildcolmap(ln):
+def buildcolmap(lncols):
 
   # columns we should create
   # columns that should be in output
@@ -197,7 +188,16 @@ def loadcastnames(cnfn):
   return castnames, castnamecorrections
 
 # aka, main()
-if True:
+def main():
+
+  intsvlist = [] 
+  av = sys.argv[1:]
+  ac = 0  
+  while ac < len(av):
+    if av[ac] == "-h": print("usage: "+sys.argv[0]+" -h(elp) inputfiles*tsv -o outputfile.tsv")
+    elif av[ac][0] == "-": raise Exeption("unkflag: "+av[ac])
+    else: intsvlist.append(av[ac])
+    ac += 1
 
   # for assigning custom object id nums for MG's
   objid_base_seen = {} 
@@ -253,7 +253,7 @@ if True:
       # map input cls to output cols
       # write header to output
       if colmap == None:
-        outcols, colmap, rulefillcols, commasplitcols, okemptycols, okunkcols = buildcolmap(ln)
+        outcols, colmap, rulefillcols, commasplitcols, okemptycols, okunkcols = buildcolmap(lncols)
         hdrcols = [colname for colname in outcols if ":" not in colname]
         hdrcols.append("Tags") 
         hdrcols.append("linenum")
@@ -730,3 +730,5 @@ if True:
       if isbadrow > 0:
         print("bad row(s) found!")
         sys.exit(666)
+
+main()
