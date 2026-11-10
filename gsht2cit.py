@@ -429,7 +429,8 @@ for intsv in intsvlist:
         # slightly normalized original value for logging changes
         oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
         # treat "in animated form" as a note, not an actor
-        if re.search(r'(?i)in\s+animated\s+form', outcolvals[namefield]) != None:
+        # also a few collective cast name types
+        if re.search(r'(?i)in\s+animated\s+form|young pioneers|svani people', outcolvals[namefield]) != None:
           addcolval(outcolvals,"General_Notes:General",outcolvals[namefield],"|")
           outcolvals[namefield] = "" 
         # clobber end-of-string elipses/etc
