@@ -40,104 +40,132 @@ while ac < len(av):
   else: intsvlist.append(av[ac])
   ac += 1
 
-# columns we should create
-# columns that should be in output
-# format of rows below is output-column-name, flags, input-column-name-pattern
-#  note: / can mean either hierarchy field arrangement, or just "aka" in a field name
-#  also: if there is a colon, the bit after the colon should be prefixed to the value string
-# note on flags:
-#  - means none
-#  * mark with a * in output, meaning should be manually edited
-#  e ok for the field to be empty
-#  m ok for the field to be missing entirely (not in the input spreadsheet at all)
-#  u if field is empty, fill with explicit UNKNOWN
-#  r field will be filled by a rule
-#  c means split on comma
-# note on patterns:
-#  these are matched against the column headers of the input files, from google spreadsheets
-#  these are regular expressions
-#  they are matched case-insensitively
-#  they are matched at the beginning
-#  they don't have to match all the way to the end
-outcols = []
-hdrpats = {}
-starcols = {}
-okunkcols = {}
-okemptycols = {}
-okmissingcols = {}
-rulefillcols = {}
-commasplitcols = {}
+# use header line to figure out what columns map to whate fields in following data lines
 personnamecols = [ "Motion_Picture_Details/Cast", "Motion_Picture_Details/Director" ]
 objidcolname = r'Entry/Object_ID'
 accnumcolname = r'Acquisition/Accession'
-for row in [ 
-  objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
-  accnumcolname+r' r NOSOURCECOLUMN', # truncated obj id
-  r'Name/Title - Title',
-  r'Other_Names_and_Numbers/Other_Numbers:Shelving u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
-  r'Other_Names_and_Numbers/Other_Numbers:Old_Object_ID r NOSOURCECOLUMN',
-  r'Location/Location u Film\sRack',
-  r'Other_Names_and_Numbers/Other_Numbers:Series_Item em (comedy\s+)?Series|Filed\sby.*\sor',
-  r'Condition/Notes e p\s*q\b',
-  r'Motion_Picture_Details/Production_Date/Date u prod.*year',
-  r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
-  r'Motion_Picture_Details/Cast *uc star\W*s\W*',
-  r'Motion_Picture_Details/Director *uc director',
-  r'Motion_Picture_Details/Producer/Publisher *e produc(er|tion\sco)',
-  r'Motion_Picture_Details/Writer *emc writer',
-  r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
-  r'Relationships/Related_Person_or_Organization/Notes:Re-Issue_Distributor e distrib.*re\W*issue',
-  r'Relationships/Related_Places/Notes:Print_Exhibition_Country e print\sexhibition\scountry',
-  r'Made/Created/Place e country',
-  r'Motion_Picture_Details/Film_Stock e film\sstock',
-  r'Motion_Picture_Details/Film_Base r NOSOURCECOLNUM',
-  r'Motion_Picture_Details/Date_Code r NOSOURCECOLNUM',
-  r'Motion_Picture_Details/Length e film\slength',
-  r'Motion_Picture_Details/Sound/Film_Sound *e sound\strack',
-  r'Motion_Picture_Details/Sound/Sound_Notes:Type r NOSOURCECOLUMN', # populated from "sound track"
-  r'Motion_Picture_Details/Frame_Rate me NOSOURCECOLUMN',
-  r'Aspect_Ratio re aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
-  r'Motion_Picture_Details/Film_Gauge/Format r NOSOURCECOLUMN',
-  r'Motion_Picture_Details/Color_Characteristics *e film\scolor',
-  r'Parts/Parts - Film\sReels', # reels, revisit?
-  r'General_Notes e notes',
-  r'General_Notes:Best_Quality_DVD_Release em dvd\s+release',
-  r'General_Notes:Best_Quality_Blu-ray_Release em blu\W*ray\s+release',
-  r'General_Notes:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
-  r'General_Notes:Stereotypes_or_Content_Issues em stereotypes',
-  r'General_Notes:Aperture_Image_Format r NOSUCHCOLUMN',
-  r'General_Notes:Intertitle_Language e language', 
-  r'General_Notes:General r NOSUCHCOLUMN',
-  r'Acquisition/Accession/Source_or_Donor u don(at)?or|blackhawk\sassets|assett?s$', 
-  ]:
-  cols = row.split()
-  if len(cols) != 3: raise Exception("misformatted label spec: "+row)
-  label, flags, pattern = cols
-  outcols.append(label)
-  hdrpats[label] = pattern
-  for c in flags:
-    if c == '*':
-      starcols[label] = True
-    elif c == 'u':
-      okunkcols[label] = True
-    elif c == 'm':
-      okmissingcols[label] = True
-    elif c == 'e':
-      okemptycols[label] = True
-    elif c == 'r':
-      rulefillcols[label] = True
-    elif c == 'c':
-      commasplitcols[label] = True
-    elif c != '-':
-      raise Exception("unexpected flag char "+c)
-  # cols with colon will not be printed directly, they'll be mapped into cols with base name before colon
-  # so we'll define cols with base name, to be filled by rule
-  if ":" in label:
-    beforecolon = re.sub(r':.*$','',label)
-    if beforecolon not in outcols:
-      outcols.append(beforecolon)
-      hdrpats[beforecolon] = "NOSOURCECOLUMN"
-      rulefillcols[beforecolon] = True
+def buildcolmap(ln):
+
+  # columns we should create
+  # columns that should be in output
+  # format of rows below is output-column-name, flags, input-column-name-pattern
+  #  note: / can mean either hierarchy field arrangement, or just "aka" in a field name
+  #  also: if there is a colon, the bit after the colon should be prefixed to the value string
+  # note on flags:
+  #  - means none
+  #  * mark with a * in output, meaning should be manually edited
+  #  e ok for the field to be empty
+  #  m ok for the field to be missing entirely (not in the input spreadsheet at all)
+  #  u if field is empty, fill with explicit UNKNOWN
+  #  r field will be filled by a rule
+  #  c means split on comma
+  # note on patterns:
+  #  these are matched against the column headers of the input files, from google spreadsheets
+  #  these are regular expressions
+  #  they are matched case-insensitively
+  #  they are matched at the beginning
+  #  they don't have to match all the way to the end
+  outcols = []
+  hdrpats = {}
+  starcols = {}
+  okunkcols = {}
+  okemptycols = {}
+  okmissingcols = {}
+  rulefillcols = {}
+  commasplitcols = {}
+  for row in [ 
+    objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
+    accnumcolname+r' r NOSOURCECOLUMN', # truncated obj id
+    r'Name/Title - Title',
+    r'Other_Names_and_Numbers/Other_Numbers:Shelving u Shelving|Bartel\s*-*\s*Thomsen\sFilm\sCode',
+    r'Other_Names_and_Numbers/Other_Numbers:Old_Object_ID r NOSOURCECOLUMN',
+    r'Location/Location u Film\sRack',
+    r'Other_Names_and_Numbers/Other_Numbers:Series_Item em (comedy\s+)?Series|Filed\sby.*\sor',
+    r'Condition/Notes e p\s*q\b',
+    r'Motion_Picture_Details/Production_Date/Date u prod.*year',
+    r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
+    r'Motion_Picture_Details/Cast *uc star\W*s\W*',
+    r'Motion_Picture_Details/Director *uc director',
+    r'Motion_Picture_Details/Producer/Publisher *e produc(er|tion\sco)',
+    r'Motion_Picture_Details/Writer *emc writer',
+    r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
+    r'Relationships/Related_Person_or_Organization/Notes:Re-Issue_Distributor e distrib.*re\W*issue',
+    r'Relationships/Related_Places/Notes:Print_Exhibition_Country e print\sexhibition\scountry',
+    r'Made/Created/Place e country',
+    r'Motion_Picture_Details/Film_Stock e film\sstock',
+    r'Motion_Picture_Details/Film_Base r NOSOURCECOLNUM',
+    r'Motion_Picture_Details/Date_Code r NOSOURCECOLNUM',
+    r'Motion_Picture_Details/Length e film\slength',
+    r'Motion_Picture_Details/Sound/Film_Sound *e sound\strack',
+    r'Motion_Picture_Details/Sound/Sound_Notes:Type r NOSOURCECOLUMN', # populated from "sound track"
+    r'Motion_Picture_Details/Frame_Rate me NOSOURCECOLUMN',
+    r'Aspect_Ratio re aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
+    r'Motion_Picture_Details/Film_Gauge/Format r NOSOURCECOLUMN',
+    r'Motion_Picture_Details/Color_Characteristics *e film\scolor',
+    r'Parts/Parts - Film\sReels', # reels, revisit?
+    r'General_Notes e notes',
+    r'General_Notes:Best_Quality_DVD_Release em dvd\s+release',
+    r'General_Notes:Best_Quality_Blu-ray_Release em blu\W*ray\s+release',
+    r'General_Notes:Best_Quality_Blu-ray_or_DVD_Release em best\squality.*dvd.*blu.*ray.*release',
+    r'General_Notes:Stereotypes_or_Content_Issues em stereotypes',
+    r'General_Notes:Aperture_Image_Format r NOSUCHCOLUMN',
+    r'General_Notes:Intertitle_Language e language', 
+    r'General_Notes:General r NOSUCHCOLUMN',
+    r'Acquisition/Accession/Source_or_Donor u don(at)?or|blackhawk\sassets|assett?s$', 
+    ]:
+    cols = row.split()
+    if len(cols) != 3: raise Exception("misformatted label spec: "+row)
+    label, flags, pattern = cols
+    outcols.append(label)
+    hdrpats[label] = pattern
+    for c in flags:
+      if c == '*':
+        starcols[label] = True
+      elif c == 'u':
+        okunkcols[label] = True
+      elif c == 'm':
+        okmissingcols[label] = True
+      elif c == 'e':
+        okemptycols[label] = True
+      elif c == 'r':
+        rulefillcols[label] = True
+      elif c == 'c':
+        commasplitcols[label] = True
+      elif c != '-':
+        raise Exception("unexpected flag char "+c)
+    # cols with colon will not be printed directly, they'll be mapped into cols with base name before colon
+    # so we'll define cols with base name, to be filled by rule
+    if ":" in label:
+      beforecolon = re.sub(r':.*$','',label)
+      if beforecolon not in outcols:
+        outcols.append(beforecolon)
+        hdrpats[beforecolon] = "NOSOURCECOLUMN"
+        rulefillcols[beforecolon] = True
+
+  # map input cols to output cols according to header line
+  colmap = {}
+  for colnum, colstr in enumerate(lncols):
+    for outcol in outcols:
+      if re.match(r'(?i)^('+hdrpats[outcol]+')',colstr): colmap[outcol] = colnum
+  # check that all required output cols were matched
+  for field in sorted(colmap.keys()):
+    if colmap[field] == None:
+      if field in okmissingcols or field in rulefillcols:
+        print(field + "=None")
+      else:
+        raise Exception("no \""+field+"\" col found in \""+intsv+"\": HDRCOLS="+",".join(lncols))
+    else:
+      print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
+  # check that nothing was mapped unexpectedly
+  unexpectedoutputcols = [colname for colname in colmap.keys() if colname not in outcols]
+  if len(unexpectedoutputcols) > 0:
+    raise Exception("unexpected output column mapping to: "+", ".join(unexpectedoutputcols))
+  # check that all input cols were mapped, except ones explicitly known to be unneeded
+  unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'(?i)(created \d+\/|updated \d+\/|catalog\W*it|filed by director or star|sorted by director or catagory|^\s*$)',lncols[colnum]) == None]
+  if len(unmappedinputcols) > 0:
+    raise Exception("unmapped input cols: "+", ".join(lncols[colnum] for colnum in unmappedinputcols))
+
+  return outcols, colmap, rulefillcols, commasplitcols, okemptycols, okunkcols
 
 # load cast names
 def loadcastnames(cnfn):
@@ -205,10 +233,6 @@ if True:
     outfn += ".4cit.csv"
     print(f"write output to {outfn}")
     outh = csv.writer(open(outfn,"w"))
-    hdrcols = [colname for colname in outcols if ":" not in colname]
-    hdrcols.append("Tags")
-    hdrcols.append("linenum")
-    outh.writerow(hdrcols)
   
     # short name of file to put in output
     source = intsv
@@ -217,9 +241,7 @@ if True:
     source = re.sub(r'^nesfm\.archive\.','',source)
   
     # we will look at header row and figure out what input col maps to what output col
-    colmap = {}
-    for field in outcols:
-      colmap[field] = None
+    colmap = None
   
     # read all lines
     for ln in inh:
@@ -229,30 +251,13 @@ if True:
   
       # header line?
       # map input cls to output cols
-      if colmap[objidcolname] == None:
-        # map input cols to output cols
-        for colnum, colstr in enumerate(lncols):
-          for outcol in outcols:
-            if re.match(r'(?i)^('+hdrpats[outcol]+')',colstr): colmap[outcol] = colnum
-        # check that all required output cols were matched
-        for field in sorted(colmap.keys()):
-          if colmap[field] == None:
-            if field in okmissingcols or field in rulefillcols:
-              print(field + "=None")
-            else:
-              raise Exception("no \""+field+"\" col found in \""+intsv+"\": HDRCOLS="+",".join(lncols))
-          else:
-            print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
-        # check that nothing was mapped unexpectedly
-        unexpectedoutputcols = [colname for colname in colmap.keys() if colname not in outcols]
-        if len(unexpectedoutputcols) > 0:
-          raise Exception("unexpected output column mapping to: "+", ".join(unexpectedoutputcols))
-        # check that all input cols were mapped, except ones explicitly known to be unneeded
-        unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'(?i)(created \d+\/|updated \d+\/|catalog\W*it|filed by director or star|sorted by director or catagory|^\s*$)',lncols[colnum]) == None]
-        if len(unmappedinputcols) > 0:
-          raise Exception("unmapped input cols: "+", ".join(lncols[colnum] for colnum in unmappedinputcols))
-  
-        # rest of loop is for regular data lines
+      # write header to output
+      if colmap == None:
+        outcols, colmap, rulefillcols, commasplitcols, okemptycols, okunkcols = buildcolmap(ln)
+        hdrcols = [colname for colname in outcols if ":" not in colname]
+        hdrcols.append("Tags") 
+        hdrcols.append("linenum")
+        outh.writerow(hdrcols)
         continue
   
       # film not actually in archive?
