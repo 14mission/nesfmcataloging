@@ -139,581 +139,589 @@ for row in [
       hdrpats[beforecolon] = "NOSOURCECOLUMN"
       rulefillcols[beforecolon] = True
 
-# for assigning custom object id nums for MG's
-objid_base_seen = {}
-
-# avoid objid and shelvingcode collisions
-objid_seen = {}
-shelvingcode_seen = {}
-
-# objid's already in use
-objid_incit = {}
-citobjidfh = open("existing.catalogit.objectids.txt")
-for ln in citobjidfh:
-  objid_incit[ln.strip().lower()] = True
-
 # load cast names
-castnames = {}
-castnamecorrections = {}
-cnfn = "castnames.txt"
-print(f"get cast names from {cnfn}")
-cnh = open(cnfn)
-for ln in cnh:
-  ln = ln.strip()
-  ln = re.sub(r'\s*#.*$','',ln)
-  if len(ln) == 0: continue
-  cols = ln.split("\t")
-  if re.match(r',',cols[0]):
-    raise Exception("comma in name: "+cols[0])
-  cols[0] = wsnorm(cols[0])
-  castnames[cols[0]] = True
-  for othercol in cols[1:]:
-    if len(othercol.strip()) > 0:
-      pat = re.sub(r'\(',r'(?:',othercol.strip())
-      try:
-        re.match(pat,"foo")
-      except Exception as e:
-        print("invalid regex in: "+ln)
-        raise e
-      castnamecorrections[pat] = cols[0]
-cnh.close()
-print("loaded "+str(len(castnames.keys()))+" names")
+def loadcastnames(cnfn):
+  castnames = {}
+  castnamecorrections = {}
+  cnfn = "castnames.txt"
+  print(f"get cast names from {cnfn}")
+  cnh = open(cnfn)
+  for ln in cnh:
+    ln = ln.strip()
+    ln = re.sub(r'\s*#.*$','',ln)
+    if len(ln) == 0: continue
+    cols = ln.split("\t")
+    if re.match(r',',cols[0]):
+      raise Exception("comma in name: "+cols[0])
+    cols[0] = wsnorm(cols[0])
+    castnames[cols[0]] = True
+    for othercol in cols[1:]:
+      if len(othercol.strip()) > 0:
+        pat = re.sub(r'\(',r'(?:',othercol.strip())
+        try:
+          re.match(pat,"foo")
+        except Exception as e:
+          print("invalid regex in: "+ln)
+          raise e
+        castnamecorrections[pat] = cols[0]
+  cnh.close()
+  print("loaded "+str(len(castnames.keys()))+" names")
+  return castnames, castnamecorrections
 
-# process all input files specified on the command line
-for intsv in intsvlist:
+# aka, main()
+if True:
 
-  # ignore certain files: "deaccessioned", and files written by this program
-  if re.match(r'(?i).*(de\W*a[cs]*se[cs]+ion|4cit)',intsv):
-    print(f"SKIP {intsv}")
-    continue
+  # for assigning custom object id nums for MG's
+  objid_base_seen = {} 
+  
+  # avoid objid and shelvingcode collisions
+  objid_seen = {}
+  shelvingcode_seen = {}
+  
+  # objid's already in use
+  objid_incit = {}
+  citobjidfh = open("existing.catalogit.objectids.txt")
+  for ln in citobjidfh:
+    objid_incit[ln.strip().lower()] = True
 
-  # start reading this fiel
-  print(f"read {intsv}")
-  inh = open(intsv)
-  lnum = 0
+  # load cast names and patterns
+  castnames, castnamecorrections = loadcastnames("castnames.txt")
 
-  # output file
-  outfn = re.sub(r'\.\w+$','',intsv)
-  outfn += ".4cit.csv"
-  print(f"write output to {outfn}")
-  outh = csv.writer(open(outfn,"w"))
-  hdrcols = [colname for colname in outcols if ":" not in colname]
-  hdrcols.append("Tags")
-  hdrcols.append("linenum")
-  outh.writerow(hdrcols)
-
-  # short name of file to put in output
-  source = intsv
-  source = re.sub(r'^.*- *','',source)
-  source = re.sub(r'\.tsv$','',source)
-  source = re.sub(r'^nesfm\.archive\.','',source)
-
-  # we will look at header row and figure out what input col maps to what output col
-  colmap = {}
-  for field in outcols:
-    colmap[field] = None
-
-  # read all lines
-  for ln in inh:
-    lnum += 1
-    lncols = ln.split("\t")
-    lncols[-1] = lncols[-1].strip()
-
-    # header line?
-    # map input cls to output cols
-    if colmap[objidcolname] == None:
-      # map input cols to output cols
-      for colnum, colstr in enumerate(lncols):
-        for outcol in outcols:
-          if re.match(r'(?i)^('+hdrpats[outcol]+')',colstr): colmap[outcol] = colnum
-      # check that all required output cols were matched
-      for field in sorted(colmap.keys()):
-        if colmap[field] == None:
-          if field in okmissingcols or field in rulefillcols:
-            print(field + "=None")
+  # process all input files specified on the command line
+  for intsv in intsvlist:
+  
+    # ignore certain files: "deaccessioned", and files written by this program
+    if re.match(r'(?i).*(de\W*a[cs]*se[cs]+ion|4cit)',intsv):
+      print(f"SKIP {intsv}")
+      continue
+  
+    # start reading this fiel
+    print(f"read {intsv}")
+    inh = open(intsv)
+    lnum = 0
+  
+    # output file
+    outfn = re.sub(r'\.\w+$','',intsv)
+    outfn += ".4cit.csv"
+    print(f"write output to {outfn}")
+    outh = csv.writer(open(outfn,"w"))
+    hdrcols = [colname for colname in outcols if ":" not in colname]
+    hdrcols.append("Tags")
+    hdrcols.append("linenum")
+    outh.writerow(hdrcols)
+  
+    # short name of file to put in output
+    source = intsv
+    source = re.sub(r'^.*- *','',source)
+    source = re.sub(r'\.tsv$','',source)
+    source = re.sub(r'^nesfm\.archive\.','',source)
+  
+    # we will look at header row and figure out what input col maps to what output col
+    colmap = {}
+    for field in outcols:
+      colmap[field] = None
+  
+    # read all lines
+    for ln in inh:
+      lnum += 1
+      lncols = ln.split("\t")
+      lncols[-1] = lncols[-1].strip()
+  
+      # header line?
+      # map input cls to output cols
+      if colmap[objidcolname] == None:
+        # map input cols to output cols
+        for colnum, colstr in enumerate(lncols):
+          for outcol in outcols:
+            if re.match(r'(?i)^('+hdrpats[outcol]+')',colstr): colmap[outcol] = colnum
+        # check that all required output cols were matched
+        for field in sorted(colmap.keys()):
+          if colmap[field] == None:
+            if field in okmissingcols or field in rulefillcols:
+              print(field + "=None")
+            else:
+              raise Exception("no \""+field+"\" col found in \""+intsv+"\": HDRCOLS="+",".join(lncols))
           else:
-            raise Exception("no \""+field+"\" col found in \""+intsv+"\": HDRCOLS="+",".join(lncols))
-        else:
-          print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
-      # check that nothing was mapped unexpectedly
-      unexpectedoutputcols = [colname for colname in colmap.keys() if colname not in outcols]
-      if len(unexpectedoutputcols) > 0:
-        raise Exception("unexpected output column mapping to: "+", ".join(unexpectedoutputcols))
-      # check that all input cols were mapped, except ones explicitly known to be unneeded
-      unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'(?i)(created \d+\/|updated \d+\/|catalog\W*it|filed by director or star|sorted by director or catagory|^\s*$)',lncols[colnum]) == None]
-      if len(unmappedinputcols) > 0:
-        raise Exception("unmapped input cols: "+", ".join(lncols[colnum] for colnum in unmappedinputcols))
-
-      # rest of loop is for regular data lines
-      continue
-
-    # film not actually in archive?
-    if re.search(r'(?i)NO prints in Archive',ln) != None:
-      print(f"skip line: {lnum}: "+ln.strip())
-      continue
-
-    # section divider line? print it but then ignore
-    # other ignorable types too
-    if len([col for col in lncols if col != None and len(col.strip())>0]) <= 2 or re.search(r'(?i)(HATS OFF IS A LOST FILM|no prints in archive|NO film prints.+DVD)',ln):
-      print(f"skip line: {lnum}: "+ln.strip())
-      continue
-
-    # regular line. make sure all required fields filled
-    # some fields can be empty, then we put UNKNOWN
-    outcolvals = {}
-    colstoberulefilled = {}
-    isbadrow = 0
-    for colname in outcols:
-      if colname not in colmap or colmap[colname] == None:
+            print(field + "=" + str(colmap[field]) + "=" + lncols[colmap[field]])
+        # check that nothing was mapped unexpectedly
+        unexpectedoutputcols = [colname for colname in colmap.keys() if colname not in outcols]
+        if len(unexpectedoutputcols) > 0:
+          raise Exception("unexpected output column mapping to: "+", ".join(unexpectedoutputcols))
+        # check that all input cols were mapped, except ones explicitly known to be unneeded
+        unmappedinputcols = [colnum for colnum in range(len(lncols)) if colnum not in colmap.values() and re.search(r'(?i)(created \d+\/|updated \d+\/|catalog\W*it|filed by director or star|sorted by director or catagory|^\s*$)',lncols[colnum]) == None]
+        if len(unmappedinputcols) > 0:
+          raise Exception("unmapped input cols: "+", ".join(lncols[colnum] for colnum in unmappedinputcols))
+  
+        # rest of loop is for regular data lines
         continue
-      # various ways of being "empty"
-      elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|none\W*credited|doesn\'t\W*apply|no stars\W*travelog(ue)?|var?ious|docum[ea]ntary|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
-        # some cols allowed to be empty
-        if colname in okemptycols:
-          outcolvals[colname] = None
-        # for some cols, we just specify UNKNOWN
-        elif colname in okunkcols:
-          print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip())
-          outcolvals[colname] = "UNKNOWN"
-        # if col is empty and is to be filled by a rule, put it on list of cols to check for later
-        elif colname in rulefillcols:
-          outcolvals[colname] = None
-          colstoberulefilled[colname] = True
-        # for others, an empty value is a fatal error
+  
+      # film not actually in archive?
+      if re.search(r'(?i)NO prints in Archive',ln) != None:
+        print(f"skip line: {lnum}: "+ln.strip())
+        continue
+  
+      # section divider line? print it but then ignore
+      # other ignorable types too
+      if len([col for col in lncols if col != None and len(col.strip())>0]) <= 2 or re.search(r'(?i)(HATS OFF IS A LOST FILM|no prints in archive|NO film prints.+DVD)',ln):
+        print(f"skip line: {lnum}: "+ln.strip())
+        continue
+  
+      # regular line. make sure all required fields filled
+      # some fields can be empty, then we put UNKNOWN
+      outcolvals = {}
+      colstoberulefilled = {}
+      isbadrow = 0
+      for colname in outcols:
+        if colname not in colmap or colmap[colname] == None:
+          continue
+        # various ways of being "empty"
+        elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|none\W*credited|doesn\'t\W*apply|no stars\W*travelog(ue)?|var?ious|docum[ea]ntary|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
+          # some cols allowed to be empty
+          if colname in okemptycols:
+            outcolvals[colname] = None
+          # for some cols, we just specify UNKNOWN
+          elif colname in okunkcols:
+            print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip())
+            outcolvals[colname] = "UNKNOWN"
+          # if col is empty and is to be filled by a rule, put it on list of cols to check for later
+          elif colname in rulefillcols:
+            outcolvals[colname] = None
+            colstoberulefilled[colname] = True
+          # for others, an empty value is a fatal error
+          else:
+            isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip())
+        # pipe char will cause problems later
+        elif "|" in lncols[colmap[colname]]:
+          raise Exception(f"pipe char in line {lnum}: "+ln.strip())
+        # regular valid value
         else:
-          isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip())
-      # pipe char will cause problems later
-      elif "|" in lncols[colmap[colname]]:
-        raise Exception(f"pipe char in line {lnum}: "+ln.strip())
-      # regular valid value
+          outcolvals[colname] = lncols[colmap[colname]].strip()
+  
+      # special rules:
+  
+      # in features data, special rules for handling column called: Filed by Director or Star "Silent" = filed by title
+      if re.search(r'feature',intsv) or re.search(r'<feature>',outcolvals["Name/Title"]) and isfilled(outcolvals,"Other_Names_and_Numbers/Other_Numbers:Series_Item"):
+        # if it has "dir(ector)" in parens, the field contains the director, but the director col is already filled, so ignore
+        if re.search(r'\((d|super)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
+          print("FILEBY-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+          outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
+        # if it contains "feature" or "silent", leave it for this weird "series item" field
+        elif re.search(r'(?i)(feature|silent|master\s*fs|television)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
+          print("FILEBY-IGNORE: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (cast="+str(outcolvals["Motion_Picture_Details/Cast"])+"): "+outcolvals["Name/Title"])
+          pass
+        # anything else, we assume is the star. chop off hyphenated suffixes though. also prefix "35"
+        else:
+          starname = re.sub(r'^35\s*|©|(\s*\.\s*)?\(.*?\)|\.?\s*-.*$|CCF|\.\s*$','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"])
+          starname = wsnorm(starname)
+          if re.match(r'(?i)(f\W*w\W*murnau|fritz\s+lang(\sw)?|paul leni)',starname):
+            print("FILEBY-UNFLAGGED-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+            pass
+          else:
+            print("FILEBY-STAR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" -> "+starname+ " ; (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+            addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
+            outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
+  
+      # handling of MG object ID's
+      # chop off leading MG prefix and any suffix to get numerical part
+      # there may be collisions so suffix 0, 1, etc
+      # prefix 2011.50 accession num to make canonical obj id
+      if re.match(r'(?i)^mg', outcolvals[objidcolname]):
+        outcolvals["Other_Names_and_Numbers/Other_Numbers:Old_Object_ID"] = outcolvals[objidcolname]
+        basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals[objidcolname])
+        basenum = re.sub(r'^0+','',basenum)
+        if "MG"+basenum in objid_base_seen:
+          objid_base_seen["MG"+basenum] += 1
+        else:
+          objid_base_seen["MG"+basenum] = 0
+        if objid_base_seen["MG"+basenum] > 10:
+          raise Exception("more than 10 like MG"+basenum)
+        outcolvals[objidcolname] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
+  
+      # other oddball object id types to match
+      if re.match(r'^(UNKNOWN|\S*#|Paul|MASTER|FF|E-|BB)', outcolvals[objidcolname]):
+        if re.search(r'(?i)comedy.shorts',intsv): genre_offset = 0
+        elif re.search(r'(?i)features',intsv): genre_offset = 200
+        elif re.search(r'(?i)serials',intsv): genre_offset = 400
+        elif re.search(r'(?i)animation',intsv): genre_offset = 600
+        elif re.search(r'(?i)drama',intsv): genre_offset = 800
+        elif re.search(r'(?i)hist.*news',intsv): genre_offset = 1000
+        elif re.search(r'(?i)cinema.hist',intsv): genre_offset = 1200
+        elif re.search(r'(?i)bartel.*films',intsv): genre_offset = 1400
+        elif re.search(r'(?i)test',intsv): genre_offset = 2000
+        else: raise Exception("unk obj id and no genre mapping for "+intsv)
+        basenum = "2026.67."+str(genre_offset)
+        if basenum in objid_base_seen:
+          objid_base_seen[basenum] += 1
+        else:
+          objid_base_seen[basenum] = 0
+        outcolvals[objidcolname] = "2026.67."+str(genre_offset+objid_base_seen[basenum])
+  
+      # catch remaining noncanonical object id's
+      if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
+        isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip())
+  
+      # trim object id to create accession number
+      outcolvals[accnumcolname] = re.sub(r'\.[^\.]+$','',outcolvals[objidcolname])
+      if outcolvals[accnumcolname] == outcolvals[objidcolname]:
+        raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
+  
+      # PQ goes into Condition/Notes, which is just a free-format text field, so prefix "PQ"
+      if isfilled(outcolvals,"Condition/Notes") and re.match(r'^\d',outcolvals["Condition/Notes"]):
+        outcolvals["Condition/Notes"] = "PQ"+outcolvals["Condition/Notes"]
+  
+      # extract film gauge from title: can be like **35mm** or (35mm)
+      Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
+      if Aspect_Ratio_title_match != None:
+        #print("gauge in title: \""+outcolvals["Name/Title"]+"\"")
+        coretitle = wsnorm(Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3))
+        titlefilmgauge = Aspect_Ratio_title_match.group(2) + " mm." # per LOC spec
+        #if outcolvals["Aspect_Ratio"] != None and re.search(r'\d+\s*mm', outcolvals["Aspect_Ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["Aspect_Ratio"].lower()) == None:
+        #  badrow("inconsistent film gauge: title=\""+outcolvals["Name/Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"")
+        #  continue
+        outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = titlefilmgauge
+        outcolvals["Name/Title"] = coretitle
+        #if outcolvals["Aspect_Ratio"] == None:
+        #  outcolvals["Aspect_Ratio"] = "UNKNOWN"
+        #print(" now title=\""+outcolvals["Name/Title"]+"\" gauge="+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" aspect ratio="+outcolvals["Aspect_Ratio"])
+      elif "35mm" in outcolvals["Name/Title"]:
+        print("WARNING: gauge REMAINING in title: \""+outcolvals["Name/Title"]+"\"")
+  
+      # extract frame rate from aspect ratio, if present
+      if outcolvals["Aspect_Ratio"] != None:
+        apect_ratio_and_frame_rate_match = re.match(r'(?i)^(.+?)\s+(\d+\s*fps)\s*$', outcolvals["Aspect_Ratio"])
+        if apect_ratio_and_frame_rate_match != None:
+          outcolvals["Aspect_Ratio"] = apect_ratio_and_frame_rate_match.group(1)
+          outcolvals["Motion_Picture_Details/frame_rate"] = apect_ratio_and_frame_rate_match.group(2).upper()
+  
+      # extract film gauge from aspect ratio
+      if outcolvals["Aspect_Ratio"] != None:
+        apect_ratio_and_Film_Gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?)\s*mm(\s*.*?)$', outcolvals["Aspect_Ratio"])
+        if apect_ratio_and_Film_Gauge_match != None:
+          outcolvals["Aspect_Ratio"] = apect_ratio_and_Film_Gauge_match.group(1) + apect_ratio_and_Film_Gauge_match.group(3).strip()
+          extracted_gauge = apect_ratio_and_Film_Gauge_match.group(2) + " mm."
+          if "Motion_Picture_Details/Film_Gauge/Format" in outcolvals and outcolvals["Motion_Picture_Details/Film_Gauge/Format"] != None and extracted_gauge != outcolvals["Motion_Picture_Details/Film_Gauge/Format"]:
+            isbadrow += badrow(f"inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge)
+          outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = extracted_gauge
+  
+      # if film gauge still not filled, that's a problem
+      if not isfilled(outcolvals,"Motion_Picture_Details/Film_Gauge/Format"):
+        isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip())
+  
+      # film length
+      if isfilled(outcolvals,"Motion_Picture_Details/Length"):
+        # catalogit doesn't want commas in length
+        outcolvals["Motion_Picture_Details/Length"] = re.sub(r',','',outcolvals["Motion_Picture_Details/Length"])
+        # fix spinal tap stonehenge error, and "pretty apostrophe" issue
+        outcolvals["Motion_Picture_Details/Length"] = re.sub(r'"|’','\'',outcolvals["Motion_Picture_Details/Length"])
+        # if length is not in a valid format, drop it
+        if not re.match(r'^\d+(\'|\s*ft)\s*$', outcolvals["Motion_Picture_Details/Length"]):
+          print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
+          outcolvals["Motion_Picture_Details/Length"] = None
+  
+      # country normalization
+      for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
+        if isfilled(outcolvals,countryfield):
+          outcolvals[countryfield] = re.sub(r'^U\W*S\W*A\W*','United States',outcolvals[countryfield])
+          outcolvals[countryfield] = re.sub(r'^U\W*S\W*(,|$)',r'United States\1',outcolvals[countryfield])
+          outcolvals[countryfield] = re.sub(r'^U\W*K\W*','United Kingdom',outcolvals[countryfield])
+          outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
+          outcolvals[countryfield] = wsnorm(outcolvals[countryfield])
+          outcolvals[countryfield] = outcolvals[countryfield].title()
+  
+      # actor/director name normalization
+      for namefield in personnamecols:
+        if isfilled(outcolvals,namefield):
+          # trim extra spaces
+          outcolvals[namefield] = wsnorm(outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'\s*(,|\|)\s*', r'\1', outcolvals[namefield])
+          # slightly normalized original value for logging changes
+          oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
+          # treat "in animated form" as a note, not an actor
+          # also a few collective cast name types
+          if re.search(r'(?i)in\s+animated\s+form|young pioneers|svani people', outcolvals[namefield]) != None:
+            addcolval(outcolvals,"General_Notes:General",outcolvals[namefield],"|")
+            outcolvals[namefield] = "" 
+          # clobber end-of-string elipses/etc
+          outcolvals[namefield] = re.sub(r'\s*,(\W+|\s*etc\.?\s*)$','', outcolvals[namefield])
+          # split up some prominent duos
+          outcolvals[namefield] = re.sub(r'(?i)\b((laurel|lanuel)\W*\&\W*hardy|l\W*\&\W*h)\b', 'Stan Laurel,Oliver Hardy', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\b(arbuckle\W*\&\W*normand|l\w*\&\w*h)\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\blance\W*\&\W*mabel nicholson\b', 'Lance Nicholson,Mabel Nicholson', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\b(ham\W*\&\W*bud)\b', 'Lloyd Hamilton,Bud Duncan', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bnormand\/sennett\/sterling\b', 'Mabel Normand,Mack Sennett,Ford Sterling', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bnormand\/sennett\b', 'Mabel Normand,Mack Sennett', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bnormand\/ford sterling\b', 'Mabel Normand,Ford Sterling', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bnormand\/charley chase\b', 'Mabel Normand,Charley Chase', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)^arbuckle\/ford sterling\b', 'Roscoe Arbuckle,Ford Sterling', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*normand\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*keaton\b', 'Roscoe Arbuckle,Buster Keaton', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bmax davidson\W*stan laurel\b', 'Max Davidson,Stan Laurel', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bAnita Garvin\W*Edgar Kennedy\b', 'Anita Garvin,Edgar Kennedy', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bkarr\W*[\&,]\W*alexander\b', 'Hillard Karr,Frank Alexander', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bM.BuschT.Todd\b','Mae Busch,Thelma Todd', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bfranc[ie]s\s*\&\s*robert\sflaherty\b','Frances Flaherty,Robert Flaherty', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bLeopold +\& +Theodore +Wharton\b','Leopold Wharton,Theodore Wharton', outcolvals[namefield])
+          outcolvals[namefield] = re.sub(r'(?i)\bmr\W+(and|\&)\s+mrs\W+sidney drew\b', 'Sidney Drew,Lucille McVey', outcolvals[namefield]) # other mrs drew for films up thru 1913, but we don't have any
+          outcolvals[namefield] = re.sub(r'(?i)jackie\s*\/jack\W+dailey','Jackie Dailey', outcolvals[namefield])
+          # space inits
+          outcolvals[namefield] = re.sub(r'(?i)\b([A-Z]\.)(?=\w+)\b',r'\1 ', outcolvals[namefield]) # space inits
+          # if syd chaplin is with charlie, he's often just "syd"
+          if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
+            outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
+          # change ampersand to comma; also slash, pipe, and w/
+          outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/|\s-+\s*',outcolvals[namefield]))
+          # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
+          while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
+            uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
+            #print(f"XASYMATCH: {outcolvals[namefield]}: pre={uptocomma}, actor={actor}, aswho={aswho}, post={commaetc}")
+            outcolvals[namefield] = uptocomma.strip() + actor.strip() + commaetc.strip()
+            if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
+              outcolvals["General_Notes:General"] += "|"+(actor+aswho).strip()
+            else:
+              outcolvals["General_Notes:General"] = (actor+aswho).strip()
+          # apply name normalization rules form castnames file
+          for pat in castnamecorrections:
+            outcolvals[namefield] = re.sub(r'(?i)(^|,|\|)\s*('+pat+r')\s*(?=$|,|\|)',r'\1'+castnamecorrections[pat],outcolvals[namefield])
+          # check for problematic names 
+          #for name in outcolvals[namefield].split(","):
+          #  if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
+          #    isbadrow += badrow(f"suspect name in line {lnum}: "+name)
+          newval = outcolvals[namefield]
+          #if newval != oldval:
+          #  print(f"NAMEFIX: {oldval} -> {newval}")
+          #for n in newval.split(","):
+          #  print(f"NAME: {n}")
+          # check for names not in approved set
+          if len(newval.strip()) > 0:
+            for n in newval.split(","):
+              if len(n.strip()) == 0:
+                isbadrow += badrow(f"empty name in line {lnum}")
+              elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
+                print(f"WARNING: unknown name \"{n}\" in line {lnum}")
+                #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}")
+  
+      # sound normalization
+      if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
+        soundval = outcolvals["Motion_Picture_Details/Sound/Film_Sound"]
+        if re.match(r'(?i)^silent$',soundval):
+          soundval = "si."
+        else:
+          outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] = soundval
+          soundval = "sd."
+        #print(outcolvals["Motion_Picture_Details/Sound/Film_Sound"]+" -> "+soundval+" + "+(outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] if "Motion_Picture_Details/Sound/Sound_Notes:Type" in outcolvals else ""))
+        outcolvals["Motion_Picture_Details/Sound/Film_Sound"] = soundval
+  
+      # color normalization: only specific set of values are allowed
+      if isfilled(outcolvals,"Motion_Picture_Details/Color_Characteristics"):
+        if re.match(r'(?i)\s*b\s*\&\s*w\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
+          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
+        elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
+          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
+        elif re.match(r'(?i)\s*(tint(ed|s|ing)?|w\/tints?)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted)"
+        elif re.match(r'(?i)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
+        elif re.match(r'(?i)\s*(tint(ed|s|ing))\s*(and|\W+)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted and toned)"
+        elif re.match(r'(?i)\s*(b\W*w\W*c(olor|ol|)|c(olor|ol|)\W*b\W*w)\W*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col. and b&w"
+        elif re.match(r'(?i)\s*(faded\W+)?red\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+          addcolval(outcolvals,"Condition/Notes",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
+          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
+        elif re.match(r'(?i)\s*(cinecolor)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+          addcolval(outcolvals,"General_Notes:General",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
+          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
+        else:
+          isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"])
+  
+      # TBD: handle serieses
+      # if series col, and filled, prefix to title
+      # if "series" in colmap and len(lncols[colmap["series"]].strip()):
+      #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
+  
+      # aspect gauge normalization; remove word parts, put into a note
+      if isfilled(outcolvals,"Aspect_Ratio"):
+        if re.match(r'(?i)^\s*(windowbox(ed)?)\s*$', outcolvals["Aspect_Ratio"]):
+          addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
+          outcolvals["Aspect_Ratio"] = None
+        elif re.match(r'(?i)^\s*R-\d.*R-\d', outcolvals["Aspect_Ratio"]):
+          addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
+          outcolvals["Aspect_Ratio"] = "mixed"
+        elif (Aspect_Ratio_match := re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])) == None:
+          isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"])
+        else:
+          outcolvals["Aspect_Ratio"] = Aspect_Ratio_match.group(2)
+          ratiolabel = Aspect_Ratio_match.group(1) + " " + Aspect_Ratio_match.group(3)
+          if len(ratiolabel.strip()) > 0:
+            if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
+              outcolvals["General_Notes:Aperture_Image_Format"] = "Movietone"
+            elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
+              outcolvals["General_Notes:Aperture_Image_Format"] = "Full Silent"
+            elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
+              outcolvals["General_Notes:Aperture_Image_Format"] = "Academy"
+            elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
+              outcolvals["General_Notes:Aperture_Image_Format"] = "Matted"
+            # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
+            elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
+              outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "super "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
+            elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*(std|standard)?\W*$',ratiolabel):
+              outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "standard "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
+            # any other random verbiage is an error
+            else:
+              isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel)
+  
+      # film stock normalization
+      if isfilled(outcolvals,"Motion_Picture_Details/Film_Stock"):
+        # fix spelling etc
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ac[ei]t[aie]te','acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)di\W*acetate','di-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)tri\W*acetate','tri-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)g[aer]+v[ae]+r[ts]*','Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)agfa\W*gevaert','Agfa-Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ferramia','ferrania',outcolvals["Motion_Picture_Details/Film_Stock"])
+        # extract date
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'\b(\d{4})\s*(\&|and|-)\s*(\d{4})',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+        for yearmatch in re.findall(r'(\b\d\d\d\d|\'\d\d)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
+          if isfilled(outcolvals,"Motion_Picture_Details/Date_Code"):
+            isbadrow += badrow(f"multiple date specs in line {lnum}")
+          yearmatch = re.sub(r'^\'','19',yearmatch)
+          outcolvals["Motion_Picture_Details/Date_Code"] = yearmatch
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(\b\d\d\d\d|\'\d\d)\b',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+        # clean up stray parens and puncs
+        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'"|\(|\)|\.',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+        # standardize unmarked
+        if re.search(r'(?i)unmarked|no.+mark',outcolvals["Motion_Picture_Details/Film_Stock"]) != None:
+          outcolvals["Motion_Picture_Details/Film_Stock"] = "no marks"
+        # find film base type and copy to Film_Base
+        for basetypematch in re.findall(r'\b((?:(?:di-?|tri-)?acetate|safety)(?:\s+film)?)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
+          addcolval(outcolvals,"Motion_Picture_Details/Film_Base",basetypematch," ")
+  
+        # whitespace and case normalization
+        outcolvals["Motion_Picture_Details/Film_Stock"] = " ".join(
+          [
+            w if re.match(r'.*\d.*',w) else "DuPont" if re.match(r'(?i)\bdupont\b',w) else w.title() if re.match(r'(?i)^(kodak|eastman|dupont|agfa|agfa-gevaert|gevaert|ferrania|fuji|kodascope|belgium)$',w) else w.lower()
+            for w in outcolvals["Motion_Picture_Details/Film_Stock"].split()
+          ]
+        )
+  
+      # extract parenthetical notes from title
+      for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name/Title']):
+        # various series names? prefix to title, with slash
+        if re.search(r'(?i)(our gang|little rascals|hal roach\'s rascals)', parenexp):
+          outcolvals['Name/Title'] = "Our Gang / "+outcolvals['Name/Title']
+        elif re.search(r'(?i)(ma?cdougal+ (kids|alley))', parenexp):
+          outcolvals['Name/Title'] = "McDougall Alley Gang / "+outcolvals['Name/Title']
+        # anything else is a note
+        else:
+          addcolval(outcolvals,"General_Notes:General",parenexp.strip(" ()"),"|")
+      # delte paren exprs from title.  also do whitespace norm
+      outcolvals['Name/Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name/Title'])
+      outcolvals['Name/Title'] = wsnorm(outcolvals['Name/Title'])
+  
+      # title fixes
+      # clobber final period
+      outcolvals['Name/Title'] = re.sub(r'\s*\.\s*$','',outcolvals['Name/Title'])
+      # "movie title, the" -> "the movie title"
+      outcolvals['Name/Title'] = re.sub(r'(?i)^(.+)\s*,\s*the\s*$',r'The \1',outcolvals['Name/Title'])
+  
+      # check if cols that were supposed to be supplied by rules actually were
+      for colname in colstoberulefilled:
+        print(f"TOBERULEFILLED: {colname}")
+        if not isfilled(outcolvals,colname):
+          isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip())
+  
+      # check for dup objid and dup shelving code
+      record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]
+      if outcolvals[objidcolname] in objid_seen:
+        isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary)
       else:
-        outcolvals[colname] = lncols[colmap[colname]].strip()
-
-    # special rules:
-
-    # in features data, special rules for handling column called: Filed by Director or Star "Silent" = filed by title
-    if re.search(r'feature',intsv) or re.search(r'<feature>',outcolvals["Name/Title"]) and isfilled(outcolvals,"Other_Names_and_Numbers/Other_Numbers:Series_Item"):
-      # if it has "dir(ector)" in parens, the field contains the director, but the director col is already filled, so ignore
-      if re.search(r'\((d|super)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
-        print("FILEBY-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
-        outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
-      # if it contains "feature" or "silent", leave it for this weird "series item" field
-      elif re.search(r'(?i)(feature|silent|master\s*fs|television)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
-        print("FILEBY-IGNORE: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (cast="+str(outcolvals["Motion_Picture_Details/Cast"])+"): "+outcolvals["Name/Title"])
-        pass
-      # anything else, we assume is the star. chop off hyphenated suffixes though. also prefix "35"
-      else:
-        starname = re.sub(r'^35\s*|©|(\s*\.\s*)?\(.*?\)|\.?\s*-.*$|CCF|\.\s*$','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"])
-        starname = wsnorm(starname)
-        if re.match(r'(?i)(f\W*w\W*murnau|fritz\s+lang(\sw)?|paul leni)',starname):
-          print("FILEBY-UNFLAGGED-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+        objid_seen[outcolvals[objidcolname]] = record_summary
+      if outcolvals[objidcolname].lower() in objid_incit:
+        isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname])
+      if "Other_Names_and_Numbers/Other_Numbers:Shelving" in outcolvals:
+        normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]).lower()
+        if normedshelvingcode == "missing":
+          pass
+        elif normedshelvingcode in shelvingcode_seen:
+          print("WARNING: dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary)
+        else:
+          shelvingcode_seen[normedshelvingcode] = record_summary
+  
+      # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
+      if "Location/Location" in outcolvals:
+        if re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["Location/Location"]):
+          outcolvals["Location/Location"] = re.sub(
+            r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
+            lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
+            outcolvals["Location/Location"])
+        elif re.match(r'(?i)^\W*(freezer|fridge|missing|storage|unknown)\W*$',outcolvals["Location/Location"]):
+          outcolvals["Location/Location"] = outcolvals["Location/Location"].strip().upper()
+        elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
           pass
         else:
-          print("FILEBY-STAR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" -> "+starname+ " ; (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
-          addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
-          outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
-
-    # handling of MG object ID's
-    # chop off leading MG prefix and any suffix to get numerical part
-    # there may be collisions so suffix 0, 1, etc
-    # prefix 2011.50 accession num to make canonical obj id
-    if re.match(r'(?i)^mg', outcolvals[objidcolname]):
-      outcolvals["Other_Names_and_Numbers/Other_Numbers:Old_Object_ID"] = outcolvals[objidcolname]
-      basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals[objidcolname])
-      basenum = re.sub(r'^0+','',basenum)
-      if "MG"+basenum in objid_base_seen:
-        objid_base_seen["MG"+basenum] += 1
-      else:
-        objid_base_seen["MG"+basenum] = 0
-      if objid_base_seen["MG"+basenum] > 10:
-        raise Exception("more than 10 like MG"+basenum)
-      outcolvals[objidcolname] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
-
-    # other oddball object id types to match
-    if re.match(r'^(UNKNOWN|\S*#|Paul|MASTER|FF|E-|BB)', outcolvals[objidcolname]):
-      if re.search(r'(?i)comedy.shorts',intsv): genre_offset = 0
-      elif re.search(r'(?i)features',intsv): genre_offset = 200
-      elif re.search(r'(?i)serials',intsv): genre_offset = 400
-      elif re.search(r'(?i)animation',intsv): genre_offset = 600
-      elif re.search(r'(?i)drama',intsv): genre_offset = 800
-      elif re.search(r'(?i)hist.*news',intsv): genre_offset = 1000
-      elif re.search(r'(?i)cinema.hist',intsv): genre_offset = 1200
-      elif re.search(r'(?i)bartel.*films',intsv): genre_offset = 1400
-      elif re.search(r'(?i)test',intsv): genre_offset = 2000
-      else: raise Exception("unk obj id and no genre mapping for "+intsv)
-      basenum = "2026.67."+str(genre_offset)
-      if basenum in objid_base_seen:
-        objid_base_seen[basenum] += 1
-      else:
-        objid_base_seen[basenum] = 0
-      outcolvals[objidcolname] = "2026.67."+str(genre_offset+objid_base_seen[basenum])
-
-    # catch remaining noncanonical object id's
-    if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
-      isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip())
-
-    # trim object id to create accession number
-    outcolvals[accnumcolname] = re.sub(r'\.[^\.]+$','',outcolvals[objidcolname])
-    if outcolvals[accnumcolname] == outcolvals[objidcolname]:
-      raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
-
-    # PQ goes into Condition/Notes, which is just a free-format text field, so prefix "PQ"
-    if isfilled(outcolvals,"Condition/Notes") and re.match(r'^\d',outcolvals["Condition/Notes"]):
-      outcolvals["Condition/Notes"] = "PQ"+outcolvals["Condition/Notes"]
-
-    # extract film gauge from title: can be like **35mm** or (35mm)
-    Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
-    if Aspect_Ratio_title_match != None:
-      #print("gauge in title: \""+outcolvals["Name/Title"]+"\"")
-      coretitle = wsnorm(Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3))
-      titlefilmgauge = Aspect_Ratio_title_match.group(2) + " mm." # per LOC spec
-      #if outcolvals["Aspect_Ratio"] != None and re.search(r'\d+\s*mm', outcolvals["Aspect_Ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["Aspect_Ratio"].lower()) == None:
-      #  badrow("inconsistent film gauge: title=\""+outcolvals["Name/Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"")
-      #  continue
-      outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = titlefilmgauge
-      outcolvals["Name/Title"] = coretitle
-      #if outcolvals["Aspect_Ratio"] == None:
-      #  outcolvals["Aspect_Ratio"] = "UNKNOWN"
-      #print(" now title=\""+outcolvals["Name/Title"]+"\" gauge="+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" aspect ratio="+outcolvals["Aspect_Ratio"])
-    elif "35mm" in outcolvals["Name/Title"]:
-      print("WARNING: gauge REMAINING in title: \""+outcolvals["Name/Title"]+"\"")
-
-    # extract frame rate from aspect ratio, if present
-    if outcolvals["Aspect_Ratio"] != None:
-      apect_ratio_and_frame_rate_match = re.match(r'(?i)^(.+?)\s+(\d+\s*fps)\s*$', outcolvals["Aspect_Ratio"])
-      if apect_ratio_and_frame_rate_match != None:
-        outcolvals["Aspect_Ratio"] = apect_ratio_and_frame_rate_match.group(1)
-        outcolvals["Motion_Picture_Details/frame_rate"] = apect_ratio_and_frame_rate_match.group(2).upper()
-
-    # extract film gauge from aspect ratio
-    if outcolvals["Aspect_Ratio"] != None:
-      apect_ratio_and_Film_Gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?)\s*mm(\s*.*?)$', outcolvals["Aspect_Ratio"])
-      if apect_ratio_and_Film_Gauge_match != None:
-        outcolvals["Aspect_Ratio"] = apect_ratio_and_Film_Gauge_match.group(1) + apect_ratio_and_Film_Gauge_match.group(3).strip()
-        extracted_gauge = apect_ratio_and_Film_Gauge_match.group(2) + " mm."
-        if "Motion_Picture_Details/Film_Gauge/Format" in outcolvals and outcolvals["Motion_Picture_Details/Film_Gauge/Format"] != None and extracted_gauge != outcolvals["Motion_Picture_Details/Film_Gauge/Format"]:
-          isbadrow += badrow(f"inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge)
-        outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = extracted_gauge
-
-    # if film gauge still not filled, that's a problem
-    if not isfilled(outcolvals,"Motion_Picture_Details/Film_Gauge/Format"):
-      isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip())
-
-    # film length
-    if isfilled(outcolvals,"Motion_Picture_Details/Length"):
-      # catalogit doesn't want commas in length
-      outcolvals["Motion_Picture_Details/Length"] = re.sub(r',','',outcolvals["Motion_Picture_Details/Length"])
-      # fix spinal tap stonehenge error, and "pretty apostrophe" issue
-      outcolvals["Motion_Picture_Details/Length"] = re.sub(r'"|’','\'',outcolvals["Motion_Picture_Details/Length"])
-      # if length is not in a valid format, drop it
-      if not re.match(r'^\d+(\'|\s*ft)\s*$', outcolvals["Motion_Picture_Details/Length"]):
-        print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
-        outcolvals["Motion_Picture_Details/Length"] = None
-
-    # country normalization
-    for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
-      if isfilled(outcolvals,countryfield):
-        outcolvals[countryfield] = re.sub(r'^U\W*S\W*A\W*','United States',outcolvals[countryfield])
-        outcolvals[countryfield] = re.sub(r'^U\W*S\W*(,|$)',r'United States\1',outcolvals[countryfield])
-        outcolvals[countryfield] = re.sub(r'^U\W*K\W*','United Kingdom',outcolvals[countryfield])
-        outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
-        outcolvals[countryfield] = wsnorm(outcolvals[countryfield])
-        outcolvals[countryfield] = outcolvals[countryfield].title()
-
-    # actor/director name normalization
-    for namefield in personnamecols:
-      if isfilled(outcolvals,namefield):
-        # trim extra spaces
-        outcolvals[namefield] = wsnorm(outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'\s*(,|\|)\s*', r'\1', outcolvals[namefield])
-        # slightly normalized original value for logging changes
-        oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
-        # treat "in animated form" as a note, not an actor
-        # also a few collective cast name types
-        if re.search(r'(?i)in\s+animated\s+form|young pioneers|svani people', outcolvals[namefield]) != None:
-          addcolval(outcolvals,"General_Notes:General",outcolvals[namefield],"|")
-          outcolvals[namefield] = "" 
-        # clobber end-of-string elipses/etc
-        outcolvals[namefield] = re.sub(r'\s*,(\W+|\s*etc\.?\s*)$','', outcolvals[namefield])
-        # split up some prominent duos
-        outcolvals[namefield] = re.sub(r'(?i)\b((laurel|lanuel)\W*\&\W*hardy|l\W*\&\W*h)\b', 'Stan Laurel,Oliver Hardy', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(arbuckle\W*\&\W*normand|l\w*\&\w*h)\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\blance\W*\&\W*mabel nicholson\b', 'Lance Nicholson,Mabel Nicholson', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\b(ham\W*\&\W*bud)\b', 'Lloyd Hamilton,Bud Duncan', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bnormand\/sennett\/sterling\b', 'Mabel Normand,Mack Sennett,Ford Sterling', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bnormand\/sennett\b', 'Mabel Normand,Mack Sennett', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bnormand\/ford sterling\b', 'Mabel Normand,Ford Sterling', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bnormand\/charley chase\b', 'Mabel Normand,Charley Chase', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)^arbuckle\/ford sterling\b', 'Roscoe Arbuckle,Ford Sterling', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*normand\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*keaton\b', 'Roscoe Arbuckle,Buster Keaton', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bmax davidson\W*stan laurel\b', 'Max Davidson,Stan Laurel', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bAnita Garvin\W*Edgar Kennedy\b', 'Anita Garvin,Edgar Kennedy', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bkarr\W*[\&,]\W*alexander\b', 'Hillard Karr,Frank Alexander', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bM.BuschT.Todd\b','Mae Busch,Thelma Todd', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bfranc[ie]s\s*\&\s*robert\sflaherty\b','Frances Flaherty,Robert Flaherty', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bLeopold +\& +Theodore +Wharton\b','Leopold Wharton,Theodore Wharton', outcolvals[namefield])
-        outcolvals[namefield] = re.sub(r'(?i)\bmr\W+(and|\&)\s+mrs\W+sidney drew\b', 'Sidney Drew,Lucille McVey', outcolvals[namefield]) # other mrs drew for films up thru 1913, but we don't have any
-        outcolvals[namefield] = re.sub(r'(?i)jackie\s*\/jack\W+dailey','Jackie Dailey', outcolvals[namefield])
-        # space inits
-        outcolvals[namefield] = re.sub(r'(?i)\b([A-Z]\.)(?=\w+)\b',r'\1 ', outcolvals[namefield]) # space inits
-        # if syd chaplin is with charlie, he's often just "syd"
-        if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
-          outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
-        # change ampersand to comma; also slash, pipe, and w/
-        outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/|\s-+\s*',outcolvals[namefield]))
-        # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
-        while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
-          uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
-          #print(f"XASYMATCH: {outcolvals[namefield]}: pre={uptocomma}, actor={actor}, aswho={aswho}, post={commaetc}")
-          outcolvals[namefield] = uptocomma.strip() + actor.strip() + commaetc.strip()
-          if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
-            outcolvals["General_Notes:General"] += "|"+(actor+aswho).strip()
-          else:
-            outcolvals["General_Notes:General"] = (actor+aswho).strip()
-        # apply name normalization rules form castnames file
-        for pat in castnamecorrections:
-          outcolvals[namefield] = re.sub(r'(?i)(^|,|\|)\s*('+pat+r')\s*(?=$|,|\|)',r'\1'+castnamecorrections[pat],outcolvals[namefield])
-        # check for problematic names 
-        #for name in outcolvals[namefield].split(","):
-        #  if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
-        #    isbadrow += badrow(f"suspect name in line {lnum}: "+name)
-        newval = outcolvals[namefield]
-        #if newval != oldval:
-        #  print(f"NAMEFIX: {oldval} -> {newval}")
-        #for n in newval.split(","):
-        #  print(f"NAME: {n}")
-        # check for names not in approved set
-        if len(newval.strip()) > 0:
-          for n in newval.split(","):
-            if len(n.strip()) == 0:
-              isbadrow += badrow(f"empty name in line {lnum}")
-            elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
-              print(f"WARNING: unknown name \"{n}\" in line {lnum}")
-              #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}")
-
-    # sound normalization
-    if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
-      soundval = outcolvals["Motion_Picture_Details/Sound/Film_Sound"]
-      if re.match(r'(?i)^silent$',soundval):
-        soundval = "si."
-      else:
-        outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] = soundval
-        soundval = "sd."
-      #print(outcolvals["Motion_Picture_Details/Sound/Film_Sound"]+" -> "+soundval+" + "+(outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] if "Motion_Picture_Details/Sound/Sound_Notes:Type" in outcolvals else ""))
-      outcolvals["Motion_Picture_Details/Sound/Film_Sound"] = soundval
-
-    # color normalization: only specific set of values are allowed
-    if isfilled(outcolvals,"Motion_Picture_Details/Color_Characteristics"):
-      if re.match(r'(?i)\s*b\s*\&\s*w\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
-        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
-      elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
-        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-      elif re.match(r'(?i)\s*(tint(ed|s|ing)?|w\/tints?)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted)"
-      elif re.match(r'(?i)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
-      elif re.match(r'(?i)\s*(tint(ed|s|ing))\s*(and|\W+)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted and toned)"
-      elif re.match(r'(?i)\s*(b\W*w\W*c(olor|ol|)|c(olor|ol|)\W*b\W*w)\W*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col. and b&w"
-      elif re.match(r'(?i)\s*(faded\W+)?red\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-        addcolval(outcolvals,"Condition/Notes",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
-        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-      elif re.match(r'(?i)\s*(cinecolor)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-        addcolval(outcolvals,"General_Notes:General",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
-        outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-      else:
-        isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"])
-
-    # TBD: handle serieses
-    # if series col, and filled, prefix to title
-    # if "series" in colmap and len(lncols[colmap["series"]].strip()):
-    #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
-
-    # aspect gauge normalization; remove word parts, put into a note
-    if isfilled(outcolvals,"Aspect_Ratio"):
-      if re.match(r'(?i)^\s*(windowbox(ed)?)\s*$', outcolvals["Aspect_Ratio"]):
-        addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
-        outcolvals["Aspect_Ratio"] = None
-      elif re.match(r'(?i)^\s*R-\d.*R-\d', outcolvals["Aspect_Ratio"]):
-        addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
-        outcolvals["Aspect_Ratio"] = "mixed"
-      elif (Aspect_Ratio_match := re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])) == None:
-        isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"])
-      else:
-        outcolvals["Aspect_Ratio"] = Aspect_Ratio_match.group(2)
-        ratiolabel = Aspect_Ratio_match.group(1) + " " + Aspect_Ratio_match.group(3)
-        if len(ratiolabel.strip()) > 0:
-          if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes:Aperture_Image_Format"] = "Movietone"
-          elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes:Aperture_Image_Format"] = "Full Silent"
-          elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
-            outcolvals["General_Notes:Aperture_Image_Format"] = "Academy"
-          elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
-            outcolvals["General_Notes:Aperture_Image_Format"] = "Matted"
-          # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
-          elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
-            outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "super "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
-          elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*(std|standard)?\W*$',ratiolabel):
-            outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "standard "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
-          # any other random verbiage is an error
-          else:
-            isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel)
-
-    # film stock normalization
-    if isfilled(outcolvals,"Motion_Picture_Details/Film_Stock"):
-      # fix spelling etc
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ac[ei]t[aie]te','acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)di\W*acetate','di-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)tri\W*acetate','tri-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)g[aer]+v[ae]+r[ts]*','Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)agfa\W*gevaert','Agfa-Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ferramia','ferrania',outcolvals["Motion_Picture_Details/Film_Stock"])
-      # extract date
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'\b(\d{4})\s*(\&|and|-)\s*(\d{4})',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
-      for yearmatch in re.findall(r'(\b\d\d\d\d|\'\d\d)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
-        if isfilled(outcolvals,"Motion_Picture_Details/Date_Code"):
-          isbadrow += badrow(f"multiple date specs in line {lnum}")
-        yearmatch = re.sub(r'^\'','19',yearmatch)
-        outcolvals["Motion_Picture_Details/Date_Code"] = yearmatch
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(\b\d\d\d\d|\'\d\d)\b',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
-      # clean up stray parens and puncs
-      outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'"|\(|\)|\.',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
-      # standardize unmarked
-      if re.search(r'(?i)unmarked|no.+mark',outcolvals["Motion_Picture_Details/Film_Stock"]) != None:
-        outcolvals["Motion_Picture_Details/Film_Stock"] = "no marks"
-      # find film base type and copy to Film_Base
-      for basetypematch in re.findall(r'\b((?:(?:di-?|tri-)?acetate|safety)(?:\s+film)?)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
-        addcolval(outcolvals,"Motion_Picture_Details/Film_Base",basetypematch," ")
-
-      # whitespace and case normalization
-      outcolvals["Motion_Picture_Details/Film_Stock"] = " ".join(
-        [
-          w if re.match(r'.*\d.*',w) else "DuPont" if re.match(r'(?i)\bdupont\b',w) else w.title() if re.match(r'(?i)^(kodak|eastman|dupont|agfa|agfa-gevaert|gevaert|ferrania|fuji|kodascope|belgium)$',w) else w.lower()
-          for w in outcolvals["Motion_Picture_Details/Film_Stock"].split()
-        ]
-      )
-
-    # extract parenthetical notes from title
-    for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name/Title']):
-      # various series names? prefix to title, with slash
-      if re.search(r'(?i)(our gang|little rascals|hal roach\'s rascals)', parenexp):
-        outcolvals['Name/Title'] = "Our Gang / "+outcolvals['Name/Title']
-      elif re.search(r'(?i)(ma?cdougal+ (kids|alley))', parenexp):
-        outcolvals['Name/Title'] = "McDougall Alley Gang / "+outcolvals['Name/Title']
-      # anything else is a note
-      else:
-        addcolval(outcolvals,"General_Notes:General",parenexp.strip(" ()"),"|")
-    # delte paren exprs from title.  also do whitespace norm
-    outcolvals['Name/Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name/Title'])
-    outcolvals['Name/Title'] = wsnorm(outcolvals['Name/Title'])
-
-    # title fixes
-    # clobber final period
-    outcolvals['Name/Title'] = re.sub(r'\s*\.\s*$','',outcolvals['Name/Title'])
-    # "movie title, the" -> "the movie title"
-    outcolvals['Name/Title'] = re.sub(r'(?i)^(.+)\s*,\s*the\s*$',r'The \1',outcolvals['Name/Title'])
-
-    # check if cols that were supposed to be supplied by rules actually were
-    for colname in colstoberulefilled:
-      print(f"TOBERULEFILLED: {colname}")
-      if not isfilled(outcolvals,colname):
-        isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip())
-
-    # check for dup objid and dup shelving code
-    record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]
-    if outcolvals[objidcolname] in objid_seen:
-      isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary)
-    else:
-      objid_seen[outcolvals[objidcolname]] = record_summary
-    if outcolvals[objidcolname].lower() in objid_incit:
-      isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname])
-    if "Other_Names_and_Numbers/Other_Numbers:Shelving" in outcolvals:
-      normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]).lower()
-      if normedshelvingcode == "missing":
-        pass
-      elif normedshelvingcode in shelvingcode_seen:
-        print("WARNING: dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary)
-      else:
-        shelvingcode_seen[normedshelvingcode] = record_summary
-
-    # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
-    if "Location/Location" in outcolvals:
-      if re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["Location/Location"]):
-        outcolvals["Location/Location"] = re.sub(
-          r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
-          lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
-          outcolvals["Location/Location"])
-      elif re.match(r'(?i)^\W*(freezer|fridge|missing|storage|unknown)\W*$',outcolvals["Location/Location"]):
-        outcolvals["Location/Location"] = outcolvals["Location/Location"].strip().upper()
-      elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
-        pass
-      else:
-        isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"])
-
-    # for all commasplit cols, replace comma with pipe.
-    for colname in outcolvals:
-      if outcolvals[colname] != None:
-        if colname in commasplitcols:
-          outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
-        if colname in personnamecols:
-          outcolvals[colname] = re.sub(r'([a-z]) (\d{4}-\d{4})\b',r'\1, \2',outcolvals[colname])
-
-    # cols with colon: strip to basename, store value there, prefix bit after colon
-    for coloncol in [colname for colname in outcols if ":" in colname]:
-      if coloncol in outcolvals and outcolvals[coloncol] != None and len(outcolvals[coloncol]) > 0:
-        beforecolon, aftercolon = coloncol.split(":")
-        prefixedval = re.sub(r'_',' ',aftercolon) + ": " + outcolvals[coloncol]
-        outcolvals[beforecolon] = outcolvals[beforecolon] + "|" + prefixedval if beforecolon in outcolvals and outcolvals[beforecolon] != None else prefixedval
-
-    # reformat cols with multiple, pipe-delimited values, with json
-    # some cols with complicated structures need this even for just one value
-    for colname in outcolvals:
-      if isfilled(outcolvals,colname) and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
-        if colname == "General_Notes":
-          vallist = []
-          for note in outcolvals[colname].split("|"):
-            if ":" in note:
-              notetype, notetext = note.split(":",maxsplit=1)
-              notetype = " ".join(notetype.strip().split("_"))
+          isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"])
+  
+      # for all commasplit cols, replace comma with pipe.
+      for colname in outcolvals:
+        if outcolvals[colname] != None:
+          if colname in commasplitcols:
+            outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
+          if colname in personnamecols:
+            outcolvals[colname] = re.sub(r'([a-z]) (\d{4}-\d{4})\b',r'\1, \2',outcolvals[colname])
+  
+      # cols with colon: strip to basename, store value there, prefix bit after colon
+      for coloncol in [colname for colname in outcols if ":" in colname]:
+        if coloncol in outcolvals and outcolvals[coloncol] != None and len(outcolvals[coloncol]) > 0:
+          beforecolon, aftercolon = coloncol.split(":")
+          prefixedval = re.sub(r'_',' ',aftercolon) + ": " + outcolvals[coloncol]
+          outcolvals[beforecolon] = outcolvals[beforecolon] + "|" + prefixedval if beforecolon in outcolvals and outcolvals[beforecolon] != None else prefixedval
+  
+      # reformat cols with multiple, pipe-delimited values, with json
+      # some cols with complicated structures need this even for just one value
+      for colname in outcolvals:
+        if isfilled(outcolvals,colname) and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
+          if colname == "General_Notes":
+            vallist = []
+            for note in outcolvals[colname].split("|"):
+              if ":" in note:
+                notetype, notetext = note.split(":",maxsplit=1)
+                notetype = " ".join(notetype.strip().split("_"))
+                vallist.append({
+                  "http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": notetype.strip(),
+                  "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": notetext.strip()})
+              else:
+                vallist.append({"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": note.strip()})
+          elif colname == "Other_Names_and_Numbers/Other_Numbers":
+            vallist = []
+            for othernum in outcolvals[colname].split("|"):
+              numtype, number = othernum.split(":")
               vallist.append({
-                "http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": notetype.strip(),
-                "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": notetext.strip()})
-            else:
-              vallist.append({"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": note.strip()})
-        elif colname == "Other_Names_and_Numbers/Other_Numbers":
-          vallist = []
-          for othernum in outcolvals[colname].split("|"):
-            numtype, number = othernum.split(":")
-            vallist.append({
-              "http://www.catalogit.me/rdf/ontologies/core/common#hasType": numtype.strip(),
-              "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": number.strip()})
-        else:
-          vallist = []
-          sawbefore = {}
-          for val in [s.strip() for s in outcolvals[colname].split("|")]:
-            if val not in sawbefore:
-              vallist.append(val)
-              sawbefore[val] = True
-        outcolvals[colname] = json.dumps(vallist)
-
-    # print columns
-    novalstr = ""
-    outrow = [
-      # if undef replace with str indicating empty
-      outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr
-      # for almost all columns
-      for colname in
-      # skip ones in colon in name because they were mapped into base (before colon) name
-      [colname for colname in outcols if ":" not in colname]
-    ]
-    outrow.append(source)
-    outrow.append(str(lnum))
-    outh.writerow(outrow)
-
-    # in case badrow()
-    if isbadrow > 0:
-      print("bad row(s) found!")
-      sys.exit(666)
+                "http://www.catalogit.me/rdf/ontologies/core/common#hasType": numtype.strip(),
+                "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": number.strip()})
+          else:
+            vallist = []
+            sawbefore = {}
+            for val in [s.strip() for s in outcolvals[colname].split("|")]:
+              if val not in sawbefore:
+                vallist.append(val)
+                sawbefore[val] = True
+          outcolvals[colname] = json.dumps(vallist)
+  
+      # print columns
+      novalstr = ""
+      outrow = [
+        # if undef replace with str indicating empty
+        outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr
+        # for almost all columns
+        for colname in
+        # skip ones in colon in name because they were mapped into base (before colon) name
+        [colname for colname in outcols if ":" not in colname]
+      ]
+      outrow.append(source)
+      outrow.append(str(lnum))
+      outh.writerow(outrow)
+  
+      # in case badrow()
+      if isbadrow > 0:
+        print("bad row(s) found!")
+        sys.exit(666)
