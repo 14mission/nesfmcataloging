@@ -430,10 +430,7 @@ for intsv in intsvlist:
         oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
         # treat "in animated form" as a note, not an actor
         if re.search(r'(?i)in\s+animated\s+form', outcolvals[namefield]) != None:
-          if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
-            outcolvals["General_Notes:General"] += "|"+outcolvals[namefield]
-          else:
-            outcolvals["General_Notes:General"] = outcolvals[namefield]
+          addcolval(outcolvals,"General_Notes:General",outcolvals[namefield],"|")
           outcolvals[namefield] = "" 
         # clobber end-of-string elipses/etc
         outcolvals[namefield] = re.sub(r'\s*,(\W+|\s*etc\.?\s*)$','', outcolvals[namefield])
