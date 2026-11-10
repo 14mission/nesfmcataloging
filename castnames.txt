@@ -151,6 +151,7 @@ Hal Mohr		# Mohr, Hal, 1894-1974; https://lccn.loc.gov/n87896227
 Hal Roach	#nk; Roach, Hal, 1892-1992; https://lccn.loc.gov/n50051034
 Hal Roach's Rascals (Group)	Our Gang|Little Rascals|Hal Roach's Rascals
 Hal Yates		# Yates, Hal; https://lccn.loc.gov/no2002037689
+Halbert Brown	hal(bert)? brown	# not in LoC; found in Spehr & Lundquist
 Hampton Del Ruth		# Del Ruth, Hampton; https://lccn.loc.gov/no91011434
 Hank Mann	# cf hair and moustache in box in office; Mann, Hank, 1887-1971; https://lccn.loc.gov/n85342797
 Hannah Washington		# aka Oatmeal; https://www.wikidata.org/wiki/Q28374237
