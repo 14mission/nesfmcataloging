@@ -256,6 +256,57 @@ def objid_rules(outcolvals,intsv,objid_base_seen):
   if outcolvals[accnumcolname] == outcolvals[objidcolname]:
     raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
 
+def film_format_rules(outcolvals):
+ 
+  # extract film gauge from title: can be like **35mm** or (35mm)
+  Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
+  if Aspect_Ratio_title_match != None:
+    #print("gauge in title: \""+outcolvals["Name/Title"]+"\"")
+    coretitle = wsnorm(Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3))
+    titlefilmgauge = Aspect_Ratio_title_match.group(2) + " mm." # per LOC spec
+    #if outcolvals["Aspect_Ratio"] != None and re.search(r'\d+\s*mm', outcolvals["Aspect_Ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["Aspect_Ratio"].lower()) == None:
+    #  badrow("inconsistent film gauge: title=\""+outcolvals["Name/Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"")
+    #  continue
+    outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = titlefilmgauge
+    outcolvals["Name/Title"] = coretitle
+    #if outcolvals["Aspect_Ratio"] == None:
+    #  outcolvals["Aspect_Ratio"] = "UNKNOWN"
+    #print(" now title=\""+outcolvals["Name/Title"]+"\" gauge="+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" aspect ratio="+outcolvals["Aspect_Ratio"])
+  elif "35mm" in outcolvals["Name/Title"]:
+    print("WARNING: gauge REMAINING in title: \""+outcolvals["Name/Title"]+"\"")
+ 
+  # extract frame rate from aspect ratio, if present
+  if outcolvals["Aspect_Ratio"] != None:
+    apect_ratio_and_frame_rate_match = re.match(r'(?i)^(.+?)\s+(\d+\s*fps)\s*$', outcolvals["Aspect_Ratio"])
+    if apect_ratio_and_frame_rate_match != None:
+      outcolvals["Aspect_Ratio"] = apect_ratio_and_frame_rate_match.group(1)
+      outcolvals["Motion_Picture_Details/frame_rate"] = apect_ratio_and_frame_rate_match.group(2).upper()
+ 
+  # extract film gauge from aspect ratio
+  if outcolvals["Aspect_Ratio"] != None:
+    apect_ratio_and_Film_Gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?)\s*mm(\s*.*?)$', outcolvals["Aspect_Ratio"])
+    if apect_ratio_and_Film_Gauge_match != None:
+      outcolvals["Aspect_Ratio"] = apect_ratio_and_Film_Gauge_match.group(1) + apect_ratio_and_Film_Gauge_match.group(3).strip()
+      extracted_gauge = apect_ratio_and_Film_Gauge_match.group(2) + " mm."
+      if "Motion_Picture_Details/Film_Gauge/Format" in outcolvals and outcolvals["Motion_Picture_Details/Film_Gauge/Format"] != None and extracted_gauge != outcolvals["Motion_Picture_Details/Film_Gauge/Format"]:
+        isbadrow += badrow(f"inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge)
+      outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = extracted_gauge
+ 
+  # if film gauge still not filled, that's a problem
+  if not isfilled(outcolvals,"Motion_Picture_Details/Film_Gauge/Format"):
+    isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip())
+ 
+  # film length
+  if isfilled(outcolvals,"Motion_Picture_Details/Length"):
+    # catalogit doesn't want commas in length
+    outcolvals["Motion_Picture_Details/Length"] = re.sub(r',','',outcolvals["Motion_Picture_Details/Length"])
+    # fix spinal tap stonehenge error, and "pretty apostrophe" issue
+    outcolvals["Motion_Picture_Details/Length"] = re.sub(r'"|’','\'',outcolvals["Motion_Picture_Details/Length"])
+    # if length is not in a valid format, drop it
+    if not re.match(r'^\d+(\'|\s*ft)\s*$', outcolvals["Motion_Picture_Details/Length"]):
+      print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
+      outcolvals["Motion_Picture_Details/Length"] = None
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -389,55 +440,9 @@ def main():
       # PQ goes into Condition/Notes, which is just a free-format text field, so prefix "PQ"
       if isfilled(outcolvals,"Condition/Notes") and re.match(r'^\d',outcolvals["Condition/Notes"]):
         outcolvals["Condition/Notes"] = "PQ"+outcolvals["Condition/Notes"]
-  
-      # extract film gauge from title: can be like **35mm** or (35mm)
-      Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
-      if Aspect_Ratio_title_match != None:
-        #print("gauge in title: \""+outcolvals["Name/Title"]+"\"")
-        coretitle = wsnorm(Aspect_Ratio_title_match.group(1) + " " + Aspect_Ratio_title_match.group(3))
-        titlefilmgauge = Aspect_Ratio_title_match.group(2) + " mm." # per LOC spec
-        #if outcolvals["Aspect_Ratio"] != None and re.search(r'\d+\s*mm', outcolvals["Aspect_Ratio"]) != None and re.search(titlefilmgauge.lower(),outcolvals["Aspect_Ratio"].lower()) == None:
-        #  badrow("inconsistent film gauge: title=\""+outcolvals["Name/Title"]+"\" vs aspect ratio=\""+outcolvals["Aspect_Ratio"]+"\"")
-        #  continue
-        outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = titlefilmgauge
-        outcolvals["Name/Title"] = coretitle
-        #if outcolvals["Aspect_Ratio"] == None:
-        #  outcolvals["Aspect_Ratio"] = "UNKNOWN"
-        #print(" now title=\""+outcolvals["Name/Title"]+"\" gauge="+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" aspect ratio="+outcolvals["Aspect_Ratio"])
-      elif "35mm" in outcolvals["Name/Title"]:
-        print("WARNING: gauge REMAINING in title: \""+outcolvals["Name/Title"]+"\"")
-  
-      # extract frame rate from aspect ratio, if present
-      if outcolvals["Aspect_Ratio"] != None:
-        apect_ratio_and_frame_rate_match = re.match(r'(?i)^(.+?)\s+(\d+\s*fps)\s*$', outcolvals["Aspect_Ratio"])
-        if apect_ratio_and_frame_rate_match != None:
-          outcolvals["Aspect_Ratio"] = apect_ratio_and_frame_rate_match.group(1)
-          outcolvals["Motion_Picture_Details/frame_rate"] = apect_ratio_and_frame_rate_match.group(2).upper()
-  
-      # extract film gauge from aspect ratio
-      if outcolvals["Aspect_Ratio"] != None:
-        apect_ratio_and_Film_Gauge_match = re.match(r'^(.+?)\s+(\d+(?:\.\d+)?)\s*mm(\s*.*?)$', outcolvals["Aspect_Ratio"])
-        if apect_ratio_and_Film_Gauge_match != None:
-          outcolvals["Aspect_Ratio"] = apect_ratio_and_Film_Gauge_match.group(1) + apect_ratio_and_Film_Gauge_match.group(3).strip()
-          extracted_gauge = apect_ratio_and_Film_Gauge_match.group(2) + " mm."
-          if "Motion_Picture_Details/Film_Gauge/Format" in outcolvals and outcolvals["Motion_Picture_Details/Film_Gauge/Format"] != None and extracted_gauge != outcolvals["Motion_Picture_Details/Film_Gauge/Format"]:
-            isbadrow += badrow(f"inconsistent film gauge info in line {lnum}: "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]+" vs "+extracted_gauge)
-          outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = extracted_gauge
-  
-      # if film gauge still not filled, that's a problem
-      if not isfilled(outcolvals,"Motion_Picture_Details/Film_Gauge/Format"):
-        isbadrow += badrow(f"no film gauge found in line {lnum}: "+ln.strip())
-  
-      # film length
-      if isfilled(outcolvals,"Motion_Picture_Details/Length"):
-        # catalogit doesn't want commas in length
-        outcolvals["Motion_Picture_Details/Length"] = re.sub(r',','',outcolvals["Motion_Picture_Details/Length"])
-        # fix spinal tap stonehenge error, and "pretty apostrophe" issue
-        outcolvals["Motion_Picture_Details/Length"] = re.sub(r'"|’','\'',outcolvals["Motion_Picture_Details/Length"])
-        # if length is not in a valid format, drop it
-        if not re.match(r'^\d+(\'|\s*ft)\s*$', outcolvals["Motion_Picture_Details/Length"]):
-          print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
-          outcolvals["Motion_Picture_Details/Length"] = None
+
+      # gauge, aspect ration, speed, etc
+      film_format_rules(outcolvals)
   
       # country normalization
       for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
