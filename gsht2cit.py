@@ -498,6 +498,36 @@ def film_stock_rules(outcolvals):
       ]
     )
 
+# adjustments to film title
+def title_rules(outcolvals,isbadrow):
+
+  # TBD: handle serieses
+  # if series col, and filled, prefix to title
+  # if "series" in colmap and len(lncols[colmap["series"]].strip()):
+  #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
+
+  # extract parenthetical notes from title
+  for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name/Title']):
+    # various series names? prefix to title, with slash
+    if re.search(r'(?i)(our gang|little rascals|hal roach\'s rascals)', parenexp):
+      outcolvals['Name/Title'] = "Our Gang / "+outcolvals['Name/Title']
+    elif re.search(r'(?i)(ma?cdougal+ (kids|alley))', parenexp):
+      outcolvals['Name/Title'] = "McDougall Alley Gang / "+outcolvals['Name/Title']
+    # anything else is a note
+    else:   
+      addcolval(outcolvals,"General_Notes:General",parenexp.strip(" ()"),"|")
+  # delte paren exprs from title.  also do whitespace norm
+  outcolvals['Name/Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name/Title'])
+  outcolvals['Name/Title'] = wsnorm(outcolvals['Name/Title'])
+              
+  # title fixes
+  # clobber final period
+  outcolvals['Name/Title'] = re.sub(r'\s*\.\s*$','',outcolvals['Name/Title'])
+  # "movie title, the" -> "the movie title"
+  outcolvals['Name/Title'] = re.sub(r'(?i)^(.+)\s*,\s*the\s*$',r'The \1',outcolvals['Name/Title'])
+
+  return isbadrow
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -651,26 +681,9 @@ def main():
 
       # film stock normalization
       film_stock_rules(outcolvals)
-  
-      # extract parenthetical notes from title
-      for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name/Title']):
-        # various series names? prefix to title, with slash
-        if re.search(r'(?i)(our gang|little rascals|hal roach\'s rascals)', parenexp):
-          outcolvals['Name/Title'] = "Our Gang / "+outcolvals['Name/Title']
-        elif re.search(r'(?i)(ma?cdougal+ (kids|alley))', parenexp):
-          outcolvals['Name/Title'] = "McDougall Alley Gang / "+outcolvals['Name/Title']
-        # anything else is a note
-        else:
-          addcolval(outcolvals,"General_Notes:General",parenexp.strip(" ()"),"|")
-      # delte paren exprs from title.  also do whitespace norm
-      outcolvals['Name/Title'] = re.sub(r'(\([^\(\)]+\))',' ',outcolvals['Name/Title'])
-      outcolvals['Name/Title'] = wsnorm(outcolvals['Name/Title'])
-  
-      # title fixes
-      # clobber final period
-      outcolvals['Name/Title'] = re.sub(r'\s*\.\s*$','',outcolvals['Name/Title'])
-      # "movie title, the" -> "the movie title"
-      outcolvals['Name/Title'] = re.sub(r'(?i)^(.+)\s*,\s*the\s*$',r'The \1',outcolvals['Name/Title'])
+
+      # adjsutments to film title
+      isbadrows = title_rules(outcolvals,isbadrow)
   
       # check if cols that were supposed to be supplied by rules actually were
       for colname in colstoberulefilled:
