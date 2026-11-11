@@ -79,7 +79,7 @@ def buildcolmap(lncols):
     r'Motion_Picture_Details/Cast ucp star\W*s\W*',
     r'Motion_Picture_Details/Director ucp director',
     r'Motion_Picture_Details/Producer/Publisher e produc(er|tion\sco)',
-    r'Motion_Picture_Details/Writer emc writer',
+    r'Motion_Picture_Details/Writer emcp writer',
     r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
     r'Relationships/Related_Person_or_Organization/Notes:Re-Issue_Distributor e distrib.*re\W*issue',
     r'Relationships/Related_Places/Notes:Print_Exhibition_Country e print\sexhibition\scountry',
