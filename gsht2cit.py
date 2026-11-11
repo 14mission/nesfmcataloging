@@ -214,7 +214,7 @@ def features_filedby_rule(outcolvals):
       outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
   return 0
 
-def objid_rules(outcolvals,intsv,objid_base_seen):
+def objid_rules(outcolvals,intsv,objid_base_seen,lncols,lnum):
   isbadrow = 0
   # handling of MG object ID's
   # chop off leading MG prefix and any suffix to get numerical part
@@ -253,7 +253,7 @@ def objid_rules(outcolvals,intsv,objid_base_seen):
 
   # catch remaining noncanonical object id's
   if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
-    isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip())
+    isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+"\t".join(lncols))
 
   # trim object id to create accession number
   outcolvals[accnumcolname] = re.sub(r'\.[^\.]+$','',outcolvals[objidcolname])
@@ -775,7 +775,7 @@ def main():
 
       # adjustments to object id
       # also create acession number
-      isbadrow += objid_rules(outcolvals,intsv,objid_base_seen)
+      isbadrow += objid_rules(outcolvals,intsv,objid_base_seen,lncols,lnum)
   
       # PQ goes into Condition/Notes, which is just a free-format text field, so prefix "PQ"
       if isfilled(outcolvals,"Condition/Notes") and re.match(r'^\d',outcolvals["Condition/Notes"]):
