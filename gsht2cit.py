@@ -342,7 +342,6 @@ def film_format_rules(outcolvals,isbadrow):
           isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel)
   return isbadrow
 
-
 # make fields listing countries use standard labels
 def country_rules(outcolvals):
   for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
@@ -353,6 +352,80 @@ def country_rules(outcolvals):
       outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
       outcolvals[countryfield] = wsnorm(outcolvals[countryfield])
       outcolvals[countryfield] = outcolvals[countryfield].title()
+
+# actor/director name normalization
+def name_rules(outcolvals,namefields,castnames,castnamecorrections,isbadrow,lnum):
+  for namefield in personnamecols:
+    if isfilled(outcolvals,namefield):
+      # trim extra spaces
+      outcolvals[namefield] = wsnorm(outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'\s*(,|\|)\s*', r'\1', outcolvals[namefield])
+      # slightly normalized original value for logging changes
+      oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
+      # treat "in animated form" as a note, not an actor
+      # also a few collective cast name types
+      if re.search(r'(?i)in\s+animated\s+form|young pioneers|svani people', outcolvals[namefield]) != None:
+        addcolval(outcolvals,"General_Notes:General",outcolvals[namefield],"|")
+        outcolvals[namefield] = ""
+      # clobber end-of-string elipses/etc
+      outcolvals[namefield] = re.sub(r'\s*,(\W+|\s*etc\.?\s*)$','', outcolvals[namefield])
+      # split up some prominent duos
+      outcolvals[namefield] = re.sub(r'(?i)\b((laurel|lanuel)\W*\&\W*hardy|l\W*\&\W*h)\b', 'Stan Laurel,Oliver Hardy', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\b(arbuckle\W*\&\W*normand|l\w*\&\w*h)\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\blance\W*\&\W*mabel nicholson\b', 'Lance Nicholson,Mabel Nicholson', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\b(ham\W*\&\W*bud)\b', 'Lloyd Hamilton,Bud Duncan', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bnormand\/sennett\/sterling\b', 'Mabel Normand,Mack Sennett,Ford Sterling', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bnormand\/sennett\b', 'Mabel Normand,Mack Sennett', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bnormand\/ford sterling\b', 'Mabel Normand,Ford Sterling', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bnormand\/charley chase\b', 'Mabel Normand,Charley Chase', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)^arbuckle\/ford sterling\b', 'Roscoe Arbuckle,Ford Sterling', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*normand\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*keaton\b', 'Roscoe Arbuckle,Buster Keaton', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bmax davidson\W*stan laurel\b', 'Max Davidson,Stan Laurel', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bAnita Garvin\W*Edgar Kennedy\b', 'Anita Garvin,Edgar Kennedy', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bkarr\W*[\&,]\W*alexander\b', 'Hillard Karr,Frank Alexander', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bM.BuschT.Todd\b','Mae Busch,Thelma Todd', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bfranc[ie]s\s*\&\s*robert\sflaherty\b','Frances Flaherty,Robert Flaherty', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bLeopold +\& +Theodore +Wharton\b','Leopold Wharton,Theodore Wharton', outcolvals[namefield])
+      outcolvals[namefield] = re.sub(r'(?i)\bmr\W+(and|\&)\s+mrs\W+sidney drew\b', 'Sidney Drew,Lucille McVey', outcolvals[namefield]) # other mrs drew for films up thru 1913, but we don't have any
+      outcolvals[namefield] = re.sub(r'(?i)jackie\s*\/jack\W+dailey','Jackie Dailey', outcolvals[namefield])
+      # space inits
+      outcolvals[namefield] = re.sub(r'(?i)\b([A-Z]\.)(?=\w+)\b',r'\1 ', outcolvals[namefield]) # space inits
+      # if syd chaplin is with charlie, he's often just "syd"
+      if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
+        outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
+      # change ampersand to comma; also slash, pipe, and w/
+      outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/|\s-+\s*',outcolvals[namefield]))
+      # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
+      while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
+        uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
+        #print(f"XASYMATCH: {outcolvals[namefield]}: pre={uptocomma}, actor={actor}, aswho={aswho}, post={commaetc}")
+        outcolvals[namefield] = uptocomma.strip() + actor.strip() + commaetc.strip()
+        if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
+          outcolvals["General_Notes:General"] += "|"+(actor+aswho).strip()
+        else:
+          outcolvals["General_Notes:General"] = (actor+aswho).strip()
+      # apply name normalization rules form castnames file
+      for pat in castnamecorrections:
+        outcolvals[namefield] = re.sub(r'(?i)(^|,|\|)\s*('+pat+r')\s*(?=$|,|\|)',r'\1'+castnamecorrections[pat],outcolvals[namefield])
+      # check for problematic names
+      #for name in outcolvals[namefield].split(","):
+      #  if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
+      #    isbadrow += badrow(f"suspect name in line {lnum}: "+name)
+      newval = outcolvals[namefield]
+      #if newval != oldval:
+      #  print(f"NAMEFIX: {oldval} -> {newval}")
+      #for n in newval.split(","):
+      #  print(f"NAME: {n}")
+      # check for names not in approved set
+      if len(newval.strip()) > 0:
+        for n in newval.split(","):
+          if len(n.strip()) == 0:
+            isbadrow += badrow(f"empty name in line {lnum}")
+          elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
+            print(f"WARNING: unknown name \"{n}\" in line {lnum}")
+            #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}")
+  return isbadrow
 
 # load cast names
 def loadcastnames(cnfn):
@@ -493,78 +566,9 @@ def main():
   
       # country normalization
       country_rules(outcolvals)
-  
+
       # actor/director name normalization
-      for namefield in personnamecols:
-        if isfilled(outcolvals,namefield):
-          # trim extra spaces
-          outcolvals[namefield] = wsnorm(outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'\s*(,|\|)\s*', r'\1', outcolvals[namefield])
-          # slightly normalized original value for logging changes
-          oldval = ",".join(re.split(r'\s*,\s*',outcolvals[namefield]))
-          # treat "in animated form" as a note, not an actor
-          # also a few collective cast name types
-          if re.search(r'(?i)in\s+animated\s+form|young pioneers|svani people', outcolvals[namefield]) != None:
-            addcolval(outcolvals,"General_Notes:General",outcolvals[namefield],"|")
-            outcolvals[namefield] = "" 
-          # clobber end-of-string elipses/etc
-          outcolvals[namefield] = re.sub(r'\s*,(\W+|\s*etc\.?\s*)$','', outcolvals[namefield])
-          # split up some prominent duos
-          outcolvals[namefield] = re.sub(r'(?i)\b((laurel|lanuel)\W*\&\W*hardy|l\W*\&\W*h)\b', 'Stan Laurel,Oliver Hardy', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\b(arbuckle\W*\&\W*normand|l\w*\&\w*h)\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\blance\W*\&\W*mabel nicholson\b', 'Lance Nicholson,Mabel Nicholson', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\b(ham\W*\&\W*bud)\b', 'Lloyd Hamilton,Bud Duncan', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bnormand\/sennett\/sterling\b', 'Mabel Normand,Mack Sennett,Ford Sterling', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bnormand\/sennett\b', 'Mabel Normand,Mack Sennett', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bnormand\/ford sterling\b', 'Mabel Normand,Ford Sterling', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bnormand\/charley chase\b', 'Mabel Normand,Charley Chase', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)^arbuckle\/ford sterling\b', 'Roscoe Arbuckle,Ford Sterling', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*normand\b', 'Roscoe Arbuckle,Mabel Normand', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)^arbuckle\s*\/\s*keaton\b', 'Roscoe Arbuckle,Buster Keaton', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bmax davidson\W*stan laurel\b', 'Max Davidson,Stan Laurel', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bAnita Garvin\W*Edgar Kennedy\b', 'Anita Garvin,Edgar Kennedy', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bkarr\W*[\&,]\W*alexander\b', 'Hillard Karr,Frank Alexander', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bM.BuschT.Todd\b','Mae Busch,Thelma Todd', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bfranc[ie]s\s*\&\s*robert\sflaherty\b','Frances Flaherty,Robert Flaherty', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bLeopold +\& +Theodore +Wharton\b','Leopold Wharton,Theodore Wharton', outcolvals[namefield])
-          outcolvals[namefield] = re.sub(r'(?i)\bmr\W+(and|\&)\s+mrs\W+sidney drew\b', 'Sidney Drew,Lucille McVey', outcolvals[namefield]) # other mrs drew for films up thru 1913, but we don't have any
-          outcolvals[namefield] = re.sub(r'(?i)jackie\s*\/jack\W+dailey','Jackie Dailey', outcolvals[namefield])
-          # space inits
-          outcolvals[namefield] = re.sub(r'(?i)\b([A-Z]\.)(?=\w+)\b',r'\1 ', outcolvals[namefield]) # space inits
-          # if syd chaplin is with charlie, he's often just "syd"
-          if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
-            outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
-          # change ampersand to comma; also slash, pipe, and w/
-          outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/|\s-+\s*',outcolvals[namefield]))
-          # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
-          while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
-            uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
-            #print(f"XASYMATCH: {outcolvals[namefield]}: pre={uptocomma}, actor={actor}, aswho={aswho}, post={commaetc}")
-            outcolvals[namefield] = uptocomma.strip() + actor.strip() + commaetc.strip()
-            if "General_Notes:General" in outcolvals and outcolvals["General_Notes:General"] != None and len(outcolvals["General_Notes:General"].strip()) > 0:
-              outcolvals["General_Notes:General"] += "|"+(actor+aswho).strip()
-            else:
-              outcolvals["General_Notes:General"] = (actor+aswho).strip()
-          # apply name normalization rules form castnames file
-          for pat in castnamecorrections:
-            outcolvals[namefield] = re.sub(r'(?i)(^|,|\|)\s*('+pat+r')\s*(?=$|,|\|)',r'\1'+castnamecorrections[pat],outcolvals[namefield])
-          # check for problematic names 
-          #for name in outcolvals[namefield].split(","):
-          #  if re.search(r'^\s*\w\W+|^\s*\S+\s*$|\/',name) and re.match(r'^\s*(UNKNOWN|Polidor|Oatmeal|Fatima|Dippy-Doo-Dads|W\. C\. Fields|W\. W\. Kelly|J\. Stuart Blackton|C. J. Williams|D\. W\. Griffith|F\. Richard Jones|J\. A\. Howe|N. T. Barrows|D\. Ross Lederman)\s*$',name) == None: # check for names with fn still an initial, and single-word names
-          #    isbadrow += badrow(f"suspect name in line {lnum}: "+name)
-          newval = outcolvals[namefield]
-          #if newval != oldval:
-          #  print(f"NAMEFIX: {oldval} -> {newval}")
-          #for n in newval.split(","):
-          #  print(f"NAME: {n}")
-          # check for names not in approved set
-          if len(newval.strip()) > 0:
-            for n in newval.split(","):
-              if len(n.strip()) == 0:
-                isbadrow += badrow(f"empty name in line {lnum}")
-              elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
-                print(f"WARNING: unknown name \"{n}\" in line {lnum}")
-                #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}")
+      isbadrow = name_rules(outcolvals,personnamecols,castnames,castnamecorrections,isbadrow,lnum)
   
       # sound normalization
       if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
