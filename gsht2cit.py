@@ -44,7 +44,6 @@ def buildcolmap(lncols):
   #  also: if there is a colon, the bit after the colon should be prefixed to the value string
   # note on flags:
   #  - means none
-  #  * mark with a * in output, meaning should be manually edited
   #  e ok for the field to be empty
   #  m ok for the field to be missing entirely (not in the input spreadsheet at all)
   #  u if field is empty, fill with explicit UNKNOWN
@@ -58,12 +57,13 @@ def buildcolmap(lncols):
   #  they don't have to match all the way to the end
   outcols = []
   hdrpats = {}
-  starcols = {}
-  okunkcols = {}
-  okemptycols = {}
-  okmissingcols = {}
-  rulefillcols = {}
-  commasplitcols = {}
+  specialcols = {
+    "okunk": {},
+    "okempty": {},
+    "okmissing": {},
+    "rulefill": {},
+    "commasplit": {}
+  }
   for row in [ 
     objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
     accnumcolname+r' r NOSOURCECOLUMN', # truncated obj id
@@ -75,10 +75,10 @@ def buildcolmap(lncols):
     r'Condition/Notes e p\s*q\b',
     r'Motion_Picture_Details/Production_Date/Date u prod.*year',
     r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
-    r'Motion_Picture_Details/Cast *uc star\W*s\W*',
-    r'Motion_Picture_Details/Director *uc director',
-    r'Motion_Picture_Details/Producer/Publisher *e produc(er|tion\sco)',
-    r'Motion_Picture_Details/Writer *emc writer',
+    r'Motion_Picture_Details/Cast uc star\W*s\W*',
+    r'Motion_Picture_Details/Director uc director',
+    r'Motion_Picture_Details/Producer/Publisher e produc(er|tion\sco)',
+    r'Motion_Picture_Details/Writer emc writer',
     r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
     r'Relationships/Related_Person_or_Organization/Notes:Re-Issue_Distributor e distrib.*re\W*issue',
     r'Relationships/Related_Places/Notes:Print_Exhibition_Country e print\sexhibition\scountry',
@@ -87,12 +87,12 @@ def buildcolmap(lncols):
     r'Motion_Picture_Details/Film_Base r NOSOURCECOLNUM',
     r'Motion_Picture_Details/Date_Code r NOSOURCECOLNUM',
     r'Motion_Picture_Details/Length e film\slength',
-    r'Motion_Picture_Details/Sound/Film_Sound *e sound\strack',
+    r'Motion_Picture_Details/Sound/Film_Sound e sound\strack',
     r'Motion_Picture_Details/Sound/Sound_Notes:Type r NOSOURCECOLUMN', # populated from "sound track"
     r'Motion_Picture_Details/Frame_Rate me NOSOURCECOLUMN',
     r'Aspect_Ratio re aspect\sratio.*film\sformat', # rules to extract fps and gauge from aspect ratio
     r'Motion_Picture_Details/Film_Gauge/Format r NOSOURCECOLUMN',
-    r'Motion_Picture_Details/Color_Characteristics *e film\scolor',
+    r'Motion_Picture_Details/Color_Characteristics e film\scolor',
     r'Parts/Parts - Film\sReels', # reels, revisit?
     r'General_Notes e notes',
     r'General_Notes:Best_Quality_DVD_Release em dvd\s+release',
@@ -110,20 +110,18 @@ def buildcolmap(lncols):
     outcols.append(label)
     hdrpats[label] = pattern
     for c in flags:
-      if c == '*':
-        starcols[label] = True
-      elif c == 'u':
-        okunkcols[label] = True
+      if c == 'u':
+        specialcols["okunk"][label] = True
       elif c == 'm':
-        okmissingcols[label] = True
+        specialcols["okmissing"][label] = True
       elif c == 'e':
-        okemptycols[label] = True
+        specialcols["okempty"][label] = True
       elif c == 'r':
-        rulefillcols[label] = True
+        specialcols["rulefill"][label] = True
       elif c == 'c':
-        commasplitcols[label] = True
+        specialcols["commasplit"][label] = True
       elif c != '-':
-        raise Exception("unexpected flag char "+c)
+        raise Exception("unexpected flag char "+c+" in: "+row)
     # cols with colon will not be printed directly, they'll be mapped into cols with base name before colon
     # so we'll define cols with base name, to be filled by rule
     if ":" in label:
@@ -131,7 +129,7 @@ def buildcolmap(lncols):
       if beforecolon not in outcols:
         outcols.append(beforecolon)
         hdrpats[beforecolon] = "NOSOURCECOLUMN"
-        rulefillcols[beforecolon] = True
+        specialcols["rulefill"][beforecolon] = True
 
   # map input cols to output cols according to header line
   colmap = {}
@@ -141,7 +139,7 @@ def buildcolmap(lncols):
   # check that all required output cols were matched
   for field in sorted(colmap.keys()):
     if colmap[field] == None:
-      if field in okmissingcols or field in rulefillcols:
+      if field in okmissingcols or field in specialcols["rulefill"]:
         print(field + "=None")
       else:
         raise Exception("no \""+field+"\" col found in \""+intsv+"\": HDRCOLS="+",".join(lncols))
@@ -156,10 +154,10 @@ def buildcolmap(lncols):
   if len(unmappedinputcols) > 0:
     raise Exception("unmapped input cols: "+", ".join(lncols[colnum] for colnum in unmappedinputcols))
 
-  return outcols, colmap, rulefillcols, commasplitcols, okemptycols, okunkcols
+  return outcols, colmap, specialcols
 
 # map cols from input tsv to dict of feats we'll ultimately import into catalogit
-def parsedataline(outcols,colmap,okemptycols,okunkcols,lncols,lnum,outcolvals,colstoberulefilled,isbadrow):
+def parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled,isbadrow):
   # regular line. make sure all required fields filled
   # some fields can be empty, then we put UNKNOWN
   for colname in outcols:
@@ -168,14 +166,14 @@ def parsedataline(outcols,colmap,okemptycols,okunkcols,lncols,lnum,outcolvals,co
     # various ways of being "empty"
     elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|none\W*credited|doesn\'t\W*apply|no stars\W*travelog(ue)?|var?ious|docum[ea]ntary|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
       # some cols allowed to be empty
-      if colname in okemptycols:
+      if colname in specialcols["okempty"]:
         outcolvals[colname] = None
       # for some cols, we just specify UNKNOWN
-      elif colname in okunkcols:
+      elif colname in specialcols["okunk"]:
         print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+"\t".join(lncols))
         outcolvals[colname] = "UNKNOWN"
       # if col is empty and is to be filled by a rule, put it on list of cols to check for later
-      elif colname in rulefillcols:
+      elif colname in specialcols["rulefill"]:
         outcolvals[colname] = None
         colstoberulefilled[colname] = True
       # for others, an empty value is a fatal error
@@ -563,7 +561,7 @@ def idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadro
       isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"])
   return isbadrow
 
-def writerow(outh,outcols,outcolvals,commasplitcols,colstoberulefilled,lnum,source,isbadrow):
+def writerow(outh,outcols,outcolvals,specialcols,colstoberulefilled,lnum,source,isbadrow):
 
   # check if cols that were supposed to be supplied by rules actually were
   for colname in colstoberulefilled:
@@ -574,7 +572,7 @@ def writerow(outh,outcols,outcolvals,commasplitcols,colstoberulefilled,lnum,sour
   # for all commasplit cols, replace comma with pipe.
   for colname in outcolvals:
     if outcolvals[colname] != None:
-      if colname in commasplitcols:
+      if colname in specialcols["commasplit"]:
         outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
       if colname in personnamecols:
         outcolvals[colname] = re.sub(r'([a-z]) (\d{4}-\d{4})\b',r'\1, \2',outcolvals[colname])
@@ -728,7 +726,7 @@ def main():
       # map input cls to output cols
       # write header to output
       if colmap == None:
-        outcols, colmap, rulefillcols, commasplitcols, okemptycols, okunkcols = buildcolmap(lncols)
+        outcols, colmap, specialcols = buildcolmap(lncols)
         hdrcols = [colname for colname in outcols if ":" not in colname]
         hdrcols.append("Tags") 
         hdrcols.append("linenum")
@@ -751,7 +749,7 @@ def main():
       outcolvals = {}
       colstoberulefilled = {}
       isbadrow = 0
-      isbadrow = parsedataline(outcols,colmap,okemptycols,okunkcols,lncols,lnum,outcolvals,colstoberulefilled,isbadrow)
+      isbadrow = parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled,isbadrow)
   
       # special rules:
   
@@ -789,7 +787,7 @@ def main():
       isbadrow = idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadrow)
   
       # check if cols that were supposed to be supplied by rules actually were
-      isbadrow = writerow(outh,outcols,outcolvals,commasplitcols,colstoberulefilled,lnum,source,isbadrow)
+      isbadrow = writerow(outh,outcols,outcolvals,specialcols,colstoberulefilled,lnum,source,isbadrow)
 
       # in case badrow()
       if isbadrow > 0:
