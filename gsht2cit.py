@@ -307,6 +307,17 @@ def film_format_rules(outcolvals):
       print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
       outcolvals["Motion_Picture_Details/Length"] = None
 
+# make fields listing countries use standard labels
+def country_rules(outcolvals):
+  for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
+    if isfilled(outcolvals,countryfield):
+      outcolvals[countryfield] = re.sub(r'^U\W*S\W*A\W*','United States',outcolvals[countryfield])
+      outcolvals[countryfield] = re.sub(r'^U\W*S\W*(,|$)',r'United States\1',outcolvals[countryfield])
+      outcolvals[countryfield] = re.sub(r'^U\W*K\W*','United Kingdom',outcolvals[countryfield])
+      outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
+      outcolvals[countryfield] = wsnorm(outcolvals[countryfield])
+      outcolvals[countryfield] = outcolvals[countryfield].title()
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -445,14 +456,7 @@ def main():
       film_format_rules(outcolvals)
   
       # country normalization
-      for countryfield in [ "Relationships/Related_Places/Notes:Print_Exhibition_Country", "Made/Created/Place" ]:
-        if isfilled(outcolvals,countryfield):
-          outcolvals[countryfield] = re.sub(r'^U\W*S\W*A\W*','United States',outcolvals[countryfield])
-          outcolvals[countryfield] = re.sub(r'^U\W*S\W*(,|$)',r'United States\1',outcolvals[countryfield])
-          outcolvals[countryfield] = re.sub(r'^U\W*K\W*','United Kingdom',outcolvals[countryfield])
-          outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
-          outcolvals[countryfield] = wsnorm(outcolvals[countryfield])
-          outcolvals[countryfield] = outcolvals[countryfield].title()
+      country_rules(outcolvals)
   
       # actor/director name normalization
       for namefield in personnamecols:
