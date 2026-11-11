@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 echo APPLY SCRIPT TO nesfm.archive.test.tsv
 ./gsht2cit.py nesfm.archive.test.tsv
 mv nesfm.archive.test.4cit.csv nesfm.archive.test.4cit.just_got.csv
