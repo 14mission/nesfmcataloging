@@ -528,6 +528,41 @@ def title_rules(outcolvals,isbadrow):
 
   return isbadrow
 
+# clean up id cols and check for dups
+def idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadrow):
+
+  # check for dup objid and dup shelving code
+  record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]
+  if outcolvals[objidcolname] in objid_seen:
+    isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary)
+  else:
+    objid_seen[outcolvals[objidcolname]] = record_summary
+  if outcolvals[objidcolname].lower() in objid_incit:
+    isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname])
+  if "Other_Names_and_Numbers/Other_Numbers:Shelving" in outcolvals:
+    normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]).lower()
+    if normedshelvingcode == "missing":
+      pass
+    elif normedshelvingcode in shelvingcode_seen:
+      print("WARNING: dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary)
+    else:
+      shelvingcode_seen[normedshelvingcode] = record_summary
+
+  # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
+  if "Location/Location" in outcolvals:
+    if re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["Location/Location"]):
+      outcolvals["Location/Location"] = re.sub(
+        r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
+        lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
+        outcolvals["Location/Location"])
+    elif re.match(r'(?i)^\W*(freezer|fridge|missing|storage|unknown)\W*$',outcolvals["Location/Location"]):
+      outcolvals["Location/Location"] = outcolvals["Location/Location"].strip().upper()
+    elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
+      pass
+    else:
+      isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"])
+  return isbadrow
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -679,43 +714,15 @@ def main():
 
       # adjsutments to film title
       isbadrow = title_rules(outcolvals,isbadrow)
+
+      # adjust id's, make sure unique
+      isbadrow = idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadrow)
   
       # check if cols that were supposed to be supplied by rules actually were
       for colname in colstoberulefilled:
         print(f"TOBERULEFILLED: {colname}")
         if not isfilled(outcolvals,colname):
           isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip())
-  
-      # check for dup objid and dup shelving code
-      record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]
-      if outcolvals[objidcolname] in objid_seen:
-        isbadrow += badrow("dup objid: "+outcolvals[objidcolname]+": "+objid_seen[outcolvals[objidcolname]]+" VS "+record_summary)
-      else:
-        objid_seen[outcolvals[objidcolname]] = record_summary
-      if outcolvals[objidcolname].lower() in objid_incit:
-        isbadrow += badrow("objid already in catalogit: "+outcolvals[objidcolname])
-      if "Other_Names_and_Numbers/Other_Numbers:Shelving" in outcolvals:
-        normedshelvingcode = re.sub(r'\W','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]).lower()
-        if normedshelvingcode == "missing":
-          pass
-        elif normedshelvingcode in shelvingcode_seen:
-          print("WARNING: dup shelvingcode: "+normedshelvingcode+": " +shelvingcode_seen[normedshelvingcode]+" VS "+record_summary)
-        else:
-          shelvingcode_seen[normedshelvingcode] = record_summary
-  
-      # normalize location; rack/shelf should be like: r(NUM/UPPERCASELETTERS) sNUM(maybelowercaseletter); no dashes
-      if "Location/Location" in outcolvals:
-        if re.match(r'(?i)^r\W*\d+\W*s\W*\d',outcolvals["Location/Location"]):
-          outcolvals["Location/Location"] = re.sub(
-            r'^[rR]\W*([\dA-Z]+)\W*[sS]\W*(\d+)\W*([A-Za-z]*(?:\/[A-Za-z]*)?)',
-            lambda m: "r" + m.group(1) + " s" + m.group(2) + m.group(3).lower(),
-            outcolvals["Location/Location"])
-        elif re.match(r'(?i)^\W*(freezer|fridge|missing|storage|unknown)\W*$',outcolvals["Location/Location"]):
-          outcolvals["Location/Location"] = outcolvals["Location/Location"].strip().upper()
-        elif re.match(r'(?i)^freezer \w$',outcolvals["Location/Location"]):
-          pass
-        else:
-          isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"])
   
       # for all commasplit cols, replace comma with pipe.
       for colname in outcolvals:
