@@ -563,6 +563,76 @@ def idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadro
       isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"])
   return isbadrow
 
+def writerow(outh,outcols,outcolvals,commasplitcols,colstoberulefilled,lnum,source,isbadrow):
+
+  # check if cols that were supposed to be supplied by rules actually were
+  for colname in colstoberulefilled:
+    print(f"TOBERULEFILLED: {colname}")
+    if not isfilled(outcolvals,colname):
+      isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip())
+
+  # for all commasplit cols, replace comma with pipe.
+  for colname in outcolvals:
+    if outcolvals[colname] != None:
+      if colname in commasplitcols:
+        outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
+      if colname in personnamecols:
+        outcolvals[colname] = re.sub(r'([a-z]) (\d{4}-\d{4})\b',r'\1, \2',outcolvals[colname])
+
+  # cols with colon: strip to basename, store value there, prefix bit after colon
+  for coloncol in [colname for colname in outcols if ":" in colname]:
+    if coloncol in outcolvals and outcolvals[coloncol] != None and len(outcolvals[coloncol]) > 0:
+      beforecolon, aftercolon = coloncol.split(":")
+      prefixedval = re.sub(r'_',' ',aftercolon) + ": " + outcolvals[coloncol]
+      outcolvals[beforecolon] = outcolvals[beforecolon] + "|" + prefixedval if beforecolon in outcolvals and outcolvals[beforecolon] != None else prefixedval
+
+  # reformat cols with multiple, pipe-delimited values, with json
+  # some cols with complicated structures need this even for just one value
+  for colname in outcolvals:
+    if isfilled(outcolvals,colname) and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
+      if colname == "General_Notes":
+        vallist = []
+        for note in outcolvals[colname].split("|"):
+          if ":" in note:
+            notetype, notetext = note.split(":",maxsplit=1)
+            notetype = " ".join(notetype.strip().split("_"))
+            vallist.append({
+              "http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": notetype.strip(),
+              "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": notetext.strip()})
+          else:
+            vallist.append({"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": note.strip()})
+      elif colname == "Other_Names_and_Numbers/Other_Numbers":
+        vallist = []
+        for othernum in outcolvals[colname].split("|"):
+          numtype, number = othernum.split(":")
+          vallist.append({
+            "http://www.catalogit.me/rdf/ontologies/core/common#hasType": numtype.strip(),
+            "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": number.strip()})
+      else:
+        vallist = []
+        sawbefore = {}
+        for val in [s.strip() for s in outcolvals[colname].split("|")]:
+          if val not in sawbefore:
+            vallist.append(val)
+            sawbefore[val] = True
+      outcolvals[colname] = json.dumps(vallist)
+
+  # print columns
+  novalstr = ""
+  outrow = [
+    # if undef replace with str indicating empty
+    outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr
+    # for almost all columns
+    for colname in
+    # skip ones in colon in name because they were mapped into base (before colon) name
+    [colname for colname in outcols if ":" not in colname]
+  ]
+  outrow.append(source)
+  outrow.append(str(lnum))
+  outh.writerow(outrow)
+
+  return isbadrow
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -719,71 +789,8 @@ def main():
       isbadrow = idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadrow)
   
       # check if cols that were supposed to be supplied by rules actually were
-      for colname in colstoberulefilled:
-        print(f"TOBERULEFILLED: {colname}")
-        if not isfilled(outcolvals,colname):
-          isbadrow += badrow(f"no value filled by rule for {colname} (even after rules) in line {lnum}: "+ln.strip())
-  
-      # for all commasplit cols, replace comma with pipe.
-      for colname in outcolvals:
-        if outcolvals[colname] != None:
-          if colname in commasplitcols:
-            outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
-          if colname in personnamecols:
-            outcolvals[colname] = re.sub(r'([a-z]) (\d{4}-\d{4})\b',r'\1, \2',outcolvals[colname])
-  
-      # cols with colon: strip to basename, store value there, prefix bit after colon
-      for coloncol in [colname for colname in outcols if ":" in colname]:
-        if coloncol in outcolvals and outcolvals[coloncol] != None and len(outcolvals[coloncol]) > 0:
-          beforecolon, aftercolon = coloncol.split(":")
-          prefixedval = re.sub(r'_',' ',aftercolon) + ": " + outcolvals[coloncol]
-          outcolvals[beforecolon] = outcolvals[beforecolon] + "|" + prefixedval if beforecolon in outcolvals and outcolvals[beforecolon] != None else prefixedval
-  
-      # reformat cols with multiple, pipe-delimited values, with json
-      # some cols with complicated structures need this even for just one value
-      for colname in outcolvals:
-        if isfilled(outcolvals,colname) and ("|" in outcolvals[colname] or colname in ["General_Notes", "Other_Names_and_Numbers/Other_Numbers"]):
-          if colname == "General_Notes":
-            vallist = []
-            for note in outcolvals[colname].split("|"):
-              if ":" in note:
-                notetype, notetext = note.split(":",maxsplit=1)
-                notetype = " ".join(notetype.strip().split("_"))
-                vallist.append({
-                  "http://www.catalogit.me/rdf/ontologies/core/common#hasNoteType": notetype.strip(),
-                  "http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": notetext.strip()})
-              else:
-                vallist.append({"http://www.catalogit.me/rdf/ontologies/core/common#hasNotes": note.strip()})
-          elif colname == "Other_Names_and_Numbers/Other_Numbers":
-            vallist = []
-            for othernum in outcolvals[colname].split("|"):
-              numtype, number = othernum.split(":")
-              vallist.append({
-                "http://www.catalogit.me/rdf/ontologies/core/common#hasType": numtype.strip(),
-                "http://www.catalogit.me/rdf/ontologies/core/common#hasValue": number.strip()})
-          else:
-            vallist = []
-            sawbefore = {}
-            for val in [s.strip() for s in outcolvals[colname].split("|")]:
-              if val not in sawbefore:
-                vallist.append(val)
-                sawbefore[val] = True
-          outcolvals[colname] = json.dumps(vallist)
-  
-      # print columns
-      novalstr = ""
-      outrow = [
-        # if undef replace with str indicating empty
-        outcolvals[colname] if colname in outcolvals and outcolvals[colname] != None else novalstr
-        # for almost all columns
-        for colname in
-        # skip ones in colon in name because they were mapped into base (before colon) name
-        [colname for colname in outcols if ":" not in colname]
-      ]
-      outrow.append(source)
-      outrow.append(str(lnum))
-      outh.writerow(outrow)
-  
+      isbadrow = writerow(outh,outcols,outcolvals,commasplitcols,colstoberulefilled,lnum,source,isbadrow)
+
       # in case badrow()
       if isbadrow > 0:
         print("bad row(s) found!")
