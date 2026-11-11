@@ -174,7 +174,7 @@ def parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberule
         outcolvals[colname] = None
       # for some cols, we just specify UNKNOWN
       elif colname in specialcols["okunk"]:
-        print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+"\t".join(lncols))
+        #print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+"\t".join(lncols))
         outcolvals[colname] = "UNKNOWN"
       # if col is empty and is to be filled by a rule, put it on list of cols to check for later
       elif colname in specialcols["rulefill"]:
@@ -195,21 +195,21 @@ def parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberule
 def features_filedby_rule(outcolvals):
   # if it has "dir(ector)" in parens, the field contains the director, but the director col is already filled, so ignore
   if re.search(r'\((d|super)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
-    print("FILEBY-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+    #print("FILEBY-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
     outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
   # if it contains "feature" or "silent", leave it for this weird "series item" field
   elif re.search(r'(?i)(feature|silent|master\s*fs|television)',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]):
-    print("FILEBY-IGNORE: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (cast="+str(outcolvals["Motion_Picture_Details/Cast"])+"): "+outcolvals["Name/Title"])
+    #print("FILEBY-IGNORE: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (cast="+str(outcolvals["Motion_Picture_Details/Cast"])+"): "+outcolvals["Name/Title"])
     pass
   # anything else, we assume is the star. chop off hyphenated suffixes though. also prefix "35"
   else:
     starname = re.sub(r'^35\s*|©|(\s*\.\s*)?\(.*?\)|\.?\s*-.*$|CCF|\.\s*$','',outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"])
     starname = wsnorm(starname)
     if re.match(r'(?i)(f\W*w\W*murnau|fritz\s+lang(\sw)?|paul leni)',starname):
-      print("FILEBY-UNFLAGGED-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+      #print("FILEBY-UNFLAGGED-DIRECTOR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
       pass
     else:
-      print("FILEBY-STAR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" -> "+starname+ " ; (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
+      #print("FILEBY-STAR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" -> "+starname+ " ; (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
       addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
       outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
   return 0
