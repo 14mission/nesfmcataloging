@@ -258,7 +258,7 @@ def objid_rules(outcolvals,intsv,objid_base_seen,isbadrow):
 
   return isbadrow
 
-def film_format_rules(outcolvals,isbadrow):
+def film_format_rules(outcolvals,lnum,isbadrow):
  
   # extract film gauge from title: can be like **35mm** or (35mm)
   Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
@@ -768,7 +768,7 @@ def main():
         outcolvals["Condition/Notes"] = "PQ"+outcolvals["Condition/Notes"]
 
       # gauge, aspect ration, speed, etc
-      isbadrow = film_format_rules(outcolvals,isbadrow)
+      isbadrow = film_format_rules(outcolvals,lnum,isbadrow)
   
       # country normalization
       country_rules(outcolvals)
