@@ -160,7 +160,8 @@ def buildcolmap(lncols):
   return outcols, colmap, specialcols
 
 # map cols from input tsv to dict of feats we'll ultimately import into catalogit
-def parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled,isbadrow):
+def parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled):
+  isbadrow = 0
   # regular line. make sure all required fields filled
   # some fields can be empty, then we put UNKNOWN
   for colname in outcols:
@@ -211,8 +212,10 @@ def features_filedby_rule(outcolvals):
       print("FILEBY-STAR: "+outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"]+" -> "+starname+ " ; (origcast="+str(outcolvals["Motion_Picture_Details/Cast"])+", director="+str(outcolvals["Motion_Picture_Details/Director"])+"): "+outcolvals["Name/Title"])
       addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
       outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
+  return 0
 
-def objid_rules(outcolvals,intsv,objid_base_seen,isbadrow):
+def objid_rules(outcolvals,intsv,objid_base_seen):
+  isbadrow = 0
   # handling of MG object ID's
   # chop off leading MG prefix and any suffix to get numerical part
   # there may be collisions so suffix 0, 1, etc
@@ -259,7 +262,8 @@ def objid_rules(outcolvals,intsv,objid_base_seen,isbadrow):
 
   return isbadrow
 
-def film_format_rules(outcolvals,lncols,lnum,isbadrow):
+def film_format_rules(outcolvals,lncols,lnum):
+  isbadrow = 0
  
   # extract film gauge from title: can be like **35mm** or (35mm)
   Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
@@ -352,9 +356,11 @@ def country_rules(outcolvals):
       outcolvals[countryfield] = re.sub(r'\bMex\.','Mexico',outcolvals[countryfield])
       outcolvals[countryfield] = wsnorm(outcolvals[countryfield])
       outcolvals[countryfield] = outcolvals[countryfield].title()
+  return 0
 
 # actor/director name normalization
-def name_rules(outcolvals,specialcols,castnames,castnamecorrections,isbadrow,lnum):
+def name_rules(outcolvals,specialcols,castnames,castnamecorrections,lnum):
+  isbadrow = 0
   for namefield in specialcols["personname"]:
     if isfilled(outcolvals,namefield):
       # trim extra spaces
@@ -428,7 +434,8 @@ def name_rules(outcolvals,specialcols,castnames,castnamecorrections,isbadrow,lnu
   return isbadrow
 
 # bundling color and sound norm rules into one func
-def color_and_sound_rules(outcolvals,isbadrow):
+def color_and_sound_rules(outcolvals):
+  isbadrow = 0
   # sound normalization
   if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
     soundval = outcolvals["Motion_Picture_Details/Sound/Film_Sound"]
@@ -466,6 +473,7 @@ def color_and_sound_rules(outcolvals,isbadrow):
 
 # film stock normalization
 def film_stock_rules(outcolvals):
+  isbadrow = 0
   if isfilled(outcolvals,"Motion_Picture_Details/Film_Stock"):
     # fix spelling etc
     outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ac[ei]t[aie]te','acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
@@ -498,9 +506,11 @@ def film_stock_rules(outcolvals):
         for w in outcolvals["Motion_Picture_Details/Film_Stock"].split()
       ]
     )
+  return isbadrow
 
 # adjustments to film title
-def title_rules(outcolvals,isbadrow):
+def title_rules(outcolvals):
+  isbadrow = 0
 
   # TBD: handle serieses
   # if series col, and filled, prefix to title
@@ -530,7 +540,8 @@ def title_rules(outcolvals,isbadrow):
   return isbadrow
 
 # clean up id cols and check for dups
-def idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadrow):
+def idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum):
+  isbadrow = 0
 
   # check for dup objid and dup shelving code
   record_summary = str(lnum)+":"+outcolvals["Name/Title"]+":"+outcolvals["Location/Location"]+":"+outcolvals["Other_Names_and_Numbers/Other_Numbers:Shelving"]
@@ -564,7 +575,8 @@ def idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadro
       isbadrow += badrow(f"misformatted rack/shelf code in {lnum}: "+outcolvals["Location/Location"])
   return isbadrow
 
-def writerow(outh,outcols,outcolvals,specialcols,colstoberulefilled,lnum,source,isbadrow):
+def writerow(outh,outcols,outcolvals,specialcols,colstoberulefilled,lnum,source):
+  isbadrow = 0
 
   # check if cols that were supposed to be supplied by rules actually were
   for colname in colstoberulefilled:
@@ -753,45 +765,45 @@ def main():
       outcolvals = {}
       colstoberulefilled = {}
       isbadrow = 0
-      isbadrow = parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled,isbadrow)
+      isbadrow += parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled)
   
       # special rules:
   
       # in features data, special rules for handling column called: Filed by Director or Star "Silent" = filed by title
       if re.search(r'feature',intsv) or re.search(r'<feature>',outcolvals["Name/Title"]) and isfilled(outcolvals,"Other_Names_and_Numbers/Other_Numbers:Series_Item"):
-        features_filedby_rule(outcolvals)
+        isbadrow += features_filedby_rule(outcolvals)
 
       # adjustments to object id
       # also create acession number
-      isbadrow = objid_rules(outcolvals,intsv,objid_base_seen,isbadrow)
+      isbadrow += objid_rules(outcolvals,intsv,objid_base_seen)
   
       # PQ goes into Condition/Notes, which is just a free-format text field, so prefix "PQ"
       if isfilled(outcolvals,"Condition/Notes") and re.match(r'^\d',outcolvals["Condition/Notes"]):
         outcolvals["Condition/Notes"] = "PQ"+outcolvals["Condition/Notes"]
 
       # gauge, aspect ration, speed, etc
-      isbadrow = film_format_rules(outcolvals,lncols,lnum,isbadrow)
+      isbadrow += film_format_rules(outcolvals,lncols,lnum)
   
       # country normalization
-      country_rules(outcolvals)
+      isbadrow += country_rules(outcolvals)
 
       # actor/director name normalization
-      isbadrow = name_rules(outcolvals,specialcols,castnames,castnamecorrections,isbadrow,lnum)
+      isbadrow += name_rules(outcolvals,specialcols,castnames,castnamecorrections,lnum)
 
       # sound and color normalization rules
-      isbadrow = color_and_sound_rules(outcolvals,isbadrow)
+      isbadrow += color_and_sound_rules(outcolvals)
 
       # film stock normalization
-      film_stock_rules(outcolvals)
+      isbadrow += film_stock_rules(outcolvals)
 
       # adjsutments to film title
-      isbadrow = title_rules(outcolvals,isbadrow)
+      isbadrow += title_rules(outcolvals)
 
       # adjust id's, make sure unique
-      isbadrow = idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum,isbadrow)
+      isbadrow += idcol_rules(outcolvals,objid_seen,objid_incit,shelvingcode_seen,lnum)
   
       # check if cols that were supposed to be supplied by rules actually were
-      isbadrow = writerow(outh,outcols,outcolvals,specialcols,colstoberulefilled,lnum,source,isbadrow)
+      isbadrow += writerow(outh,outcols,outcolvals,specialcols,colstoberulefilled,lnum,source)
 
       # in case badrow()
       if isbadrow > 0:
