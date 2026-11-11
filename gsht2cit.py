@@ -427,6 +427,43 @@ def name_rules(outcolvals,namefields,castnames,castnamecorrections,isbadrow,lnum
             #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}")
   return isbadrow
 
+# bundling color and sound norm rules into one func
+def color_and_sound_rules(outcolvals,isbadrow):
+  # sound normalization
+  if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
+    soundval = outcolvals["Motion_Picture_Details/Sound/Film_Sound"]
+    if re.match(r'(?i)^silent$',soundval):
+      soundval = "si."
+    else:
+      outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] = soundval
+      soundval = "sd."
+    #print(outcolvals["Motion_Picture_Details/Sound/Film_Sound"]+" -> "+soundval+" + "+(outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] if "Motion_Picture_Details/Sound/Sound_Notes:Type" in outcolvals else ""))
+    outcolvals["Motion_Picture_Details/Sound/Film_Sound"] = soundval
+ 
+  # color normalization: only specific set of values are allowed
+  if isfilled(outcolvals,"Motion_Picture_Details/Color_Characteristics"):
+    if re.match(r'(?i)\s*b\s*\&\s*w\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
+    elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
+    elif re.match(r'(?i)\s*(tint(ed|s|ing)?|w\/tints?)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted)"
+    elif re.match(r'(?i)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
+    elif re.match(r'(?i)\s*(tint(ed|s|ing))\s*(and|\W+)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted and toned)"
+    elif re.match(r'(?i)\s*(b\W*w\W*c(olor|ol|)|c(olor|ol|)\W*b\W*w)\W*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col. and b&w"
+    elif re.match(r'(?i)\s*(faded\W+)?red\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      addcolval(outcolvals,"Condition/Notes",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
+      outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
+    elif re.match(r'(?i)\s*(cinecolor)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+      addcolval(outcolvals,"General_Notes:General",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
+      outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
+    else:
+      isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"])
+  return isbadrow
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -569,41 +606,10 @@ def main():
 
       # actor/director name normalization
       isbadrow = name_rules(outcolvals,personnamecols,castnames,castnamecorrections,isbadrow,lnum)
-  
-      # sound normalization
-      if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
-        soundval = outcolvals["Motion_Picture_Details/Sound/Film_Sound"]
-        if re.match(r'(?i)^silent$',soundval):
-          soundval = "si."
-        else:
-          outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] = soundval
-          soundval = "sd."
-        #print(outcolvals["Motion_Picture_Details/Sound/Film_Sound"]+" -> "+soundval+" + "+(outcolvals["Motion_Picture_Details/Sound/Sound_Notes:Type"] if "Motion_Picture_Details/Sound/Sound_Notes:Type" in outcolvals else ""))
-        outcolvals["Motion_Picture_Details/Sound/Film_Sound"] = soundval
-  
-      # color normalization: only specific set of values are allowed
-      if isfilled(outcolvals,"Motion_Picture_Details/Color_Characteristics"):
-        if re.match(r'(?i)\s*b\s*\&\s*w\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
-          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
-        elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): 
-          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-        elif re.match(r'(?i)\s*(tint(ed|s|ing)?|w\/tints?)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted)"
-        elif re.match(r'(?i)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
-        elif re.match(r'(?i)\s*(tint(ed|s|ing))\s*(and|\W+)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted and toned)"
-        elif re.match(r'(?i)\s*(b\W*w\W*c(olor|ol|)|c(olor|ol|)\W*b\W*w)\W*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col. and b&w"
-        elif re.match(r'(?i)\s*(faded\W+)?red\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-          addcolval(outcolvals,"Condition/Notes",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
-          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-        elif re.match(r'(?i)\s*(cinecolor)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
-          addcolval(outcolvals,"General_Notes:General",outcolvals["Motion_Picture_Details/Color_Characteristics"],"; ")
-          outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-        else:
-          isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"])
-  
+
+      # sound and color normalization rules
+      isbadrow = color_and_sound_rules(outcolvals,isbadrow)
+
       # TBD: handle serieses
       # if series col, and filled, prefix to title
       # if "series" in colmap and len(lncols[colmap["series"]].strip()):
