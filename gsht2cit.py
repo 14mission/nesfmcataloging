@@ -211,7 +211,7 @@ def features_filedby_rule(outcolvals):
       addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
       outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
 
-def objid_rules(outcolvals,intsv,objid_base_seen):
+def objid_rules(outcolvals,intsv,objid_base_seen,isbadrow):
   # handling of MG object ID's
   # chop off leading MG prefix and any suffix to get numerical part
   # there may be collisions so suffix 0, 1, etc
@@ -256,7 +256,9 @@ def objid_rules(outcolvals,intsv,objid_base_seen):
   if outcolvals[accnumcolname] == outcolvals[objidcolname]:
     raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
 
-def film_format_rules(outcolvals):
+  return isbadrow
+
+def film_format_rules(outcolvals,isbadrow):
  
   # extract film gauge from title: can be like **35mm** or (35mm)
   Aspect_Ratio_title_match = re.match(r'(?i)^(.*?)(?:\*\*|\()(\d+)\s*mm(?:\*\*|\))(.*?)$', outcolvals["Name/Title"])
@@ -306,6 +308,40 @@ def film_format_rules(outcolvals):
     if not re.match(r'^\d+(\'|\s*ft)\s*$', outcolvals["Motion_Picture_Details/Length"]):
       print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
       outcolvals["Motion_Picture_Details/Length"] = None
+
+
+  # aspect gauge normalization; remove word parts, put into a note
+  if isfilled(outcolvals,"Aspect_Ratio"):
+    if re.match(r'(?i)^\s*(windowbox(ed)?)\s*$', outcolvals["Aspect_Ratio"]):
+      addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
+      outcolvals["Aspect_Ratio"] = None
+    elif re.match(r'(?i)^\s*R-\d.*R-\d', outcolvals["Aspect_Ratio"]):
+      addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
+      outcolvals["Aspect_Ratio"] = "mixed" 
+    elif (Aspect_Ratio_match := re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])) == None:
+      isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"])
+    else:
+      outcolvals["Aspect_Ratio"] = Aspect_Ratio_match.group(2)
+      ratiolabel = Aspect_Ratio_match.group(1) + " " + Aspect_Ratio_match.group(3)
+      if len(ratiolabel.strip()) > 0:
+        if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
+          outcolvals["General_Notes:Aperture_Image_Format"] = "Movietone"
+        elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
+          outcolvals["General_Notes:Aperture_Image_Format"] = "Full Silent"
+        elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
+          outcolvals["General_Notes:Aperture_Image_Format"] = "Academy"
+        elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
+          outcolvals["General_Notes:Aperture_Image_Format"] = "Matted"
+        # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
+        elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
+          outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "super "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
+        elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*(std|standard)?\W*$',ratiolabel):
+          outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "standard "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
+        # any other random verbiage is an error
+        else:
+          isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel)
+  return isbadrow
+
 
 # make fields listing countries use standard labels
 def country_rules(outcolvals):
@@ -446,14 +482,14 @@ def main():
 
       # adjustments to object id
       # also create acession number
-      objid_rules(outcolvals,intsv,objid_base_seen)
+      isbadrow = objid_rules(outcolvals,intsv,objid_base_seen,isbadrow)
   
       # PQ goes into Condition/Notes, which is just a free-format text field, so prefix "PQ"
       if isfilled(outcolvals,"Condition/Notes") and re.match(r'^\d',outcolvals["Condition/Notes"]):
         outcolvals["Condition/Notes"] = "PQ"+outcolvals["Condition/Notes"]
 
       # gauge, aspect ration, speed, etc
-      film_format_rules(outcolvals)
+      isbadrow = film_format_rules(outcolvals,isbadrow)
   
       # country normalization
       country_rules(outcolvals)
@@ -568,37 +604,6 @@ def main():
       # if series col, and filled, prefix to title
       # if "series" in colmap and len(lncols[colmap["series"]].strip()):
       #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
-  
-      # aspect gauge normalization; remove word parts, put into a note
-      if isfilled(outcolvals,"Aspect_Ratio"):
-        if re.match(r'(?i)^\s*(windowbox(ed)?)\s*$', outcolvals["Aspect_Ratio"]):
-          addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
-          outcolvals["Aspect_Ratio"] = None
-        elif re.match(r'(?i)^\s*R-\d.*R-\d', outcolvals["Aspect_Ratio"]):
-          addcolval(outcolvals,"General_Notes:General",outcolvals["Aspect_Ratio"].strip())
-          outcolvals["Aspect_Ratio"] = "mixed"
-        elif (Aspect_Ratio_match := re.match(r'^(.*?)([\d\.]+:1)(.*?)$', outcolvals["Aspect_Ratio"])) == None:
-          isbadrow += badrow(f"can't parse aspect ratio in line {lnum}: "+outcolvals["Aspect_Ratio"])
-        else:
-          outcolvals["Aspect_Ratio"] = Aspect_Ratio_match.group(2)
-          ratiolabel = Aspect_Ratio_match.group(1) + " " + Aspect_Ratio_match.group(3)
-          if len(ratiolabel.strip()) > 0:
-            if re.match(r'(?i)^\s*movietone(\s*ratio)?\s*$',ratiolabel):
-              outcolvals["General_Notes:Aperture_Image_Format"] = "Movietone"
-            elif re.match(r'(?i)^\s*full\s*silent\s*(aperture|ratio)?\s*$',ratiolabel):
-              outcolvals["General_Notes:Aperture_Image_Format"] = "Full Silent"
-            elif re.match(r'(?i)^\s*academy\s*(ratio)?\s*$',ratiolabel):
-              outcolvals["General_Notes:Aperture_Image_Format"] = "Academy"
-            elif re.match(r'(?i)^\s*matted(\s*on\sleft)?\s*$',ratiolabel):
-              outcolvals["General_Notes:Aperture_Image_Format"] = "Matted"
-            # except! for 8mm, if it's prefixed by super or standard or single, pack it back as prefix of gauge
-            elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*sup(er)?\W*$',ratiolabel):
-              outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "super "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
-            elif outcolvals["Motion_Picture_Details/Film_Gauge/Format"] == "8 mm." and re.match(r'(?i)\W*(std|standard)?\W*$',ratiolabel):
-              outcolvals["Motion_Picture_Details/Film_Gauge/Format"] = "standard "+outcolvals["Motion_Picture_Details/Film_Gauge/Format"]
-            # any other random verbiage is an error
-            else:
-              isbadrow += badrow(f"unexpected aspect ratio label in line {lnum}: "+ratiolabel)
   
       # film stock normalization
       if isfilled(outcolvals,"Motion_Picture_Details/Film_Stock"):
