@@ -309,7 +309,6 @@ def film_format_rules(outcolvals,isbadrow):
       print("WARNING: invalid length "+outcolvals["Motion_Picture_Details/Length"]+f" in line {lnum}")
       outcolvals["Motion_Picture_Details/Length"] = None
 
-
   # aspect gauge normalization; remove word parts, put into a note
   if isfilled(outcolvals,"Aspect_Ratio"):
     if re.match(r'(?i)^\s*(windowbox(ed)?)\s*$', outcolvals["Aspect_Ratio"]):
@@ -464,6 +463,41 @@ def color_and_sound_rules(outcolvals,isbadrow):
       isbadrow += badrow(f"unmapped color type in line {lnum}: "+outcolvals["Motion_Picture_Details/Color_Characteristics"])
   return isbadrow
 
+# film stock normalization
+def film_stock_rules(outcolvals):
+  if isfilled(outcolvals,"Motion_Picture_Details/Film_Stock"):
+    # fix spelling etc
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ac[ei]t[aie]te','acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)di\W*acetate','di-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)tri\W*acetate','tri-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)g[aer]+v[ae]+r[ts]*','Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)agfa\W*gevaert','Agfa-Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ferramia','ferrania',outcolvals["Motion_Picture_Details/Film_Stock"])
+    # extract date
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'\b(\d{4})\s*(\&|and|-)\s*(\d{4})',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+    for yearmatch in re.findall(r'(\b\d\d\d\d|\'\d\d)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
+      if isfilled(outcolvals,"Motion_Picture_Details/Date_Code"):
+        isbadrow += badrow(f"multiple date specs in line {lnum}")
+      yearmatch = re.sub(r'^\'','19',yearmatch)
+      outcolvals["Motion_Picture_Details/Date_Code"] = yearmatch
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(\b\d\d\d\d|\'\d\d)\b',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+    # clean up stray parens and puncs
+    outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'"|\(|\)|\.',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
+    # standardize unmarked
+    if re.search(r'(?i)unmarked|no.+mark',outcolvals["Motion_Picture_Details/Film_Stock"]) != None:
+      outcolvals["Motion_Picture_Details/Film_Stock"] = "no marks"
+    # find film base type and copy to Film_Base
+    for basetypematch in re.findall(r'\b((?:(?:di-?|tri-)?acetate|safety)(?:\s+film)?)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
+      addcolval(outcolvals,"Motion_Picture_Details/Film_Base",basetypematch," ")
+
+    # whitespace and case normalization
+    outcolvals["Motion_Picture_Details/Film_Stock"] = " ".join(
+      [
+        w if re.match(r'.*\d.*',w) else "DuPont" if re.match(r'(?i)\bdupont\b',w) else w.title() if re.match(r'(?i)^(kodak|eastman|dupont|agfa|agfa-gevaert|gevaert|ferrania|fuji|kodascope|belgium)$',w) else w.lower()
+        for w in outcolvals["Motion_Picture_Details/Film_Stock"].split()
+      ]
+    )
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -614,40 +648,9 @@ def main():
       # if series col, and filled, prefix to title
       # if "series" in colmap and len(lncols[colmap["series"]].strip()):
       #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
-  
+
       # film stock normalization
-      if isfilled(outcolvals,"Motion_Picture_Details/Film_Stock"):
-        # fix spelling etc
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ac[ei]t[aie]te','acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)di\W*acetate','di-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)tri\W*acetate','tri-acetate',outcolvals["Motion_Picture_Details/Film_Stock"])
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)g[aer]+v[ae]+r[ts]*','Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)agfa\W*gevaert','Agfa-Gevaert',outcolvals["Motion_Picture_Details/Film_Stock"])
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(?i)ferramia','ferrania',outcolvals["Motion_Picture_Details/Film_Stock"])
-        # extract date
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'\b(\d{4})\s*(\&|and|-)\s*(\d{4})',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
-        for yearmatch in re.findall(r'(\b\d\d\d\d|\'\d\d)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
-          if isfilled(outcolvals,"Motion_Picture_Details/Date_Code"):
-            isbadrow += badrow(f"multiple date specs in line {lnum}")
-          yearmatch = re.sub(r'^\'','19',yearmatch)
-          outcolvals["Motion_Picture_Details/Date_Code"] = yearmatch
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'(\b\d\d\d\d|\'\d\d)\b',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
-        # clean up stray parens and puncs
-        outcolvals["Motion_Picture_Details/Film_Stock"] = re.sub(r'"|\(|\)|\.',' ',outcolvals["Motion_Picture_Details/Film_Stock"])
-        # standardize unmarked
-        if re.search(r'(?i)unmarked|no.+mark',outcolvals["Motion_Picture_Details/Film_Stock"]) != None:
-          outcolvals["Motion_Picture_Details/Film_Stock"] = "no marks"
-        # find film base type and copy to Film_Base
-        for basetypematch in re.findall(r'\b((?:(?:di-?|tri-)?acetate|safety)(?:\s+film)?)\b',outcolvals["Motion_Picture_Details/Film_Stock"]):
-          addcolval(outcolvals,"Motion_Picture_Details/Film_Base",basetypematch," ")
-  
-        # whitespace and case normalization
-        outcolvals["Motion_Picture_Details/Film_Stock"] = " ".join(
-          [
-            w if re.match(r'.*\d.*',w) else "DuPont" if re.match(r'(?i)\bdupont\b',w) else w.title() if re.match(r'(?i)^(kodak|eastman|dupont|agfa|agfa-gevaert|gevaert|ferrania|fuji|kodascope|belgium)$',w) else w.lower()
-            for w in outcolvals["Motion_Picture_Details/Film_Stock"].split()
-          ]
-        )
+      film_stock_rules(outcolvals)
   
       # extract parenthetical notes from title
       for parenexp in re.findall(r'(\([^\(\)]+\))',outcolvals['Name/Title']):
