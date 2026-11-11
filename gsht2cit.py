@@ -674,16 +674,11 @@ def main():
       # sound and color normalization rules
       isbadrow = color_and_sound_rules(outcolvals,isbadrow)
 
-      # TBD: handle serieses
-      # if series col, and filled, prefix to title
-      # if "series" in colmap and len(lncols[colmap["series"]].strip()):
-      #  lncols[colmap["title"]] = lncols[colmap["series"]].strip() + ": " + lncols[colmap["title"]]
-
       # film stock normalization
       film_stock_rules(outcolvals)
 
       # adjsutments to film title
-      isbadrows = title_rules(outcolvals,isbadrow)
+      isbadrow = title_rules(outcolvals,isbadrow)
   
       # check if cols that were supposed to be supplied by rules actually were
       for colname in colstoberulefilled:
