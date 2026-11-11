@@ -211,6 +211,51 @@ def features_filedby_rule(outcolvals):
       addcolval(outcolvals,"Motion_Picture_Details/Cast",starname,",",True)
       outcolvals["Other_Names_and_Numbers/Other_Numbers:Series_Item"] = None
 
+def objid_rules(outcolvals,intsv,objid_base_seen):
+  # handling of MG object ID's
+  # chop off leading MG prefix and any suffix to get numerical part
+  # there may be collisions so suffix 0, 1, etc
+  # prefix 2011.50 accession num to make canonical obj id
+  if re.match(r'(?i)^mg', outcolvals[objidcolname]):
+    outcolvals["Other_Names_and_Numbers/Other_Numbers:Old_Object_ID"] = outcolvals[objidcolname]
+    basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals[objidcolname])
+    basenum = re.sub(r'^0+','',basenum)
+    if "MG"+basenum in objid_base_seen:
+      objid_base_seen["MG"+basenum] += 1
+    else:
+      objid_base_seen["MG"+basenum] = 0
+    if objid_base_seen["MG"+basenum] > 10:
+      raise Exception("more than 10 like MG"+basenum)
+    outcolvals[objidcolname] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
+
+  # other oddball object id types to match
+  if re.match(r'^(UNKNOWN|\S*#|Paul|MASTER|FF|E-|BB)', outcolvals[objidcolname]):
+    if re.search(r'(?i)comedy.shorts',intsv): genre_offset = 0
+    elif re.search(r'(?i)features',intsv): genre_offset = 200
+    elif re.search(r'(?i)serials',intsv): genre_offset = 400
+    elif re.search(r'(?i)animation',intsv): genre_offset = 600
+    elif re.search(r'(?i)drama',intsv): genre_offset = 800
+    elif re.search(r'(?i)hist.*news',intsv): genre_offset = 1000
+    elif re.search(r'(?i)cinema.hist',intsv): genre_offset = 1200
+    elif re.search(r'(?i)bartel.*films',intsv): genre_offset = 1400
+    elif re.search(r'(?i)test',intsv): genre_offset = 2000
+    else: raise Exception("unk obj id and no genre mapping for "+intsv)
+    basenum = "2026.67."+str(genre_offset)
+    if basenum in objid_base_seen:
+      objid_base_seen[basenum] += 1
+    else:
+      objid_base_seen[basenum] = 0
+    outcolvals[objidcolname] = "2026.67."+str(genre_offset+objid_base_seen[basenum])
+
+  # catch remaining noncanonical object id's
+  if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
+    isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip())
+
+  # trim object id to create accession number
+  outcolvals[accnumcolname] = re.sub(r'\.[^\.]+$','',outcolvals[objidcolname])
+  if outcolvals[accnumcolname] == outcolvals[objidcolname]:
+    raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -336,50 +381,10 @@ def main():
       # in features data, special rules for handling column called: Filed by Director or Star "Silent" = filed by title
       if re.search(r'feature',intsv) or re.search(r'<feature>',outcolvals["Name/Title"]) and isfilled(outcolvals,"Other_Names_and_Numbers/Other_Numbers:Series_Item"):
         features_filedby_rule(outcolvals)
-  
-      # handling of MG object ID's
-      # chop off leading MG prefix and any suffix to get numerical part
-      # there may be collisions so suffix 0, 1, etc
-      # prefix 2011.50 accession num to make canonical obj id
-      if re.match(r'(?i)^mg', outcolvals[objidcolname]):
-        outcolvals["Other_Names_and_Numbers/Other_Numbers:Old_Object_ID"] = outcolvals[objidcolname]
-        basenum = re.sub(r'(?i)mg\D*|\D.*$','',outcolvals[objidcolname])
-        basenum = re.sub(r'^0+','',basenum)
-        if "MG"+basenum in objid_base_seen:
-          objid_base_seen["MG"+basenum] += 1
-        else:
-          objid_base_seen["MG"+basenum] = 0
-        if objid_base_seen["MG"+basenum] > 10:
-          raise Exception("more than 10 like MG"+basenum)
-        outcolvals[objidcolname] = "2011.50."+basenum+str(objid_base_seen["MG"+basenum])
-  
-      # other oddball object id types to match
-      if re.match(r'^(UNKNOWN|\S*#|Paul|MASTER|FF|E-|BB)', outcolvals[objidcolname]):
-        if re.search(r'(?i)comedy.shorts',intsv): genre_offset = 0
-        elif re.search(r'(?i)features',intsv): genre_offset = 200
-        elif re.search(r'(?i)serials',intsv): genre_offset = 400
-        elif re.search(r'(?i)animation',intsv): genre_offset = 600
-        elif re.search(r'(?i)drama',intsv): genre_offset = 800
-        elif re.search(r'(?i)hist.*news',intsv): genre_offset = 1000
-        elif re.search(r'(?i)cinema.hist',intsv): genre_offset = 1200
-        elif re.search(r'(?i)bartel.*films',intsv): genre_offset = 1400
-        elif re.search(r'(?i)test',intsv): genre_offset = 2000
-        else: raise Exception("unk obj id and no genre mapping for "+intsv)
-        basenum = "2026.67."+str(genre_offset)
-        if basenum in objid_base_seen:
-          objid_base_seen[basenum] += 1
-        else:
-          objid_base_seen[basenum] = 0
-        outcolvals[objidcolname] = "2026.67."+str(genre_offset+objid_base_seen[basenum])
-  
-      # catch remaining noncanonical object id's
-      if not re.match(r'^(19|20)\d\d\.\d+\.\d+$',outcolvals[objidcolname]):
-        isbadrow += badrow("improper object id \""+outcolvals[objidcolname]+f"\" in in line {lnum}: "+ln.strip())
-  
-      # trim object id to create accession number
-      outcolvals[accnumcolname] = re.sub(r'\.[^\.]+$','',outcolvals[objidcolname])
-      if outcolvals[accnumcolname] == outcolvals[objidcolname]:
-        raise Exception("failed to trim obj id for accession id: "+outcolvals[objidcolname])
+
+      # adjustments to object id
+      # also create acession number
+      objid_rules(outcolvals,intsv,objid_base_seen)
   
       # PQ goes into Condition/Notes, which is just a free-format text field, so prefix "PQ"
       if isfilled(outcolvals,"Condition/Notes") and re.match(r'^\d',outcolvals["Condition/Notes"]):
