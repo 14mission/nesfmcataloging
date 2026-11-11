@@ -158,6 +158,36 @@ def buildcolmap(lncols):
 
   return outcols, colmap, rulefillcols, commasplitcols, okemptycols, okunkcols
 
+def parsedataline(outcols,colmap,okemptycols,okunkcols,lncols,lnum,outcolvals,colstoberulefilled,isbadrow):
+  # regular line. make sure all required fields filled
+  # some fields can be empty, then we put UNKNOWN
+  for colname in outcols:
+    if colname not in colmap or colmap[colname] == None:
+      continue
+    # various ways of being "empty"
+    elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|none\W*credited|doesn\'t\W*apply|no stars\W*travelog(ue)?|var?ious|docum[ea]ntary|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
+      # some cols allowed to be empty
+      if colname in okemptycols:
+        outcolvals[colname] = None
+      # for some cols, we just specify UNKNOWN
+      elif colname in okunkcols:
+        print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+"\t".join(lncols))
+        outcolvals[colname] = "UNKNOWN"
+      # if col is empty and is to be filled by a rule, put it on list of cols to check for later
+      elif colname in rulefillcols:
+        outcolvals[colname] = None
+        colstoberulefilled[colname] = True
+      # for others, an empty value is a fatal error
+      else:
+        isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+"\t".join(lncols))
+    # pipe char will cause problems later
+    elif "|" in lncols[colmap[colname]]:
+      raise Exception(f"pipe char in line {lnum}: "+"\t".join(lncols))
+    # regular valid value
+    else:
+      outcolvals[colname] = lncols[colmap[colname]].strip()
+  return isbadrow
+
 # load cast names
 def loadcastnames(cnfn):
   castnames = {}
@@ -276,31 +306,7 @@ def main():
       outcolvals = {}
       colstoberulefilled = {}
       isbadrow = 0
-      for colname in outcols:
-        if colname not in colmap or colmap[colname] == None:
-          continue
-        # various ways of being "empty"
-        elif lncols[colmap[colname]] == None or len(lncols[colmap[colname]].strip()) == 0 or re.match(r'(?i)^\W*(un?known|unnown|20xx\.xx\.xx|no\W*credit|none\W*credited|doesn\'t\W*apply|no stars\W*travelog(ue)?|var?ious|docum[ea]ntary|see individual listings|n\s*\/\s*a)\W*$',lncols[colmap[colname]]):
-          # some cols allowed to be empty
-          if colname in okemptycols:
-            outcolvals[colname] = None
-          # for some cols, we just specify UNKNOWN
-          elif colname in okunkcols:
-            print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+ln.strip())
-            outcolvals[colname] = "UNKNOWN"
-          # if col is empty and is to be filled by a rule, put it on list of cols to check for later
-          elif colname in rulefillcols:
-            outcolvals[colname] = None
-            colstoberulefilled[colname] = True
-          # for others, an empty value is a fatal error
-          else:
-            isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+ln.strip())
-        # pipe char will cause problems later
-        elif "|" in lncols[colmap[colname]]:
-          raise Exception(f"pipe char in line {lnum}: "+ln.strip())
-        # regular valid value
-        else:
-          outcolvals[colname] = lncols[colmap[colname]].strip()
+      isbadrow = parsedataline(outcols,colmap,okemptycols,okunkcols,lncols,lnum,outcolvals,colstoberulefilled,isbadrow)
   
       # special rules:
   
