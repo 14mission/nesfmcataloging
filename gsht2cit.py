@@ -32,7 +32,6 @@ def wsnorm(s):
 # rename exported spreadsheets like this: ls NESFM\ Silent\ Film\ Achive\ -\ *tsv | perl -ne 's/\s+$//gs; my $origfn = $_; my $newfn = $origfn; $newfn =~ s/.* - /nesfm.archive./; $newfn =~ s/ /_/g; $newfn =~ s/&/and/g; $newfn = lc $newfn; print "mv \"$origfn\" $newfn\n"' | sh
 
 # use header line to figure out what columns map to whate fields in following data lines
-personnamecols = [ "Motion_Picture_Details/Cast", "Motion_Picture_Details/Director" ]
 objidcolname = r'Entry/Object_ID'
 accnumcolname = r'Acquisition/Accession'
 def buildcolmap(lncols):
@@ -49,6 +48,7 @@ def buildcolmap(lncols):
   #  u if field is empty, fill with explicit UNKNOWN
   #  r field will be filled by a rule
   #  c means split on comma
+  #  p means it's a name of a person
   # note on patterns:
   #  these are matched against the column headers of the input files, from google spreadsheets
   #  these are regular expressions
@@ -62,7 +62,8 @@ def buildcolmap(lncols):
     "okempty": {},
     "okmissing": {},
     "rulefill": {},
-    "commasplit": {}
+    "commasplit": {},
+    "personname": {},
   }
   for row in [ 
     objidcolname+r' u Acc?ession\s+Num', # unk not actually ok
@@ -75,8 +76,8 @@ def buildcolmap(lncols):
     r'Condition/Notes e p\s*q\b',
     r'Motion_Picture_Details/Production_Date/Date u prod.*year',
     r'Made/Created/Notes:Re-Issue_Year e re\W*issue.*year',
-    r'Motion_Picture_Details/Cast uc star\W*s\W*',
-    r'Motion_Picture_Details/Director uc director',
+    r'Motion_Picture_Details/Cast ucp star\W*s\W*',
+    r'Motion_Picture_Details/Director ucp director',
     r'Motion_Picture_Details/Producer/Publisher e produc(er|tion\sco)',
     r'Motion_Picture_Details/Writer emc writer',
     r'Relationships/Related_Person_or_Organization/Notes:Original_Distributor e distrib.*orig',
@@ -120,6 +121,8 @@ def buildcolmap(lncols):
         specialcols["rulefill"][label] = True
       elif c == 'c':
         specialcols["commasplit"][label] = True
+      elif c == 'p':
+        specialcols["personname"][label] = True
       elif c != '-':
         raise Exception("unexpected flag char "+c+" in: "+row)
     # cols with colon will not be printed directly, they'll be mapped into cols with base name before colon
@@ -351,8 +354,8 @@ def country_rules(outcolvals):
       outcolvals[countryfield] = outcolvals[countryfield].title()
 
 # actor/director name normalization
-def name_rules(outcolvals,namefields,castnames,castnamecorrections,isbadrow,lnum):
-  for namefield in personnamecols:
+def name_rules(outcolvals,specialcols,castnames,castnamecorrections,isbadrow,lnum):
+  for namefield in specialcols["personname"]:
     if isfilled(outcolvals,namefield):
       # trim extra spaces
       outcolvals[namefield] = wsnorm(outcolvals[namefield])
@@ -574,7 +577,8 @@ def writerow(outh,outcols,outcolvals,specialcols,colstoberulefilled,lnum,source,
     if outcolvals[colname] != None:
       if colname in specialcols["commasplit"]:
         outcolvals[colname] = re.sub(r'\s*,\s*','|',outcolvals[colname])
-      if colname in personnamecols:
+      # in name cols, re-introduce comma before dates
+      if colname in specialcols["personname"]:
         outcolvals[colname] = re.sub(r'([a-z]) (\d{4}-\d{4})\b',r'\1, \2',outcolvals[colname])
 
   # cols with colon: strip to basename, store value there, prefix bit after colon
@@ -772,7 +776,7 @@ def main():
       country_rules(outcolvals)
 
       # actor/director name normalization
-      isbadrow = name_rules(outcolvals,personnamecols,castnames,castnamecorrections,isbadrow,lnum)
+      isbadrow = name_rules(outcolvals,specialcols,castnames,castnamecorrections,isbadrow,lnum)
 
       # sound and color normalization rules
       isbadrow = color_and_sound_rules(outcolvals,isbadrow)
