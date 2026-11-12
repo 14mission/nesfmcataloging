@@ -160,7 +160,7 @@ def buildcolmap(lncols):
   return outcols, colmap, specialcols
 
 # map cols from input tsv to dict of feats we'll ultimately import into catalogit
-def parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled):
+def parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled,source):
   isbadrow = 0
   # regular line. make sure all required fields filled
   # some fields can be empty, then we put UNKNOWN
@@ -180,6 +180,10 @@ def parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberule
       elif colname in specialcols["rulefill"]:
         outcolvals[colname] = None
         colstoberulefilled[colname] = True
+      # special case, so many drama/essany listings have no parts info, we'll just warn
+      elif colname == "Parts/Parts" and re.search(r'drama.*essanay',source):
+        print(f"empty (use UNKNOWN) {colname} in line {lnum}: "+"\t".join(lncols))
+        outcolvals[colname] = None
       # for others, an empty value is a fatal error
       else:
         isbadrow += badrow(f"empty (NOTALLOWED) {colname} in line {lnum}:"+"\t".join(lncols))
@@ -434,7 +438,7 @@ def name_rules(outcolvals,specialcols,castnames,castnamecorrections,lnum):
   return isbadrow
 
 # bundling color and sound norm rules into one func
-def color_and_sound_rules(outcolvals):
+def color_and_sound_rules(outcolvals,lnum):
   isbadrow = 0
   # sound normalization
   if isfilled(outcolvals,"Motion_Picture_Details/sound/film_sound"):
@@ -453,7 +457,7 @@ def color_and_sound_rules(outcolvals):
       outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w"
     elif re.match(r'(?i)\s*col(or|\.)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
       outcolvals["Motion_Picture_Details/Color_Characteristics"] = "col."
-    elif re.match(r'(?i)\s*(tint(ed|s|ing)?|w\/tints?)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
+    elif re.match(r'(?i)\s*(color\s+)?(tint(ed|s|ing)?|w\/tints?|amber)\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]): # may revisit handling of "amber"
       outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (tinted)"
     elif re.match(r'(?i)\s*(ton(e|ed|ing|es))\s*$', outcolvals["Motion_Picture_Details/Color_Characteristics"]):
       outcolvals["Motion_Picture_Details/Color_Characteristics"] = "b&w (toned)"
@@ -765,7 +769,7 @@ def main():
       outcolvals = {}
       colstoberulefilled = {}
       isbadrow = 0
-      isbadrow += parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled)
+      isbadrow += parsedataline(outcols,colmap,specialcols,lncols,lnum,outcolvals,colstoberulefilled,source)
   
       # special rules:
   
@@ -791,7 +795,7 @@ def main():
       isbadrow += name_rules(outcolvals,specialcols,castnames,castnamecorrections,lnum)
 
       # sound and color normalization rules
-      isbadrow += color_and_sound_rules(outcolvals)
+      isbadrow += color_and_sound_rules(outcolvals,lnum)
 
       # film stock normalization
       isbadrow += film_stock_rules(outcolvals)
