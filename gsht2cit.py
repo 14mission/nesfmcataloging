@@ -401,7 +401,7 @@ def name_rules(outcolvals,specialcols,castnames,castnamecorrections,lnum):
       if re.search(r'(?i)\bchaplin\b',outcolvals[namefield]):
         outcolvals[namefield] = re.sub(r'(?i)(^|,)\s*syd\s*($|,)',r'\1Syd Chaplin', outcolvals[namefield])
       # change ampersand to comma; also slash, pipe, and w/
-      outcolvals[namefield] = ",".join(s.strip() for s in re.split(r',|\&|\||\/| w\/|\s-+\s*',outcolvals[namefield]))
+      outcolvals[namefield] = ",".join(s.strip() for s in re.split(r'[,\&\|\/]+| w\/|\s-+\s*',outcolvals[namefield]))
       # extract ACTORNAME as PARTNAME, or anything parenthetical in a name
       while (xasymatch := re.fullmatch(r'(?i)^(.+,|)(\w[^,]+)(\s+as\s+\w[^,]+|\s+\([^,]+\))(,.+|)$',outcolvals[namefield])) != None:
         uptocomma, actor, aswho, commaetc = xasymatch.group(1), xasymatch.group(2), xasymatch.group(3), xasymatch.group(4)
@@ -427,7 +427,7 @@ def name_rules(outcolvals,specialcols,castnames,castnamecorrections,lnum):
       if len(newval.strip()) > 0:
         for n in newval.split(","):
           if len(n.strip()) == 0:
-            isbadrow += badrow(f"empty name in line {lnum}")
+            isbadrow += badrow(f"empty name in line {lnum}:{namefield}:"+outcolvals[namefield]+" ("+outcolvals["Name/Title"]+")")
           elif n not in castnames and n != "UNKNOWN": # drop UNKNOWN later
             print(f"WARNING: unknown name \"{n}\" in line {lnum}")
             #isbadrow += badrow(f"WARNING: unknown name \"{n}\" in line {lnum}")
