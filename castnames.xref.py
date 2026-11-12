@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-import sys, re, json
+import sys, re, json, os
 from loc_authorities.api import LocAPI
-import pywikibot
-import wikipediaapi
+import tmdbsimple as tmdb
+tmdb.API_KEY = os.getenv('TMDB_API_KEY')
 
 #usage: tsv file exported from spreadsheets as single arg, stdin names to investigate
 if len(sys.argv) != 2:
@@ -53,23 +53,24 @@ if True:
 #  print(name+": "+",".join(name2filmtitles[name]))
 
 # set up LOC interface
+print("set up loc")
 loc = LocAPI()
 
-# and wikidata interface
-wikidata = pywikibot.Site("en","wikipedia")
+# set up tmdb interface
+print("set up tmdb")
+tmdb = tmdb.Search()
+#response = search.person(query="Tom Cruise")
 
-# wikipedia
-wikip = wikipediaapi.Wikipedia(
-  language="en",
-  user_agent="Niles Essanay Silent Film Museum",
-)
+print("ok")
 
 for ln in sys.stdin:
   ln = ln.strip()
   cols = ln.split("\t")
   name = cols[0]
+  print("name: "+name)
 
   # look up in loc
+  print(" query loc")
   revname = re.sub(r'^(.+?)\s+(\w+)\s*$',r'\2, \1',name)
   suggestionlist = loc.suggest(revname,"names")
 
@@ -86,18 +87,12 @@ for ln in sys.stdin:
       suggdata["dates"] = (datematch.group(1) if datematch else None)
       locfilmmatches.append(suggdata)
 
-  # and wikidata
-  wikidpage = pywikibot.Page(wikidata, name)
-  wikiditem = pywikibot.ItemPage.fromPage(wikidpage)
-  wikiddesc = wikiditem.descriptions.get("en")
-
-  # wikipedia
-  wikippage = wikip.page(name)
-  wikipsummary = wikippage.summary
+  # look up in tmdb
+  print(" query tmdb")
+  tmdbresp = tmdb.person(query=name)
 
   print(name+"\n"
     + " ourfilms="+(",".join(name2filmtitles[name] if name in name2filmtitles else "None"))+"\n"
     + " locmatches="+(",".join([str(m) for m in locfilmmatches]) if len(locfilmmatches) else "None")+"\n"
-    + " wikidata="+wikiddesc+"\n"
-    + " wikipedia="+wikipsummary
+    + " tmdb="+str(tmdbresp)+"\n"
   )
