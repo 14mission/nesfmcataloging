@@ -4,6 +4,14 @@ from loc_authorities.api import LocAPI
 import tmdbsimple as tmdb
 tmdb.API_KEY = os.getenv('TMDB_API_KEY')
 
+def list2str(list):
+  if list == None:
+    return "Null"
+  elif len(list) == 0:
+    return "Empty"
+  else:
+    return(", ".join([str(item) for item in list]))
+
 #usage: tsv file exported from spreadsheets as single arg, stdin names to investigate
 if len(sys.argv) != 2:
   raise Exception("need one arg, tsv from spreadsheet, to get name/film mappings")
@@ -97,8 +105,7 @@ for ln in sys.stdin:
       tmdbmatches.append(respdata)
 
   print(name+"\n"
-    + " ourfilms="+(",".join(name2filmtitles[name] if name in name2filmtitles else "None"))+"\n"
-    + " locmatches="+(",".join([str(m) for m in locfilmmatches]) if len(locfilmmatches) else "None")+"\n"
-    #+ " tmdb="+str(tmdbresp)+"\n"
-    + " tmdbmatches="+(",".join([str(m) for m in tmdbmatches]) if len(tmdbmatches) else "None")+"\n"
+    + " ourfilms="+list2str(name2filmtitles[name] if name in name2filmtitles else ["None"])+"\n"
+    + " locmatches="+list2str(locfilmmatches)+"\n"
+    + " tmdbmatches="+list2str(tmdbmatches)+"\n"
   )
