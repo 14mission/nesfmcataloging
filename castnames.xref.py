@@ -90,9 +90,15 @@ for ln in sys.stdin:
   # look up in tmdb
   print(" query tmdb")
   tmdbresp = tmdb.person(query=name)
+  tmdbmatches = []
+  if tmdbresp["results"]:
+    for res in tmdbresp["results"]:
+      respdata = { "name": res["name"], "original_name": res["original_name"], "dates": None }
+      tmdbmatches.append(respdata)
 
   print(name+"\n"
     + " ourfilms="+(",".join(name2filmtitles[name] if name in name2filmtitles else "None"))+"\n"
     + " locmatches="+(",".join([str(m) for m in locfilmmatches]) if len(locfilmmatches) else "None")+"\n"
-    + " tmdb="+str(tmdbresp)+"\n"
+    #+ " tmdb="+str(tmdbresp)+"\n"
+    + " tmdbmatches="+(",".join([str(m) for m in tmdbmatches]) if len(tmdbmatches) else "None")+"\n"
   )
