@@ -60,7 +60,7 @@ loc = LocAPI()
 
 # set up tmdb interface
 print("set up tmdb")
-tmdb = tmdb.Search()
+tmdbsearch = tmdb.Search()
 #response = search.person(query="Tom Cruise")
 
 print("ok")
@@ -91,12 +91,15 @@ for ln in sys.stdin:
 
   # look up in tmdb
   print(" query tmdb")
-  tmdbresp = tmdb.person(query=name)
+  tmdbresp = tmdbsearch.person(query=name)
   tmdbmatches = []
   if tmdbresp["results"]:
     for res in tmdbresp["results"]:
-      respdata = { "name": res["name"], "original_name": res["original_name"], "dates": None }
+      respdata = { "name": res["name"], "original_name": res["original_name"], "dates": None, "id":res["id"] }
+      personinfo = tmdb.People(res["id"]).info()
+      respdata["dates"] = personinfo["birthday"].split("-")[0] + "-" + personinfo["deathday"].split("-")[0]
       tmdbmatches.append(respdata)
+       
 
   print(name+"\n"
     + " ourfilms="+list2str(name2filmtitles[name] if name in name2filmtitles else ["None"])+"\n"
