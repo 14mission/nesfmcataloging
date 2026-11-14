@@ -97,7 +97,7 @@ for ln in sys.stdin:
   tmdbmatches = []
   if tmdbresp["results"]:
     for res in tmdbresp["results"]:
-      respdata = { "name": res["name"], "original_name": res["original_name"], "dates": None, "id":res["id"] }
+      respdata = { "name": res["name"], "original_name": res["original_name"], "dates": None, "id":res["id"], "datematch":False }
       person = tmdb.People(res["id"])
       personinfo = person.info()
       if personinfo == None: personinfo = {}
@@ -112,8 +112,14 @@ for ln in sys.stdin:
         respdata["datematch"]=True
       tmdbmatches.append(respdata)
 
-  print(name+"\n"
-    + " ourfilms="+list2str(sorted(name2filmtitles[name]) if name in name2filmtitles else ["None"])+"\n"
-    + " locmatches="+list2str(locmatches)+"\n"
-    + " tmdbmatches="+list2str(tmdbmatches)
-  )
+  print(name)
+  if name in name2filmtitles:
+    print(" ourfilms:"+list2str(sorted(name2filmtitles[name])))
+  for locmatch in locmatches:
+    print(" loc:"+locmatch["label"]+"; "+locmatch["uri"])
+  for tmdbmatch in tmdbmatches:
+    print(" tmdb:"+tmdbmatch["name"]+"; "+tmdbmatch["dates"]+"; "+str(tmdbmatch["id"]))
+    if tmdbmatch["datematch"]:
+      print("  datematch")
+    if len(tmdbmatch["matchingcredits"]):
+      print("  matchingfilms:"+list2str(sorted(tmdbmatch["matchingcredits"])))
