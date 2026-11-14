@@ -59,8 +59,8 @@ print("set up loc")
 loc = LocAPI()
 
 # set up tmdb interface
-print("set up tmdb")
-tmdbsearch = tmdb.Search()
+#print("set up tmdb")
+#tmdbsearch = tmdb.Search()
 #response = search.person(query="Tom Cruise")
 
 print("ok")
@@ -91,7 +91,7 @@ for ln in sys.stdin:
 
   # look up in tmdb
   print(" query tmdb")
-  tmdbresp = tmdbsearch.person(query=name)
+  tmdbresp = tmdb.Search().person(query=name)
   tmdbmatches = []
   if tmdbresp["results"]:
     for res in tmdbresp["results"]:
