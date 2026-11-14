@@ -50,9 +50,8 @@ for filmtsvfn in sys.argv[1:]:
           name = " ".join(name.split())
           if len(name) > 0:
             if name not in name2filmtitles:
-              name2filmtitles[name] = []
-            name2filmtitles[name].append(title)
-          #print(f"map: {name} -> "+cols[titlecolnum])
+              name2filmtitles[name] = {}
+            name2filmtitles[name][title] = True
 
 # set up LOC interface
 print("set up loc")
@@ -78,15 +77,18 @@ for ln in sys.stdin:
 
   # find likely film-related people in loc
   locmatches = []
+  locmatchdates = {}
   for sugg in suggestionlist:
     label = sugg.label
     link = sugg.uri
     jsonstr = json.dumps(vars(sugg))
     if re.search(r'(?i)(motion.picture|actor|actress|director|film)',jsonstr):
       #print(jsonstr)
-      suggdata = { "label": sugg.label, "uri": sugg.uri }
+      suggdata = { "label": sugg.label, "uri": sugg.uri, "dates":None }
       datematch = re.search(r'\b((?:18|19)\d\d-19\d\d)\b', suggdata["label"])
-      suggdata["dates"] = (datematch.group(1) if datematch else None)
+      if datematch:
+        suggdata["dates"] = datematch.group(1)
+        locmatchdates[datematch.group(1)] = True
       locmatches.append(suggdata)
 
   # look up in tmdb
@@ -101,19 +103,17 @@ for ln in sys.stdin:
       if personinfo == None: personinfo = {}
       respdata["dates"] = (personinfo["birthday"].split("-")[0] if "birthday" in personinfo and personinfo["birthday"] != None else "UNK") + "-" + (personinfo["deathday"].split("-")[0] if "deathday" in personinfo and personinfo["deathday"] != None else "UNK")
       movie_credits = person.movie_credits()
-      #respdata["credits"] = [movie['title'] for movie in movie_credits['cast']]
+      credittitles = [movie['title'] for movie in movie_credits['cast']]
+      respdata["matchingcredits"] = {}
+      for title in credittitles:
+        if title in name2filmtitles[name]:
+          respdata["matchingcredits"][title] = True
+      if respdata["dates"] in locmatchdates:
+        respdata["datematch"]=True
       tmdbmatches.append(respdata)
 
   print(name+"\n"
-    + " ourfilms="+list2str(name2filmtitles[name] if name in name2filmtitles else ["None"])+"\n"
+    + " ourfilms="+list2str(sorted(name2filmtitles[name]) if name in name2filmtitles else ["None"])+"\n"
     + " locmatches="+list2str(locmatches)+"\n"
     + " tmdbmatches="+list2str(tmdbmatches)
   )
-  if(len(locmatches)==1 and len(tmdbmatches)==1):
-    print(" BOTH UNIQUE")
-    if locmatches[0]["dates"] == tmdbmatches[0]["dates"]:
-      print(" MATCHING DATES: "+locmatches[0]["dates"])
-    else:
-      print(" MISMATCHED DATES: "+locmatches[0]["dates"]+" VS "+tmdbmatches[0]["dates"])
-  else:
-    print(" NOT 1 AND 1: "+str(len(locmatches))+" VS "+str(len(tmdbmatches)))
