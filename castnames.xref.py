@@ -4,6 +4,11 @@ from loc_authorities.api import LocAPI
 import tmdbsimple as tmdb
 tmdb.API_KEY = os.getenv('TMDB_API_KEY')
 
+def namenorm(name):
+  name = re.sub(r'\.','. ',name)
+  name = " ".join(name.split())
+  return name
+
 def list2str(list):
   if list == None:
     return "Null"
@@ -46,8 +51,8 @@ for filmtsvfn in sys.argv[1:]:
       title = re.sub(r'\*\S+',' ',title)
       title = " ".join(title.split())
       for colnum in namecolnums:
-        for name in cols[colnum].split(","):
-          name = " ".join(name.split())
+        for name in re.split(r',|\&',cols[colnum]):
+          name = namenorm(name)
           if len(name) > 0:
             if name not in name2filmtitles:
               name2filmtitles[name] = {}
@@ -68,10 +73,11 @@ for ln in sys.stdin:
   ln = ln.strip()
   cols = ln.split("\t")
   name = cols[0]
+  name = namenorm(name)
   print("name: "+name)
 
   # look up in loc
-  print(" query loc")
+  #print(" query loc")
   revname = re.sub(r'^(.+?)\s+(\w+)\s*$',r'\2, \1',name)
   suggestionlist = loc.suggest(revname,"names")
 
@@ -92,7 +98,7 @@ for ln in sys.stdin:
       locmatches.append(suggdata)
 
   # look up in tmdb
-  print(" query tmdb")
+  #print(" query tmdb")
   tmdbresp = tmdb.Search().person(query=name)
   tmdbmatches = []
   if tmdbresp["results"]:
@@ -103,22 +109,23 @@ for ln in sys.stdin:
       if personinfo == None: personinfo = {}
       respdata["dates"] = (personinfo["birthday"].split("-")[0] if "birthday" in personinfo and personinfo["birthday"] != None else "UNK") + "-" + (personinfo["deathday"].split("-")[0] if "deathday" in personinfo and personinfo["deathday"] != None else "UNK")
       movie_credits = person.movie_credits()
-      credittitles = [movie['title'] for movie in movie_credits['cast']]
+      respdata["credits"] = [movie['title'] for movie in movie_credits['cast']]
       respdata["matchingcredits"] = {}
-      for title in credittitles:
-        if title in name2filmtitles[name]:
+      for title in respdata["credits"]:
+        if name in name2filmtitles and title in name2filmtitles[name]:
           respdata["matchingcredits"][title] = True
       if respdata["dates"] in locmatchdates:
         respdata["datematch"]=True
       tmdbmatches.append(respdata)
 
-  print(name)
+  #print(name)
   if name in name2filmtitles:
     print(" ourfilms:"+list2str(sorted(name2filmtitles[name])))
   for locmatch in locmatches:
-    print(" loc:"+locmatch["label"]+"; "+locmatch["uri"])
+    print(" loc:"+locmatch["label"]+"; "+str(locmatch["dates"])+"; "+locmatch["uri"])
   for tmdbmatch in tmdbmatches:
-    print(" tmdb:"+tmdbmatch["name"]+"; "+tmdbmatch["dates"]+"; "+str(tmdbmatch["id"]))
+    print(" tmdb:"+tmdbmatch["name"]+"; "+str(tmdbmatch["dates"])+"; "+str(tmdbmatch["id"]))
+    #print("  credits:"+list2str(sorted(tmdbmatch["credits"])))
     if tmdbmatch["datematch"]:
       print("  datematch")
     if len(tmdbmatch["matchingcredits"]):
