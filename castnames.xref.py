@@ -9,11 +9,22 @@ def namenorm(name):
   name = " ".join(name.split())
   return name
 
-def list2str(list):
+def filmnorm(film):
+  film = film.lower()
+  film = re.sub(r'[\(\*].*$','',film)
+  film = re.sub(r"\'",'',film)
+  film = re.sub(r'[^\w\s]',' ',film)
+  film = re.sub(r'\b(the|of|a)\b',' ',film)
+  film = " ".join(film.split())
+  return film
+
+def list2str(list,trunc=None):
   if list == None:
     return "Null"
   elif len(list) == 0:
     return "Empty"
+  elif trunc != None and len(list) > trunc:
+    return(", ".join([str(item) for item in list[0:trunc]])+"...")
   else:
     return(", ".join([str(item) for item in list]))
 
@@ -46,10 +57,7 @@ for filmtsvfn in sys.argv[1:]:
       if len(namecolnums) < 2: raise Exception("too few name cols")
     elif len(cols) >= maxcolneeded:
       title = cols[titlecolnum]
-      title = re.sub(r'\(.*?\)',' ',title)
-      title = re.sub(r'(?i)\s*,\s*the.*$','',title)
-      title = re.sub(r'\*\S+',' ',title)
-      title = " ".join(title.split())
+      title = filmnorm(title)
       for colnum in namecolnums:
         for name in re.split(r',|\&',cols[colnum]):
           name = namenorm(name)
@@ -68,6 +76,7 @@ loc = LocAPI()
 #response = search.person(query="Tom Cruise")
 
 print("ok")
+print("")
 
 for ln in sys.stdin:
   ln = ln.strip()
@@ -109,7 +118,7 @@ for ln in sys.stdin:
       if personinfo == None: personinfo = {}
       respdata["dates"] = (personinfo["birthday"].split("-")[0] if "birthday" in personinfo and personinfo["birthday"] != None else "UNK") + "-" + (personinfo["deathday"].split("-")[0] if "deathday" in personinfo and personinfo["deathday"] != None else "UNK")
       movie_credits = person.movie_credits()
-      respdata["credits"] = [movie['title'] for movie in movie_credits['cast']]
+      respdata["credits"] = [filmnorm(movie['title']) for movie in movie_credits['cast']]
       respdata["matchingcredits"] = {}
       for title in respdata["credits"]:
         if name in name2filmtitles and title in name2filmtitles[name]:
@@ -120,13 +129,17 @@ for ln in sys.stdin:
 
   #print(name)
   if name in name2filmtitles:
-    print(" ourfilms:"+list2str(sorted(name2filmtitles[name])))
+    print(" ourfilms: "+list2str(sorted(name2filmtitles[name])))
   for locmatch in locmatches:
-    print(" loc:"+locmatch["label"]+"; "+str(locmatch["dates"])+"; "+locmatch["uri"])
+    print(" loc: "+locmatch["label"]+"; "+str(locmatch["dates"])+"; "+locmatch["uri"])
+  if len(locmatches) == 0:
+    print(" loc: NONE")
   for tmdbmatch in tmdbmatches:
-    print(" tmdb:"+tmdbmatch["name"]+"; "+str(tmdbmatch["dates"])+"; "+str(tmdbmatch["id"]))
-    #print("  credits:"+list2str(sorted(tmdbmatch["credits"])))
-    if tmdbmatch["datematch"]:
-      print("  datematch")
-    if len(tmdbmatch["matchingcredits"]):
-      print("  matchingfilms:"+list2str(sorted(tmdbmatch["matchingcredits"])))
+    print(" tmdb: "+tmdbmatch["name"]+"; "+str(tmdbmatch["dates"])+"; "+str(tmdbmatch["id"]))
+    print("  datematch: "+str(tmdbmatch["datematch"]))
+    print("  matchingfilms: "+list2str(sorted(tmdbmatch["matchingcredits"])))
+    print("  allfilms: "+list2str(sorted(tmdbmatch["credits"]),10))
+  if len(tmdbmatches) == 0:
+    print(" tmdb: NONE")
+  print("")
+  sys.stdout.flush()
