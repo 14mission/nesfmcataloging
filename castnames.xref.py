@@ -117,8 +117,8 @@ for ln in sys.stdin:
       personinfo = person.info()
       if personinfo == None: personinfo = {}
       respdata["dates"] = (personinfo["birthday"].split("-")[0] if "birthday" in personinfo and personinfo["birthday"] != None else "UNK") + "-" + (personinfo["deathday"].split("-")[0] if "deathday" in personinfo and personinfo["deathday"] != None else "UNK")
-      movie_credits = person.movie_credits()
-      respdata["credits"] = [filmnorm(movie['title']) for movie in movie_credits['cast']]
+      movie_credits = person.combined_credits()
+      respdata["credits"] = [filmnorm(movie['title']) for movie in movie_credits['cast'] + movie_credits['crew']]
       respdata["matchingcredits"] = {}
       for title in respdata["credits"]:
         if name in name2filmtitles and title in name2filmtitles[name]:
