@@ -97,7 +97,7 @@ for ln in sys.stdin:
     label = sugg.label
     link = sugg.uri
     jsonstr = json.dumps(vars(sugg))
-    if re.search(r'(?i)(motion.picture|actor|actress|director|film)',jsonstr):
+    if re.search(r'(?i)(motion.picture|actor|actress|director|film|screen\W*writer|author|play\W*wright)',jsonstr):
       #print(jsonstr)
       suggdata = { "label": sugg.label, "uri": sugg.uri, "dates":None }
       datematch = re.search(r'\b((?:18|19)\d\d-19\d\d)\b', suggdata["label"])
@@ -118,7 +118,7 @@ for ln in sys.stdin:
       if personinfo == None: personinfo = {}
       respdata["dates"] = (personinfo["birthday"].split("-")[0] if "birthday" in personinfo and personinfo["birthday"] != None else "UNK") + "-" + (personinfo["deathday"].split("-")[0] if "deathday" in personinfo and personinfo["deathday"] != None else "UNK")
       movie_credits = person.combined_credits()
-      respdata["credits"] = [filmnorm(movie['title']) for movie in movie_credits['cast'] + movie_credits['crew']]
+      respdata["credits"] = [(filmnorm(movie['title']) if 'title' in movie else "NoTitle") for movie in movie_credits['cast'] + movie_credits['crew']]
       respdata["matchingcredits"] = {}
       for title in respdata["credits"]:
         if name in name2filmtitles and title in name2filmtitles[name]:
