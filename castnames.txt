@@ -316,7 +316,7 @@ Sammy Morrison	(ernest|sammy)\W+morrison|sunshine sammy( morrison)?	# Morrison, 
 Sam Newfield		# Newfield, Sam, 1899-1964; https://lccn.loc.gov/n87896233
 Scott Pembroke	percy scott pembroke	# Pembroke, Scott, 1889-1951; https://lccn.loc.gov/no2004078097
 Scott Sidney		# Sidney, Scott, 1872-1928; https://lccn.loc.gov/no98097339
-Sidney A. Franklin 1893-1972	sidney\W*a\W*franklin(\W*1893-1972)?|sidney\W*franklin\W*1893-1972	# Franklin, Sidney A., 1893-1972; http://id.loc.gov/authorities/names/n85376764
+Sidney A. Franklin 1893-1972	sidney\W*a\W*franklin(\W*1893-1972)?|sidney\W*franklin\W*1893-1972	# Franklin, Sidney A., 1893-1972; http://id.loc.gov/authorities/names/n85376764; https://en.wikipedia.org/wiki/Sidney_Franklin_(director); do not confuse with Sydney Franklin
 Sidney Drew		# Drew, Sidney, 1864-1919; https://lccn.loc.gov/n85138423
 Siegmund Lubin		# Lubin, Siegmund, -1923; https://lccn.loc.gov/n84034340
 Slim Summerville	(george\W*)?(slim|s)\W*(summ?erville\b|sumr\.)	# Summerville, Slim, 1892-1946; see row 343
@@ -329,7 +329,6 @@ Stephen Roberts		# Roberts, Stephen, 1895-1936; https://lccn.loc.gov/no89001235
 Stuart Erwin	Stu Erwin	# Erwin, Stuart, 1903-1967; https://lccn.loc.gov/n86105735
 Sunkist Bathing Beauties (Group)	(the )?sunkist bathing beauties|(mack )?sen+et+'s bathing beauties
 Syd Chaplin		# Chaplin, Syd, 1885-1965 ; https://lccn.loc.gov/n85138483
-Sydney Franklin 1870-1931		# Franklin, Sydney, 1870-1931; http://id.loc.gov/authorities/names/no2011163553
 Ta'avale		# https://en.wikipedia.org/wiki/Moana_(1926_film); Samoan actress; single name is probably correct, and we're unlikely to find more info
 Thelma Todd	t\W+todd	# Todd, Thelma, 1905-1935; https://lccn.loc.gov/n88159021
 Thomas La Rose	#tbd
@@ -897,7 +896,7 @@ Spencer Gordon Bennet		# Spencer Gordon Bennet, 1893-1987 no89010405  http://id.
 Stellan Rye		# Stellan Rye http://id.loc.gov/authorities/names/nr97034546
 Stepan Iosifovich Shkurat	Stepan Shkurat	# Stepan Iosifovich Shkurat, 1886-1973 http://id.loc.gov/authorities/names/nr2002018599
 Stephen Vincent Benet		# Benét, Stephen Vincent, 1898-1943; http://id.loc.gov/authorities/names/n50007691
-Sydney Franklin 1870-1931       # not in our listings: Franklin, Sydney, 1870-1931;  http://id.loc.gov/authorities/names/no2011163553
+Sydney Franklin 1870-1931       # not in our listings: Franklin, Sydney, 1870-1931;  http://id.loc.gov/authorities/names/no2011163553; do not confuse with Sidney A. Franklin
 Sylvia Breamer		# Sylvia Breamer, -1943 http://id.loc.gov/authorities/names/nr2001039153
 Sylvia Sidney		# Sylvia Sidney, 1910-1999 http://id.loc.gov/authorities/names/nr98003177
 Takeshi Sakamoto		# Takeshi Sakamoto, 1925-2010 nr2007004948
