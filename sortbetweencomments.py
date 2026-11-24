@@ -2,6 +2,7 @@
 import sys, locale, unicodedata, re
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 curbatch = []
+seennames = {}
 for curln in sys.stdin:
   curln = curln.strip()
   if len(curln) == 0:
@@ -16,6 +17,12 @@ for curln in sys.stdin:
     print(curln)
   else:
     curbatch.append(curln)
+    curname = re.sub(r'\t.*$','',curln).lower()
+    if len(curname) > 0:
+      if curname in seennames:
+        raise Exception("dup name: "+curname)
+      else:
+        seennames[curname] = True
 print("eof",file=sys.stderr)
 print("prev: "+str(len(curbatch))+" lines",file=sys.stderr)
 curbatch.sort(key=locale.strxfrm)
